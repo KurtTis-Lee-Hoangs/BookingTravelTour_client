@@ -1,0 +1,195 @@
+import React, { useEffect, useState, useContext } from "react";
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Container,
+  Row,
+  Col,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
+import { AuthContext } from "../context/AuthContext";
+import { BASE_URL } from "../utils/config";
+import useFetch from "../hooks/useFetch";
+import "../styles/profile.css";
+
+const ProfilePage = () => {
+  const { user, setUser } = useContext(AuthContext);
+  const [username, setUsername] = useState(user.username);
+  const [email, setEmail] = useState(user.email);
+  const [avatar, setAvatar] = useState(null);
+  const {
+    data: userData,
+    loading,
+    error,
+  } = useFetch(`${BASE_URL}/users/${user._id}`);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [userData]);
+
+  const handleProfileUpdate = async (e) => {
+    
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    if (newPassword.length < 6) {
+      alert("New password must be at least 6 characters long");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/users/${user._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Password updated successfully");
+        setIsModalOpen(false); // Close the modal after successful password change
+      } else {
+        alert(result.message); // Show error message from backend
+      }
+    } catch (error) {
+      console.error("Error updating password", error);
+      alert("An error occurred while updating the password");
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
+
+  return (
+    <Container className="profile-page">
+      <Row>
+        <Col md={{ size: 6, offset: 3 }}>
+          <h2 className="text-center mb-4">Profile Settings</h2>
+
+          {/* Form to update user information */}
+          <Form onSubmit={handleProfileUpdate}>
+            <div className="text-center">
+              <img
+                src={
+                  userData?.avatar ||
+                  "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?t=st=1730600707~exp=1730604307~hmac=63d2ed023c4a722f90f9c59a0417ca2eba185a3b9323bf93f4a6ff988c6bd6d7&w=740"
+                }
+                alt="User Avatar"
+                className="profile-photo mb-3"
+              />
+            </div>
+
+            <FormGroup>
+              <Label for="avatar">Avatar</Label>
+              <Input
+                type="text"
+                name="avatar"
+                id="avatar"
+                value={user.avatar}
+                accept="image/*"
+                onChange={(e) => setAvatar(e.target.files[0])}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="username">Username</Label>
+              <Input
+                type="text"
+                name="username"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="email">Email</Label>
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled
+              />
+            </FormGroup>
+
+            <Button type="submit" className="btn primary__btn m-2">
+              Update Profile
+            </Button>
+
+            {/* Change Password section */}
+            <Button
+              type="button"
+              className="btn primary__btn m-2"
+              onClick={toggleModal}
+            >
+              Change Password
+            </Button>
+          </Form>
+
+          {/* Modal for changing password */}
+          <Modal isOpen={isModalOpen} toggle={toggleModal}>
+            <ModalHeader toggle={toggleModal}>Change Password</ModalHeader>
+            <ModalBody>
+              <Form onSubmit={handleChangePassword}>
+                <FormGroup>
+                  <Label for="currentPassword">Current Password</Label>
+                  <Input
+                    type="password"
+                    name="currentPassword"
+                    id="currentPassword"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="newPassword">New Password</Label>
+                  <Input
+                    type="password"
+                    name="newPassword"
+                    id="newPassword"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <ModalFooter>
+                  <Button type="submit" color="primary">
+                    Change Password
+                  </Button>
+                  <Button color="secondary" onClick={toggleModal}>
+                    Cancel
+                  </Button>
+                </ModalFooter>
+              </Form>
+            </ModalBody>
+          </Modal>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default ProfilePage;

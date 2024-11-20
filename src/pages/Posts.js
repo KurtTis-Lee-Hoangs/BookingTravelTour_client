@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import CommonSection from "../shared/CommonSection";
 import "../styles/tour.css";
-import TourCard from "../shared/TourCard";
-import SearchBar from "../shared/SearchBar";
+import PostCard from "../shared/PostCard";
+import SearchPost from "../shared/SearchPost";
 import NewSletter from "../shared/NewSletter";
-import tourData from "../assets/data/tours";
+// import tourData from "../assets/data/tours";
 import { Container, Row, Col } from "reactstrap";
 import ScrollButton from "../shared/ScrollButton";
 import useFetch from "../hooks/useFetch";
@@ -14,15 +14,19 @@ const Tours = () => {
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
 
-  const { data: tours, loading, error } = useFetch(`${BASE_URL}/tours?page=${page}`);
+  const {
+    data: posts,
+    loading,
+    error,
+  } = useFetch(`${BASE_URL}/posts/user/getAllPostByUser?page=${page}`);
 
-  const { data: tourCount } = useFetch(`${BASE_URL}/tours/search/getTourCount`);
+  const { data: postCount } = useFetch(`${BASE_URL}/posts/search/getPostCount`);
 
   useEffect(() => {
-    const pages = Math.ceil(tourCount / 8); // later we will use backend data count
+    const pages = Math.ceil(postCount / 8); // later we will use backend data count
     setPageCount(pages);
     window.scrollTo(0, 0);
-  }, [page, tourCount, tours]);
+  }, [page, postCount, posts]);
 
   return (
     <>
@@ -30,41 +34,20 @@ const Tours = () => {
       <section>
         <Container>
           <Row>
-            <SearchBar />
+            <SearchPost />
           </Row>
         </Container>
       </section>
 
       <section className="pt-0">
         <Container>
-          {/* <Row>
-            {tours?.map((tour) => (
-              <Col lg="3" key={tour.id} className="mb-4">
-                <TourCard tour={tour} />
-              </Col>
-            ))}
-
-            <Col lg="12">
-              <div className="pagination d-flex align-items-center justify-content-center mt-4 gap-3">
-                {[...Array(pageCount).keys()].map((number) => (
-                  <span
-                    key={number}
-                    onClick={() => setPage(number)}
-                    className={page === number ? "active__page" : ""}
-                  >
-                    {number + 1}
-                  </span>
-                ))}
-              </div>
-            </Col>
-          </Row> */}
           {loading && <h4 className="text-cente pt-5">Loading......</h4>}
           {error && <h4 className="text-cente pt-5">{error}</h4>}
           {!loading && !error && (
             <Row>
-              {tours?.map((tour) => (
-                <Col lg="3" key={tour._id} className="mb-4">
-                  <TourCard tour={tour} />
+              {posts?.map((post) => (
+                <Col lg="3" key={post._id} className="mb-4">
+                  <PostCard post={post} />
                 </Col>
               ))}
 

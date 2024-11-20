@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, FormGroup, Button } from "reactstrap";
 import "../styles/login.css";
@@ -11,10 +11,9 @@ const Login = () => {
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
 
-
   const [credentials, setCredentials] = useState({
     email: undefined,
-    password: undefined
+    password: undefined,
   });
 
   const handleChange = (e) => {
@@ -35,21 +34,41 @@ const Login = () => {
         },
         credentials: "include",
         body: JSON.stringify(credentials),
-      })
+      });
 
       const result = await res.json();
-      if(!res.ok) {
-        alert(result.message);
+      //   if(!res.ok) {
+      //     alert(result.message);
+      //   }
+
+      //   // console.log(result.data);
+
+      //   // dispatch({ type: "LOGIN_SUCCESS", payload: result.data });
+      //   dispatch({ type: "LOGIN_SUCCESS", payload:{ ...result.data, role: result.role} });
+      //   navigate("/");
+      // } catch (err) {
+      //   dispatch({ type: "LOGIN_FAILURE", payload: err.message });
+      // }
+
+      if (!res.ok) {
+        alert(result.message); // Show an error message if login fails
+        dispatch({ type: "LOGIN_FAILURE", payload: result.message });
+      } else {
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: { ...result.data, role: result.role },
+        });
+        navigate("/"); // Only navigate if login is successful
       }
-
-      // console.log(result.data);
-
-      dispatch({ type: "LOGIN_SUCCESS", payload: result.data });
-      navigate("/");
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE", payload: err.message });
+      alert("Login failed. Please try again.");
     }
-  }
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <section>

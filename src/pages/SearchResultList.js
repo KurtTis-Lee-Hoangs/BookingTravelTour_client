@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CommonSection from "../shared/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import { useLocation } from "react-router-dom";
 import TourCard from "../shared/TourCard";
 import NewSletter from "../shared/NewSletter";
+import ScrollButton from "../shared/ScrollButton";
+
 
 const SearchResultList = () => {
   const location = useLocation();
 
   const [data] = useState(location.state);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -29,6 +35,7 @@ const SearchResultList = () => {
           </Row>
         </Container>
       </section>
+      <ScrollButton />
       <NewSletter />
     </>
   );

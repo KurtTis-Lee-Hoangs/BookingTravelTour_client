@@ -33,7 +33,7 @@ const Booking = ({ tour, avgRating }) => {
   const handleClick = async (e) => {
     e.preventDefault();
 
-    console.log(booking);
+    // console.log(booking);
 
     try {
       if (!user || user === undefined || user === null) {

@@ -14,7 +14,7 @@ const Tours = () => {
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
 
-  const { data: tours, loading, error } = useFetch(`${BASE_URL}/tours?page=${page}`);
+  const { data: tours, loading, error } = useFetch(`${BASE_URL}/tours/user/getAllTourByUser?page=${page}`);
 
   const { data: tourCount } = useFetch(`${BASE_URL}/tours/search/getTourCount`);
 

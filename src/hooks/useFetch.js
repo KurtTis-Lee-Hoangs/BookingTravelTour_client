@@ -10,8 +10,14 @@ const useFetch = (url) => {
       setLoading(true);
 
       try {
-        const res = await fetch(url);
-
+        const res = await fetch(url, {
+          credentials: "include", 
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        // console.log(res)
+        // console.log(url)
         if (!res.ok) {
           setError("failed to fetch");
         }

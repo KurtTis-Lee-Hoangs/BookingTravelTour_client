@@ -10,6 +10,8 @@ import NewSletter from "../shared/NewSletter";
 import useFetch from "../hooks/useFetch";
 import { BASE_URL } from "../utils/config";
 import { AuthContext } from "../context/AuthContext";
+import ScrollButton from "../shared/ScrollButton";
+
 
 const TourDetails = () => {
   const { id } = useParams();
@@ -223,6 +225,7 @@ const TourDetails = () => {
           )}
         </Container>
       </section>
+      <ScrollButton />
 
       <NewSletter />
     </>

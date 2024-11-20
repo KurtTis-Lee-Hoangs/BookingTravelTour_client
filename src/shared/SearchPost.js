@@ -10,31 +10,6 @@ const SearchBar = () => {
   const maxGroupSizeRef = useRef(0);
   const navigate = useNavigate();
 
-  // const searchHandler = async (e) => {
-  //   const location = locationRef.current.value;
-  //   const day = dayRef.current.value;
-  //   const maxGroupSize = maxGroupSizeRef.current.value;
-
-  //   if (location === "" || day === "" || maxGroupSize === "") {
-  //     return alert("All fields are required");
-  //   }
-
-  //   const res = await fetch(
-  //     `${BASE_URL}/tours/search/getTourBySearch?city=${location}&day=${day}&maxGroupSize=${maxGroupSize}`
-  //   );
-
-  //   if (!res.ok) {
-  //     alert("Something went wrong");
-  //   }
-
-  //   const result = await res.json();
-
-  //   navigate(
-  //     `/tours/search?city=${location}&day=${day}&maxGroupSize=${maxGroupSize}`,
-  //     { state: result.data }
-  //   );
-  // };
-
   const searchHandler = async (e) => {
     // Lấy giá trị từ các trường input
     const location = locationRef.current.value;
@@ -68,41 +43,17 @@ const SearchBar = () => {
     <Col lg="12">
       <div className="search__bar">
         <Form className="d-flex align-items-center gap-4">
-          <FormGroup className="d-flex gap-3 form__group form__group-fast">
+          <FormGroup className="d-flex gap-3 form__group">
             <span>
               <i class="ri-map-pin-line"></i>
             </span>
             <div>
-              <h6>Location</h6>
+              <h6>Title</h6>
               <input
                 type="text"
-                placeholder="Where are you going?"
+                placeholder="What article are you looking for?"
                 ref={locationRef}
               />
-            </div>
-          </FormGroup>
-
-          <FormGroup className="d-flex gap-3 form__group form__group-fast">
-            <span>
-              <i class="ri-map-pin-time-line"></i>
-            </span>
-            <div>
-              <h6>How Many Days?</h6>
-              <input
-                type="number"
-                placeholder="Day"
-                ref={dayRef}
-              />
-            </div>
-          </FormGroup>
-
-          <FormGroup className="d-flex gap-3 form__group">
-            <span>
-              <i class="ri-group-line"></i>
-            </span>
-            <div>
-              <h6>Max People</h6>
-              <input type="number" placeholder="0" ref={maxGroupSizeRef} />
             </div>
           </FormGroup>
 

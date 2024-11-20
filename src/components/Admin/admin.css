@@ -1,0 +1,65 @@
+/* admin.css */
+.sidebar {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 0 10px;
+  height: 530px;
+}
+
+.sidebar-title {
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.sidebar-menu {
+  list-style-type: none;
+  padding: 10px;
+}
+
+.sidebar-menu li {
+  margin-bottom: 10px;
+}
+
+.sidebar-menu li button {
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  font-size: 1.1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.sidebar-menu li button:hover {
+  background-color: #ff7e01 !important;
+  transform: scale(1.05);
+}
+
+/* Active state when the item is selected */
+/* .sidebar-menu li button.active {
+  background-color: #007bff;
+  color: white;
+} */
+
+/* Style cho khi hover trên một mục đã chọn */
+/* .sidebar-menu li button.active:hover {
+  background-color: #0056b3;
+} */
+
+.content {
+  padding: 20px;
+  border: 2px solid var(--text-color);
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
