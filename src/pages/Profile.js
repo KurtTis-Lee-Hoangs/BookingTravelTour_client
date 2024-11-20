@@ -3,16 +3,22 @@ import { Button, Form, FormGroup, Label, Input, Container, Row, Col } from "reac
 import { AuthContext } from "../context/AuthContext";
 import { BASE_URL } from "../utils/config";
 import "../styles/profile.css";
+import useFetch from "../hooks/useFetch";
 
 const ProfilePage = () => {
   const { user, dispatch } = useContext(AuthContext);
   const [avatar, setAvatar] = useState(user?.avatar || "");
   const [username, setUsername] = useState(user?.username || "");
   const [password, setPassword] = useState("");
+  const {
+    data: userData,
+    loading,
+    error,
+  } = useFetch(`${BASE_URL}/users/${user._id}`);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [userData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +30,7 @@ const ProfilePage = () => {
     };
 
     try {
-      const response = await fetch(`${BASE_URL}/users/${user._id}`, {
+      const response = await fetch(userData, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

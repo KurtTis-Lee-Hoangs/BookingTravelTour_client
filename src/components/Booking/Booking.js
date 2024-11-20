@@ -22,7 +22,19 @@ const Booking = ({ tour, avgRating }) => {
   });
 
   const handleChange = (e) => {
-    setBooking((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    // setBooking((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+
+    const { id, value } = e.target;
+
+    // Check if the input is for guestSize
+    if (id === "guestSize") {
+      // Only update if the value is greater than or equal to 1
+      if (value >= 1 || value === "") {
+        setBooking((prev) => ({ ...prev, [id]: value }));
+      }
+    } else {
+      setBooking((prev) => ({ ...prev, [id]: value }));
+    }
   };
 
   const serviceFree = 10;
@@ -105,9 +117,10 @@ const Booking = ({ tour, avgRating }) => {
             />
             <input
               type="number"
-              placeholder=""
+              placeholder="1"
               id="guestSize"
               required
+              min="1"
               onChange={handleChange}
             />
           </FormGroup>

@@ -5,8 +5,9 @@ import useFetch from "../../hooks/useFetch";
 
 const UsersTable = () => {
   // Fetch the users data from the API
-  const { data: post, loading, error } = useFetch(`${BASE_URL}/posts`);
+  const { data: booking, loading, error } = useFetch(`${BASE_URL}/booking`);
 
+  // console.log("🚀 ~ UsersTable ~ data:", user)
   // Handle loading and error states
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -23,40 +24,37 @@ const UsersTable = () => {
   };
 
   return (
-    // <div style={{ overflowX: "auto", width: "100%" }}>
     <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "400px" }}>
-      {/* <Table striped style={{ minWidth: "2000px", display: "block" }}> */}
-      <Table striped style={{ minWidth: "800px" }}>
+      <h2>Users List</h2> {/* Tiêu đề */}
+      <Table striped style={{ minWidth: "1400px" }}>
         {/* Bảng người dùng */}
         <thead>
           <tr>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Description</th>
+            <th>UserID</th>
+            <th>User email</th>
+            <th>Tour name</th>
+            <th>FullName</th>
+            <th>Guest size</th>
+            <th>Phone</th>
+            <th>bookAt</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {post?.map((post) => (
-            <tr key={post._id}>
+          {booking?.map((booking) => (
+            <tr key={booking._id}>              
+              <td>{booking.userId}</td>
+              <td>{booking.userEmail}</td>
+              <td>{booking.tourName}</td>
+              <td>{booking.fullName}</td>
+              <td>{booking.guestSize}</td>
+              <td>{booking.phone}</td>
+              <td>{booking.bookAt}</td>
               <td>
-                <img
-                  src={post.images}
-                  alt="Tour imgae"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%",
-                  }}
-                />
-              </td>
-              <td>{post.title}</td>
-              <td>{post.description}</td>
-              <td>
-                <Button color="primary" size="sm" onClick={() => handleEdit(post._id)}>
+                <Button color="primary" size="sm" onClick={() => handleEdit(booking._id)}>
                   Edit
                 </Button>{" "}
-                <Button color="danger" size="sm" onClick={() => handleDelete(post._id)}>
+                <Button color="danger" size="sm" onClick={() => handleDelete(booking._id)}>
                   Delete
                 </Button>
               </td>

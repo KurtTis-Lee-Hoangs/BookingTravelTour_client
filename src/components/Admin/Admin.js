@@ -5,6 +5,7 @@ import "./admin.css";
 import UsersTable from "./UsersTable";
 import ToursTable from "./ToursTable";
 import PostsTable from "./PostTable";
+import BookingTable from "./BookingTable"
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("users");
@@ -45,6 +46,14 @@ const Admin = () => {
                 All posts
               </Button>
             </li>
+            <li>
+              <Button
+                className="btn primary__btn"
+                onClick={() => handleTabClick("bookings")}
+              >
+                All bookings
+              </Button>
+            </li>
           </ul>
         </Col>
 
@@ -69,6 +78,13 @@ const Admin = () => {
               <h2>Posts</h2>
               <p>Here you can manage posts (Add, Delete, Create, Update)</p>
               <PostsTable />
+            </div>
+          )}
+          {activeTab === "bookings" && (
+            <div>
+              <h2>Bookings</h2>
+              <p>Here you can manage bookings (Add, Delete, Create, Update)</p>
+              <BookingTable />
             </div>
           )}
         </Col>

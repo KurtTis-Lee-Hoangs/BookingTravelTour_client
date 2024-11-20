@@ -11,6 +11,7 @@ import SearchResultList from "../pages/SearchResultList";
 import ThankYou from "../pages/ThankYou";
 import Profile from "../pages/Profile";
 import Admin from "../components/Admin/Admin";
+import BookingHistory from "../components/User/BookingHistory";
 
 const Routers = () => {
   return (
@@ -27,6 +28,7 @@ const Routers = () => {
       <Route path="/tours/search" element={<SearchResultList />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/admin" element={<Admin />} />
+      <Route path="/history" element={<BookingHistory />} />
     </Routes>
   );
 };
