@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "reactstrap";
-import { BASE_URL } from "../../utils/config";
-import useFetch from "../../hooks/useFetch";
+import { BASE_URL } from "../../../utils/config";
+import useFetch from "../../../hooks/useFetch";
 
 const UsersTable = () => {
   // Fetch the users data from the API
@@ -21,6 +21,12 @@ const UsersTable = () => {
   const handleDelete = (id) => {
     // Logic to delete the tour with the given ID
     console.log(`Delete post with ID: ${id}`);
+  };
+
+  // Format phone number with +84 prefix
+  const formatPhoneNumber = (phone) => {
+    const phoneStr = phone.toString();
+    return "+84 " + phoneStr.replace(/(\d{4})(\d{3})(\d{3})/, "$1 $2 $3");
   };
 
   return (
@@ -46,34 +52,38 @@ const UsersTable = () => {
           </tr>
         </thead>
         <tbody>
-          {booking?.map((booking) => (
-            <tr key={booking._id}>
-              <td>{booking.userId}</td>
-              <td>{booking.userEmail}</td>
-              <td>{booking.tourName}</td>
-              <td>{booking.fullName}</td>
-              <td>{booking.guestSize}</td>
-              <td>{booking.phone}</td>
-              <td>{booking.bookAt}</td>
-              <td>
-                <Button
-                  className="acction__btn"
-                  color="primary"
-                  size="sm"
-                  onClick={() => handleEdit(booking._id)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  color="danger"
-                  size="sm"
-                  onClick={() => handleDelete(booking._id)}
-                >
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {booking?.map((booking) => {
+            const formattedDate = new Date(booking.bookAt).toLocaleDateString();
+            const formattedPhone = formatPhoneNumber(booking.phone);
+            return (
+              <tr key={booking._id}>
+                <td>{booking.userId}</td>
+                <td>{booking.userEmail}</td>
+                <td>{booking.tourName}</td>
+                <td>{booking.fullName}</td>
+                <td>{booking.guestSize}</td>
+                <td>{formattedPhone}</td>
+                <td>{formattedDate}</td>
+                <td>
+                  <Button
+                    className="acction__btn"
+                    color="primary"
+                    size="sm"
+                    onClick={() => handleEdit(booking._id)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    onClick={() => handleDelete(booking._id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </div>

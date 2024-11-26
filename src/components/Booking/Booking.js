@@ -32,6 +32,11 @@ const Booking = ({ tour, avgRating }) => {
       if (value >= 1 || value === "") {
         setBooking((prev) => ({ ...prev, [id]: value }));
       }
+    } else if (id === "phone") {
+      const phonePattern = /^0\d{9}$/;
+      if (phonePattern.test(value) || value === "") {
+        setBooking((prev) => ({ ...prev, [id]: value }));
+      }
     } else {
       setBooking((prev) => ({ ...prev, [id]: value }));
     }
@@ -44,9 +49,7 @@ const Booking = ({ tour, avgRating }) => {
   // send data to the server
   const handleClick = async (e) => {
     e.preventDefault();
-
     // console.log(booking);
-
     try {
       if (!user || user === undefined || user === null) {
         return alert("Please sign in to book tour");

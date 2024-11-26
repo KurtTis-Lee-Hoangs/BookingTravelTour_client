@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "reactstrap";
-import { BASE_URL } from "../../utils/config";
-import useFetch from "../../hooks/useFetch";
+import { BASE_URL } from "../../../utils/config";
+import useFetch from "../../../hooks/useFetch";
 
 const UsersTable = () => {
   // Fetch the users data from the API
-  const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours`);
+  const { data: post, loading, error } = useFetch(`${BASE_URL}/posts`);
 
   // Handle loading and error states
   if (loading) return <div>Loading...</div>;
@@ -14,45 +14,50 @@ const UsersTable = () => {
   // Functions to handle edit and delete actions
   const handleEdit = (id) => {
     // Logic to edit the tour with the given ID
-    console.log(`Edit tour with ID: ${id}`);
+    console.log(`Edit post with ID: ${id}`);
   };
 
   const handleDelete = (id) => {
     // Logic to delete the tour with the given ID
-    console.log(`Delete tour with ID: ${id}`);
+    console.log(`Delete post with ID: ${id}`);
+  };
+
+  const truncateDescription = (description) => {
+    const words = description.split(" ");
+    return words.length > 9 ? words.slice(0, 9).join(" ") + "..." : description;
+  };
+
+  const truncateTitle = (title) => {
+    const words = title.split(" ");
+    return words.length > 9 ? words.slice(0, 9).join(" ") + "..." : title;
   };
 
   return (
     // <div style={{ overflowX: "auto", width: "100%" }}>
-    <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "500px" }}>
-      <div className="d-flex gap-3  mb-3">
-        <h2>Tours List</h2>
+    <div style={{ overflowY: "auto", maxHeight: "500px" }}>
+      <div className="d-flex gap-3 mb-3">
+        <h2>Posts List</h2>
         <Button color="primary" size="m">
-          Add tour
+          Add post
         </Button>
       </div>
       {/* <Table striped style={{ minWidth: "2000px", display: "block" }}> */}
-      <Table striped style={{ minWidth: "1200px" }}>
+      <Table striped style={{ minWidth: "800px" }}>
         {/* Bảng người dùng */}
         <thead>
           <tr>
-            <th>Avatar</th>
+            <th>Image</th>
             <th>Title</th>
-            <th>City</th>
-            <th>Address</th>
-            <th>Day</th>
-            <th>Desc</th>
-            <th>Price</th>
-            <th>Max Group Size</th>
+            <th>Description</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {tour?.map((tour) => (
-            <tr key={tour._id}>
+          {post?.map((post) => (
+            <tr key={post._id}>
               <td>
                 <img
-                  src={tour.photo}
+                  src={post.images}
                   alt="Tour imgae"
                   style={{
                     width: "50px",
@@ -61,26 +66,21 @@ const UsersTable = () => {
                   }}
                 />
               </td>
-              <td>{tour.title}</td>
-              <td>{tour.city}</td>
-              <td>{tour.address}</td>
-              <td>{tour.day}</td>
-              <td>{tour.desc}</td>
-              <td>{tour.price}</td>
-              <td>{tour.maxGroupSize}</td>
+              <td>{truncateTitle(post.title)}</td>
+              <td>{truncateDescription(post.description)}...</td>
               <td>
                 <Button
                   className="acction__btn"
                   color="primary"
                   size="sm"
-                  onClick={() => handleEdit(tour._id)}
+                  onClick={() => handleEdit(post._id)}
                 >
                   Edit
                 </Button>
                 <Button
                   color="danger"
                   size="sm"
-                  onClick={() => handleDelete(tour._id)}
+                  onClick={() => handleDelete(post._id)}
                 >
                   Delete
                 </Button>

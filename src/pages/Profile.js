@@ -15,10 +15,41 @@ const ProfilePage = () => {
     loading,
     error,
   } = useFetch(`${BASE_URL}/users/${user._id}`);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [userData]);
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setIsUploading(true);  // Bắt đầu tải ảnh lên
+
+      // Tạo FormData để gửi file ảnh tới Cloudinary
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "avatarImg"); // Hãy chắc chắn rằng preset này được phép tải lên ảnh
+
+      try {
+        // Upload ảnh lên Cloudinary
+        const response = await fetch("https://api.cloudinary.com/v1_1/dmbkgg1ac/image/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        if (data.secure_url) {
+          // Cập nhật avatar mới vào trong state của avatar
+          setAvatar(data.secure_url);
+        }
+      } catch (error) {
+        console.error("Error uploading image to Cloudinary:", error);
+      } finally {
+        setIsUploading(false);  // Kết thúc quá trình tải ảnh lên
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,11 +111,11 @@ const ProfilePage = () => {
             <FormGroup>
               <Label for="avatar">Avatar</Label>
               <Input
-                type="text"
+                type="file"
                 name="avatar"
                 id="avatar"
-                value={avatar}
-                onChange={(e) => setAvatar(e.target.value)}
+                onChange={handleAvatarChange}
+                disabled={isUploading}
               />
             </FormGroup>
 

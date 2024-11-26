@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import "./admin.css";
-import UsersTable from "./UsersTable";
-import ToursTable from "./ToursTable";
-import PostsTable from "./PostTable";
-import BookingTable from "./BookingTable";
+import UsersTable from "./UsersTable/UsersTable";
+import ToursTable from "./ToursTable/ToursTable";
+import PostsTable from "./PostsTable/PostTable";
+import BookingTable from "./BookingsTable/BookingTable";
 import NewSletter from "../../shared/NewSletter";
 
 const Admin = () => {
