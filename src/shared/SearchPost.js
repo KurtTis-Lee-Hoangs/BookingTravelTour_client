@@ -5,29 +5,23 @@ import { BASE_URL } from "../utils/config";
 import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
-  const locationRef = useRef("");
-  const dayRef = useRef(0);
-  const maxGroupSizeRef = useRef(0);
+  const titleRef = useRef("");
   const navigate = useNavigate();
 
   const searchHandler = async (e) => {
     // Lấy giá trị từ các trường input
-    const location = locationRef.current.value;
-    const day = dayRef.current.value;
-    const maxGroupSize = maxGroupSizeRef.current.value;
+    const title = titleRef.current.value;
 
     // Kiểm tra nếu không có bất kỳ giá trị nào
-    if (!location && !day && !maxGroupSize) {
+    if (!title) {
       return alert("Please enter at least one search criteria.");
     }
 
     // Xây dựng URL động dựa trên các giá trị có sẵn
     const queryParams = new URLSearchParams();
-    if (location) queryParams.append("city", location);
-    if (day) queryParams.append("day", day);
-    if (maxGroupSize) queryParams.append("maxGroupSize", maxGroupSize);
+    if (title) queryParams.append("title", title);
 
-    const res = await fetch(`${BASE_URL}/tours/search/getTourBySearch?${queryParams.toString()}`);
+    const res = await fetch(`${BASE_URL}/posts/search/getPostBySearch?${queryParams.toString()}`);
 
     if (!res.ok) {
       alert("Something went wrong");
@@ -36,7 +30,7 @@ const SearchBar = () => {
 
     const result = await res.json();
 
-    navigate(`/tours/search?${queryParams.toString()}`, { state: result.data });
+    navigate(`/posts/search?${queryParams.toString()}`, { state: result.data });
   };
 
   return (
@@ -51,8 +45,8 @@ const SearchBar = () => {
               <h6>Title</h6>
               <input
                 type="text"
-                placeholder="What article are you looking for?"
-                ref={locationRef}
+                placeholder="What post are you looking"
+                ref={titleRef}
               />
             </div>
           </FormGroup>

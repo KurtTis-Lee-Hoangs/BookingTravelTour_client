@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const useFetch = (url) => {
+const useFetch = (url, refreshKey) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,11 +28,13 @@ const useFetch = (url) => {
       } catch (err) {
         setError(err.message);
         setLoading(false);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [url]);
+  }, [url, refreshKey]);
 
   return {
     data,

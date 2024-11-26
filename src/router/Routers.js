@@ -12,6 +12,8 @@ import ThankYou from "../pages/ThankYou";
 import Profile from "../pages/Profile";
 import Admin from "../components/Admin/Admin";
 import BookingHistory from "../components/User/BookingHistory";
+import SearchResultListPost from "../pages/SearchResultListPost";
+
 
 const Routers = () => {
   return (
@@ -26,6 +28,7 @@ const Routers = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/thankyou" element={<ThankYou />} />
       <Route path="/tours/search" element={<SearchResultList />} />
+      <Route path="/posts/search" element={<SearchResultListPost />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/history" element={<BookingHistory />} />

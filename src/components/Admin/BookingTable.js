@@ -24,8 +24,13 @@ const UsersTable = () => {
   };
 
   return (
-    <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "400px" }}>
-      <h2>Users List</h2> {/* Tiêu đề */}
+    <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "500px" }}>
+      <div className="d-flex gap-3 mb-3">
+        <h2>Bookings List</h2>
+        <Button color="primary" size="m">
+          Add booking
+        </Button>
+      </div>
       <Table striped style={{ minWidth: "1400px" }}>
         {/* Bảng người dùng */}
         <thead>
@@ -42,7 +47,7 @@ const UsersTable = () => {
         </thead>
         <tbody>
           {booking?.map((booking) => (
-            <tr key={booking._id}>              
+            <tr key={booking._id}>
               <td>{booking.userId}</td>
               <td>{booking.userEmail}</td>
               <td>{booking.tourName}</td>
@@ -51,10 +56,19 @@ const UsersTable = () => {
               <td>{booking.phone}</td>
               <td>{booking.bookAt}</td>
               <td>
-                <Button color="primary" size="sm" onClick={() => handleEdit(booking._id)}>
+                <Button
+                  className="acction__btn"
+                  color="primary"
+                  size="sm"
+                  onClick={() => handleEdit(booking._id)}
+                >
                   Edit
-                </Button>{" "}
-                <Button color="danger" size="sm" onClick={() => handleDelete(booking._id)}>
+                </Button>
+                <Button
+                  color="danger"
+                  size="sm"
+                  onClick={() => handleDelete(booking._id)}
+                >
                   Delete
                 </Button>
               </td>

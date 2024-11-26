@@ -5,7 +5,7 @@
   border: 1px solid #ddd;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   margin: 0 10px;
-  height: 530px;
+  height: 550px;
 }
 
 .sidebar-title {
@@ -62,4 +62,8 @@
 h2 {
   font-size: 28px;
   margin-bottom: 20px;
+}
+
+.acction__btn {
+  margin-right: 10px;
 }

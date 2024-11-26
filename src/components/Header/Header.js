@@ -12,7 +12,7 @@ const nav__links = [
   },
   {
     path: "/posts",
-    display: "Article",
+    display: "Blogs",
   },
   {
     path: "/tours",

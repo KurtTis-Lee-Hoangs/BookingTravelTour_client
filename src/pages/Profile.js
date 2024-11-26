@@ -30,11 +30,12 @@ const ProfilePage = () => {
     };
 
     try {
-      const response = await fetch(userData, {
+      const response = await fetch(`${BASE_URL}/users/${user._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(updatedData),
       });
 

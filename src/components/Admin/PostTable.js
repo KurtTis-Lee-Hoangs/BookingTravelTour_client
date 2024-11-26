@@ -24,9 +24,15 @@ const UsersTable = () => {
 
   return (
     // <div style={{ overflowX: "auto", width: "100%" }}>
-    <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "400px" }}>
+    <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "500px" }}>
+      <div className="d-flex gap-3 mb-3">
+        <h2>Posts List</h2>
+        <Button color="primary" size="m">
+          Add post
+        </Button>
+      </div>
       {/* <Table striped style={{ minWidth: "2000px", display: "block" }}> */}
-      <Table striped style={{ minWidth: "800px" }}>
+      <Table striped style={{ minWidth: "1200px" }}>
         {/* Bảng người dùng */}
         <thead>
           <tr>
@@ -53,10 +59,19 @@ const UsersTable = () => {
               <td>{post.title}</td>
               <td>{post.description}</td>
               <td>
-                <Button color="primary" size="sm" onClick={() => handleEdit(post._id)}>
+                <Button
+                  className="acction__btn"
+                  color="primary"
+                  size="sm"
+                  onClick={() => handleEdit(post._id)}
+                >
                   Edit
-                </Button>{" "}
-                <Button color="danger" size="sm" onClick={() => handleDelete(post._id)}>
+                </Button>
+                <Button
+                  color="danger"
+                  size="sm"
+                  onClick={() => handleDelete(post._id)}
+                >
                   Delete
                 </Button>
               </td>

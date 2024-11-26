@@ -4,6 +4,7 @@ import { BASE_URL } from "../../utils/config";
 import useFetch from "../../hooks/useFetch";
 import { Table, Container, Row, Col } from "reactstrap";
 import "./booking-history.css";
+import NewSletter from "../../shared/NewSletter";
 
 const BookingHistory = () => {
   const {
@@ -11,6 +12,10 @@ const BookingHistory = () => {
     loading,
     error,
   } = useFetch(`${BASE_URL}/booking/user/history`);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [bookingData]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -22,46 +27,53 @@ const BookingHistory = () => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <div className="booking-history-table">
-            <h2 className="table-title">Booking History</h2>
-            <Table striped hover responsive>
-              <thead>
-                <tr>
-                  <th>User Email</th>
-                  <th>Name</th>
-                  <th>Tour Name</th>
-                  <th>Size</th>
-                  <th>Phone</th>
-                  <th>Booking Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bookingData?.map((bookingData) => {
-                  const formattedDate = new Date(
-                    bookingData.bookAt
-                  ).toLocaleDateString();
-                  const formattedPhone = formatPhoneNumber(bookingData.phone);
-
-                  return (
-                    <tr key={bookingData._id}>
-                      <td>{bookingData.userEmail}</td>
-                      <td>{bookingData.fullName}</td>
-                      <td>{bookingData.tourName}</td>
-                      <td>{bookingData.guestSize}</td>
-                      <td>{formattedPhone}</td>
-                      <td>{formattedDate}</td>
+    <>
+      <section>
+        <Container>
+          <Row>
+            <Col>
+              <div className="booking-history-table">
+                <h2 className="table-title">Booking History</h2>
+                <Table striped hover responsive>
+                  <thead>
+                    <tr>
+                      <th>User Email</th>
+                      <th>Name</th>
+                      <th>Tour Name</th>
+                      <th>Size</th>
+                      <th>Phone</th>
+                      <th>Booking Date</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+                  </thead>
+                  <tbody>
+                    {bookingData?.map((bookingData) => {
+                      const formattedDate = new Date(
+                        bookingData.bookAt
+                      ).toLocaleDateString();
+                      const formattedPhone = formatPhoneNumber(
+                        bookingData.phone
+                      );
+
+                      return (
+                        <tr key={bookingData._id}>
+                          <td>{bookingData.userEmail}</td>
+                          <td>{bookingData.fullName}</td>
+                          <td>{bookingData.tourName}</td>
+                          <td>{bookingData.guestSize}</td>
+                          <td>{formattedPhone}</td>
+                          <td>{formattedDate}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+      <NewSletter />
+    </>
   );
 };
 

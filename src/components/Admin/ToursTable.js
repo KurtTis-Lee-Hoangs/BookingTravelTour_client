@@ -24,7 +24,13 @@ const UsersTable = () => {
 
   return (
     // <div style={{ overflowX: "auto", width: "100%" }}>
-    <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "400px" }}>
+    <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "500px" }}>
+      <div className="d-flex gap-3  mb-3">
+        <h2>Tours List</h2>
+        <Button color="primary" size="m">
+          Add tour
+        </Button>
+      </div>
       {/* <Table striped style={{ minWidth: "2000px", display: "block" }}> */}
       <Table striped style={{ minWidth: "1200px" }}>
         {/* Bảng người dùng */}
@@ -63,10 +69,19 @@ const UsersTable = () => {
               <td>{tour.price}</td>
               <td>{tour.maxGroupSize}</td>
               <td>
-                <Button color="primary" size="sm" onClick={() => handleEdit(tour._id)}>
+                <Button
+                  className="acction__btn"
+                  color="primary"
+                  size="sm"
+                  onClick={() => handleEdit(tour._id)}
+                >
                   Edit
-                </Button>{" "}
-                <Button color="danger" size="sm" onClick={() => handleDelete(tour._id)}>
+                </Button>
+                <Button
+                  color="danger"
+                  size="sm"
+                  onClick={() => handleDelete(tour._id)}
+                >
                   Delete
                 </Button>
               </td>

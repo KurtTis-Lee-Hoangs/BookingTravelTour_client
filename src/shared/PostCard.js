@@ -7,25 +7,25 @@ const PostCard = ({ post }) => {
   const { _id, title, images, description } = post;
 
   // Split the description into words and take the first 4
-  const descriptionPreview = description.split(" ").slice(0, 4).join(" ");
+  const descriptionPreview = description.split(" ").slice(0, 5).join(" ");
+  const titlePreview = title.split(" ").slice(0, 10).join(" ");
 
   return (
     <Link to={`/posts/${_id}`} className="tour__card">
       <Card>
-        <div className="tour__img">
+        <div className="post__img">
           <img src={images} alt="post-img" />
         </div>
 
         <CardBody>
           <h5 className="tour__title">
             {/* <Link to={`/tours/${_id}`}>{title}</Link> */}
-            <p>{title}</p>
+            {/* <p>{title}</p> */}
+            <p>{titlePreview} ...</p>
           </h5>
 
           <div className="card__bottom d-flex align-items-center justify-content-between mt-3">
-            <p>
-              {descriptionPreview}...
-            </p>
+            <p>{descriptionPreview} ......</p>
 
             <button className="btn booking__btn">
               <Link to={`/posts/${_id}`}>Read</Link>
