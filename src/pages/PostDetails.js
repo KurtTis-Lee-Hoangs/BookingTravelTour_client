@@ -15,7 +15,7 @@ const PostDetails = () => {
   // destructure properties from post object
   const {
     title,
-    images,
+    image,
     description
   } = post || {};  // Ensure post is not undefined
 
@@ -44,7 +44,7 @@ const PostDetails = () => {
             <Row>
               <Col>
                 <div className="tour__content">
-                  <img src={images} alt="post-image" />
+                  <img src={image} alt="post-image" />
                   <div className="tour__info">
                     <h2>{title}</h2>
                     {/* <h5>Description</h5> */}

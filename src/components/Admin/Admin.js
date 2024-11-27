@@ -22,11 +22,11 @@ const Admin = () => {
   return (
     <>
       <section>
-        <Container fluid>
+        <Container>
           <Row className="mt-5">
             {/* Sidebar */}
             <h2 className="text-center mb-4">Admin Panel</h2>
-            <Col lg="2" md="3" className="sidebar">
+            <Col lg="2" md="2" sm="2" className="sidebar">
               <h3 className="sidebar-title text-center">Manage</h3>
               <ul className="sidebar-menu">
                 <li>
@@ -65,7 +65,7 @@ const Admin = () => {
             </Col>
 
             {/* Content */}
-            <Col lg="9" md="9" className="content">
+            <Col lg="9" md="9" sm="5" className="content">
               {activeTab === "users" && (
                 <div>
                   {/* <h2>Users List</h2>

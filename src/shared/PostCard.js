@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./tour-card.css";
 
 const PostCard = ({ post }) => {
-  const { _id, title, images, description } = post;
+  const { _id, title, image, description } = post;
 
   // Split the description into words and take the first 4
   const descriptionPreview = description.split(" ").slice(0, 5).join(" ");
@@ -14,7 +14,7 @@ const PostCard = ({ post }) => {
     <Link to={`/posts/${_id}`} className="tour__card">
       <Card>
         <div className="post__img">
-          <img src={images} alt="post-img" />
+          <img src={image} alt="post-img" />
         </div>
 
         <CardBody>
