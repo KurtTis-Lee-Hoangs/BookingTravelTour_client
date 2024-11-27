@@ -3,7 +3,7 @@ import { Table, Button } from "reactstrap";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
 
-const UsersTable = () => {
+const PostsTable = () => {
   // Fetch the users data from the API
   const { data: post, loading, error } = useFetch(`${BASE_URL}/posts`);
 
@@ -93,4 +93,4 @@ const UsersTable = () => {
   );
 };
 
-export default UsersTable;
+export default PostsTable;

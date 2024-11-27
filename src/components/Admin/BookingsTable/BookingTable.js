@@ -3,7 +3,7 @@ import { Table, Button } from "reactstrap";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
 
-const UsersTable = () => {
+const BookingsTable = () => {
   // Fetch the users data from the API
   const { data: booking, loading, error } = useFetch(`${BASE_URL}/booking`);
 
@@ -90,4 +90,4 @@ const UsersTable = () => {
   );
 };
 
-export default UsersTable;
+export default BookingsTable;

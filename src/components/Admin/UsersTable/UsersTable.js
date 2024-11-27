@@ -13,8 +13,8 @@ const UsersTable = () => {
     loading,
     error,
   } = useFetch(`${BASE_URL}/users`, refreshKey);
+  const [isUploading, setIsUploading] = useState(false);
   const [modal, setModal] = useState(false);
-  const [editModal, setEditModal] = useState(false);
   const [newUser, setNewUser] = useState({
     username: "",
     email: "",
@@ -22,13 +22,14 @@ const UsersTable = () => {
     role: "user",
   });
 
+  const [editModal, setEditModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
+  const [originalUser, setOriginalUser] = useState(null);
   const openEditModal = (user) => {
     setOriginalUser(user); // Lưu bản sao dữ liệu gốc
     setEditingUser(user); // Lưu thông tin người dùng vào state
     setEditModal(true); // Mở modal
   };
-  const [originalUser, setOriginalUser] = useState(null);
 
   const toggleModal = () => setModal(!modal);
 
@@ -128,18 +129,23 @@ const UsersTable = () => {
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
+      setIsUploading(true); // Bắt đầu tải ảnh lên
+
       // Create FormData to send the image file to Cloudinary
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", "avatarImg"); // Make sure this is allowed for unsigned uploads
-    
+
       try {
         // Upload to Cloudinary
-        const response = await fetch("https://api.cloudinary.com/v1_1/dmbkgg1ac/image/upload", {
-          method: "POST",
-          body: formData,
-        });
-    
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dmbkgg1ac/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
         const data = await response.json();
         if (data.secure_url) {
           // Update the editingUser state with the Cloudinary URL
@@ -150,37 +156,39 @@ const UsersTable = () => {
         }
       } catch (error) {
         console.error("Error uploading image to Cloudinary:", error);
+      } finally {
+        setIsUploading(false); // Kết thúc quá trình tải ảnh lên
       }
     }
   };
-  
+
   const handleEditUser = async () => {
     try {
       const updatedFields = {};
-  
+
       // Check for changes in the user fields
       Object.keys(editingUser).forEach((key) => {
         if (editingUser[key] !== originalUser[key]) {
           updatedFields[key] = editingUser[key];
         }
       });
-  
+
       if (Object.keys(updatedFields).length === 0) {
         // alert("No changes made.");
         return;
       }
-  
+
       const response = await fetch(`${BASE_URL}/users/${editingUser._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedFields),
         credentials: "include",
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to update user");
       }
-  
+
       // Refresh the page or reload the updated data
       setRefreshKey((prevKey) => prevKey + 1);
       setEditModal(false); // Close modal after update
@@ -231,10 +239,19 @@ const UsersTable = () => {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>
-                <Button className="acction__btn" color="primary" size="sm" onClick={() => openEditModal(user)} >
+                <Button
+                  className="acction__btn"
+                  color="primary"
+                  size="sm"
+                  onClick={() => openEditModal(user)}
+                >
                   Edit
                 </Button>
-                <Button color="danger" size="sm" onClick={() => handleDeleteUser(user._id)}>
+                <Button
+                  color="danger"
+                  size="sm"
+                  onClick={() => handleDeleteUser(user._id)}
+                >
                   Delete
                 </Button>
               </td>
