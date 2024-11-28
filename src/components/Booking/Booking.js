@@ -4,9 +4,10 @@ import { Form, FormGroup, ListGroup, ListGroupItem, Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { BASE_URL } from "../../utils/config";
+import useFetch from "../../hooks/useFetch";
 
 const Booking = ({ tour, avgRating }) => {
-  const { price, reviews, title } = tour;
+  const { price, reviews, title, maxGroupSize } = tour;
   const navigate = useNavigate();
 
   const { user } = useContext(AuthContext);
@@ -19,6 +20,7 @@ const Booking = ({ tour, avgRating }) => {
     phone: "",
     guestSize: 1,
     bookAt: "",
+    totalPrice: price,
   });
 
   const handleChange = (e) => {
@@ -26,11 +28,18 @@ const Booking = ({ tour, avgRating }) => {
 
     const { id, value } = e.target;
 
-    // Check if the input is for guestSize
     if (id === "guestSize") {
-      // Only update if the value is greater than or equal to 1
       if (value >= 1 || value === "") {
-        setBooking((prev) => ({ ...prev, [id]: value }));
+        const updatedGuestSize = value || 1; // Default to 1 if empty
+        const calculatedTotalAmount =
+          Number(price) * Number(updatedGuestSize) +
+          Number(serviceFree) * Number(updatedGuestSize);
+
+        setBooking((prev) => ({
+          ...prev,
+          [id]: updatedGuestSize,
+          totalPrice: calculatedTotalAmount, // Update totalPrice
+        }));
       }
     } else if (id === "phone") {
       const phonePattern = /^0\d{9}$/;
@@ -42,46 +51,85 @@ const Booking = ({ tour, avgRating }) => {
     }
   };
 
-  const serviceFree = 10;
+  const serviceFree = 100000;
   const totalAmount =
-    Number(price) * Number(booking.guestSize) + Number(serviceFree);
+    Number(price) * Number(booking.guestSize) +
+    Number(serviceFree) * Number(booking.guestSize);
 
   // send data to the server
   const handleClick = async (e) => {
     e.preventDefault();
-    // console.log(booking);
+
+    // Kiểm tra nếu guestSize lớn hơn maxGroupSize
+    if (booking.guestSize > maxGroupSize) {
+      return alert(
+        `Guest size cannot exceed the maximum group size of ${maxGroupSize}.`
+      );
+    }
+
+    // Lấy ngày hiện tại
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Đặt giờ về 0 để so sánh chỉ tính ngày
+
+    // Lấy ngày người dùng chọn
+    const selectedDate = new Date(booking.bookAt);
+
+    if (selectedDate < today) {
+      return alert("Booking date must be today or later.");
+    }
+
     try {
-      if (!user || user === undefined || user === null) {
-        return alert("Please sign in to book tour");
+      // Kiểm tra xem user đã đăng nhập hay chưa
+      if (!user) {
+        return alert("Please sign in to book the tour");
       }
 
+      // Gửi yêu cầu tạo booking
       const res = await fetch(`${BASE_URL}/booking`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
+        credentials: "include", // Bao gồm cookie nếu có
         body: JSON.stringify(booking),
       });
 
-      const result = await res.json();
-
+      // Kiểm tra trạng thái phản hồi
       if (!res.ok) {
-        return alert(result.message);
+        const errorData = await res.json();
+        return alert(errorData.message || "Failed to create booking.");
       }
 
-      navigate("/thankyou");
+      // Lấy dữ liệu từ phản hồi
+      const result = await res.json();
+
+      if (result.success && result.paymentUrl) {
+        // Chuyển hướng tới URL thanh toán
+        window.location.href = result.paymentUrl;
+      } else {
+        console.error("Payment URL not found:", result.message);
+        alert(result.message || "Unable to process payment.");
+      }
     } catch (err) {
-      alert(err.message);
+      console.error("Error during booking:", err.message);
+      alert("An error occurred while booking the tour. Please try again.");
     }
   };
+
+  const formattedPrice = price ? price.toLocaleString("vi-VN") : "0";
+  const formattedserviceFree = serviceFree
+    ? serviceFree.toLocaleString("vi-VN")
+    : "0";
+  const formattedtotalAmount = totalAmount
+    ? totalAmount.toLocaleString("vi-VN")
+    : "0";
 
   return (
     <div className="booking">
       <div className="booking__top d-flex align-items-center justify-content-between">
-        <h3>
-          ${price} <span>/per person</span>
-        </h3>
+        <h4>
+          {formattedPrice} VND <span>/person</span>
+        </h4>
         <span className="tour__rating d-flex align-items-center">
           <i class="ri-star-fill"></i>
           {avgRating === 0 ? null : avgRating} ({reviews?.length})
@@ -116,6 +164,7 @@ const Booking = ({ tour, avgRating }) => {
               placeholder=""
               id="bookAt"
               required
+              min={new Date().toISOString().split("T")[0]}
               onChange={handleChange}
             />
             <input
@@ -134,19 +183,21 @@ const Booking = ({ tour, avgRating }) => {
         <ListGroup>
           <ListGroupItem className="border-0 px-0">
             <h5 className="d-flex align-items-center gap-1">
-              ${price} <i class="ri-close-line"></i> 1 person
+              {formattedPrice} VND <i class="ri-close-line"></i> 1 person
             </h5>
-            <span> ${price}</span>
+            <span> {formattedPrice} VND</span>
           </ListGroupItem>
 
           <ListGroupItem className="border-0 px-0">
-            <h5>Service charge</h5>
-            <span> ${serviceFree}</span>
+            <h5 className="d-flex align-items-center gap-1">
+              Service charge <i class="ri-close-line"></i> 1 person
+            </h5>
+            <span> {formattedserviceFree} VND</span>
           </ListGroupItem>
 
           <ListGroupItem className="border-0 px-0 total">
             <h5>Total</h5>
-            <span> ${totalAmount}</span>
+            <span> {formattedtotalAmount} VND</span>
           </ListGroupItem>
         </ListGroup>
 

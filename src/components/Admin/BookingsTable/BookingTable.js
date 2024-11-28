@@ -4,13 +4,8 @@ import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
 
 const BookingsTable = () => {
-  // Fetch the users data from the API
-  const { data: booking, loading, error } = useFetch(`${BASE_URL}/booking`);
-
-  // console.log("🚀 ~ UsersTable ~ data:", user)
-  // Handle loading and error states
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  const [refreshKey, setRefreshKey] = useState(0);
+  const { data: booking, loading, error } = useFetch(`${BASE_URL}/booking`, refreshKey);
 
   // Functions to handle edit and delete actions
   const handleEdit = (id) => {
@@ -18,9 +13,23 @@ const BookingsTable = () => {
     console.log(`Edit post with ID: ${id}`);
   };
 
-  const handleDelete = (id) => {
-    // Logic to delete the tour with the given ID
-    console.log(`Delete post with ID: ${id}`);
+  const handleDeleteBooking = async (bookingId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+    if (!confirmDelete) return;
+    try {
+      const response = await fetch(`${BASE_URL}/bookings/${bookingId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete user");
+      }
+      setRefreshKey((prevKey) => prevKey + 1);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
   // Format phone number with +84 prefix
@@ -28,6 +37,9 @@ const BookingsTable = () => {
     const phoneStr = phone.toString();
     return "+84 " + phoneStr.replace(/(\d{4})(\d{3})(\d{3})/, "$1 $2 $3");
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "500px" }}>
@@ -76,7 +88,7 @@ const BookingsTable = () => {
                   <Button
                     color="danger"
                     size="sm"
-                    onClick={() => handleDelete(booking._id)}
+                    onClick={() => handleDeleteBooking(booking._id)}
                   >
                     Delete
                   </Button>

@@ -14,13 +14,14 @@ import ScrollButton from "../shared/ScrollButton";
 
 
 const TourDetails = () => {
+  const [refreshKey, setRefreshKey] = useState(0);
   const { id } = useParams();
   const reviewMsgRef = useRef("");
   const [tourRating, setTourRating] = useState(null);
   const { user } = useContext(AuthContext);
 
   // fetch data from database
-  const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours/${id}`);
+  const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours/${id}`, refreshKey);
 
   // desctructure properties from tour object
   const {
@@ -56,6 +57,7 @@ const TourDetails = () => {
       const reviewObj = {
         username: user?.username,
         reviewText,
+        avatarUser: user.avatar,
         rating: tourRating,
       };
 
@@ -72,16 +74,21 @@ const TourDetails = () => {
       if (!res.ok) {
         return alert(result.message);
       }
+      setRefreshKey((prevKey) => prevKey + 1);
       // alert("Review submitted");
       alert(result.message);
     } catch (err) {
       alert(err.message);
     }
   };
+
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [tour]);
 
+  const formattedPrice = price ? price.toLocaleString("vi-VN") : "0";
+  
   return (
     <>
       <section>
@@ -121,7 +128,7 @@ const TourDetails = () => {
                         <i class="ri-map-pin-2-line"></i> {city}
                       </span>
                       <span>
-                        <i class="ri-wallet-3-line"></i> ${price} /per person
+                        <i class="ri-wallet-3-line"></i> {formattedPrice} VND /person
                       </span>
                       <span>
                         <i class="ri-time-line"></i> {day} days
@@ -191,7 +198,7 @@ const TourDetails = () => {
                     <ListGroup className="user__reviews">
                       {reviews?.map((review) => (
                         <div className="review__item">
-                          <img src={user.photo} alt="" />
+                          <img src={review.avatarUser} alt="" />
 
                           <div className="w-100">
                             <div className="d-flex align-items-center justify-content-between">

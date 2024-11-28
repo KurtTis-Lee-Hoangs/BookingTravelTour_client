@@ -61,13 +61,13 @@
   color: var(--secondary-color);
 }
 
-.card__bottom h5 {
+.card__bottom h6 {
   color: var(--secondary-color);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
-.card__bottom h5 span {
+.card__bottom h6 span {
   font-weight: 500;
   color: var(--text-color);
   font-size: 0.8rem;

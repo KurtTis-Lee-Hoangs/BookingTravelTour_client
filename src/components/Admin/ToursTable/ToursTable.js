@@ -182,6 +182,15 @@ const ToursTable = () => {
     return words.length > 4 ? words.slice(0, 4).join(" ") + "..." : desc;
   };
 
+  const formatCurrency = (price) => {
+    return Number(price).toLocaleString("vi-VN", 
+      // {
+      // style: "currency",
+      // currency: "VND",
+      // }
+    ) + " VND";
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -193,7 +202,7 @@ const ToursTable = () => {
           Add tour
         </Button>
       </div>
-      <Table striped style={{ minWidth: "1200px" }}>
+      <Table striped style={{ minWidth: "1400px" }}>
         <thead>
           <tr>
             <th>Avatar</th>
@@ -212,7 +221,9 @@ const ToursTable = () => {
           {tour?.map((tour) => (
             <tr key={tour._id}>
               <td>
-                <img src={tour.photo} alt="Tour imgae"
+                <img
+                  src={tour.photo}
+                  alt="Tour imgae"
                   style={{
                     width: "50px",
                     height: "50px",
@@ -225,7 +236,7 @@ const ToursTable = () => {
               <td>{tour.address}</td>
               <td>{tour.day}</td>
               <td>{truncateDesc(tour.desc)}</td>
-              <td>{tour.price}</td>
+              <td>{formatCurrency(tour.price)}</td>
               <td>{tour.maxGroupSize}</td>
               <td>
                 {tour.featured ? (
@@ -235,8 +246,23 @@ const ToursTable = () => {
                 )}
               </td>
               <td>
-                <Button className="acction__btn" color="primary" size="sm" onClick={() => openEditModal(tour)} > Edit </Button>
-                <Button color="danger" size="sm" onClick={() => handleDeleteTour(tour._id)} > Delete </Button>
+                <Button
+                  className="acction__btn"
+                  color="primary"
+                  size="sm"
+                  onClick={() => openEditModal(tour)}
+                >
+                  {" "}
+                  Edit{" "}
+                </Button>
+                <Button
+                  color="danger"
+                  size="sm"
+                  onClick={() => handleDeleteTour(tour._id)}
+                >
+                  {" "}
+                  Delete{" "}
+                </Button>
               </td>
             </tr>
           ))}

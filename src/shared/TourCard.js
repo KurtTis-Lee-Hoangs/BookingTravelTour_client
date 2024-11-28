@@ -8,6 +8,7 @@ const TourCard = ({ tour }) => {
   const { _id, title, city, photo, price, featured, reviews } = tour;
 
   const { avgRating, totalRating } = calculateAvgRating(reviews);
+  const formattedPrice = price.toLocaleString("vi-VN");
 
   return (
     <div to={`/tours/${_id}`} className="tour__card">
@@ -35,9 +36,9 @@ const TourCard = ({ tour }) => {
           </h5>
 
           <div className="card__bottom d-flex align-items-center justify-content-between mt-3">
-            <h5>
-              ${price} <span> /per person</span>
-            </h5>
+            <h6>
+            {formattedPrice} VND <span> /person</span>
+            </h6>
 
             <button className="btn booking__btn">
               <Link to={`/tours/${_id}`}>Book Now</Link>

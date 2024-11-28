@@ -26,6 +26,10 @@ const BookingHistory = () => {
     return "+84 " + phoneStr.replace(/(\d{4})(\d{3})(\d{3})/, "$1 $2 $3");
   };
 
+  const formatCurrency = (price) => {
+    return new Intl.NumberFormat("vi-VN").format(price) + " VND";
+  };
+
   return (
     <>
       <section>
@@ -43,6 +47,8 @@ const BookingHistory = () => {
                       <th>Size</th>
                       <th>Phone</th>
                       <th>Booking Date</th>
+                      <th>Total Price</th>
+                      <th>Payment</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -53,6 +59,7 @@ const BookingHistory = () => {
                       const formattedPhone = formatPhoneNumber(
                         bookingData.phone
                       );
+                      const formattedPrice = formatCurrency(bookingData.totalPrice);
 
                       return (
                         <tr key={bookingData._id}>
@@ -62,6 +69,14 @@ const BookingHistory = () => {
                           <td>{bookingData.guestSize}</td>
                           <td>{formattedPhone}</td>
                           <td>{formattedDate}</td>
+                          <td>{formattedPrice}</td>
+                          <td>
+                            {bookingData.isPayment ? (
+                              <span style={{ color: "green" }}>Yes</span>
+                            ) : (
+                              <span style={{ color: "red" }}>No</span>
+                            )}
+                          </td>
                         </tr>
                       );
                     })}
