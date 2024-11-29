@@ -4,7 +4,6 @@ import { Form, FormGroup, ListGroup, ListGroupItem, Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { BASE_URL } from "../../utils/config";
-import useFetch from "../../hooks/useFetch";
 
 const Booking = ({ tour, avgRating }) => {
   const { price, reviews, title, maxGroupSize } = tour;
@@ -85,7 +84,7 @@ const Booking = ({ tour, avgRating }) => {
       }
 
       // Gửi yêu cầu tạo booking
-      const res = await fetch(`${BASE_URL}/booking`, {
+      const res = await fetch(`${BASE_URL}/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -11,7 +11,7 @@ const PostCard = ({ post }) => {
   const titlePreview = title.split(" ").slice(0, 10).join(" ");
 
   return (
-    <Link to={`/posts/${_id}`} className="tour__card">
+    <div to={`/posts/${_id}`} className="tour__card">
       <Card>
         <div className="post__img">
           <img src={image} alt="post-img" />
@@ -33,7 +33,7 @@ const PostCard = ({ post }) => {
           </div>
         </CardBody>
       </Card>
-    </Link>
+    </div>
   );
 };
 

@@ -11,7 +11,7 @@ const BookingHistory = () => {
     data: bookingData,
     loading,
     error,
-  } = useFetch(`${BASE_URL}/booking/user/history`);
+  } = useFetch(`${BASE_URL}/bookings/user/history`);
 
   useEffect(() => {
     window.scrollTo(0, 0);

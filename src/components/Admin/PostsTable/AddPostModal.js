@@ -22,7 +22,7 @@ const AddPostModal = ({
 }) => {
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader toggle={toggle}>Add New Tour</ModalHeader>
+      <ModalHeader toggle={toggle}>Add New Post</ModalHeader>
       <ModalBody>
         <Form>
           <FormGroup>

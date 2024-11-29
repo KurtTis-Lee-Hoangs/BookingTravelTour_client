@@ -21,7 +21,7 @@ const EditPostModal = ({
 }) => {
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader toggle={toggle}>Edit Tour</ModalHeader>
+      <ModalHeader toggle={toggle}>Edit Post</ModalHeader>
       <ModalBody>
         {editingPost && (
           <Form>
