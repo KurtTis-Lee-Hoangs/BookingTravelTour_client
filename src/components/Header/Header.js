@@ -207,6 +207,12 @@ const Header = () => {
                         >
                           History Booking
                         </Link>
+                        <Link
+                          to="/favourite"
+                          className="dropdown__item profile-item"
+                        >
+                          Favourite Tour
+                        </Link>
                         {user && user.role === "admin" && (
                           <Link
                             to="/admin"

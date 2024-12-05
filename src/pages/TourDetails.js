@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import "../styles/tour-details.css";
 import { Container, Row, Col, Form, ListGroup } from "reactstrap";
 import { useParams } from "react-router-dom";
-import tourData from "../assets/data/tours";
 import calculateAvgRating from "../utils/avgRating";
-import avatar from "../assets/images/avatar.jpg";
 import Booking from "../components/Booking/Booking";
 import NewSletter from "../shared/NewSletter";
 import useFetch from "../hooks/useFetch";
@@ -12,16 +10,20 @@ import { BASE_URL } from "../utils/config";
 import { AuthContext } from "../context/AuthContext";
 import ScrollButton from "../shared/ScrollButton";
 
-
 const TourDetails = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const { id } = useParams();
   const reviewMsgRef = useRef("");
   const [tourRating, setTourRating] = useState(null);
   const { user } = useContext(AuthContext);
+  const [isLiked, setIsLiked] = useState(false);
 
   // fetch data from database
-  const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours/${id}`, refreshKey);
+  const {
+    data: tour,
+    loading,
+    error,
+  } = useFetch(`${BASE_URL}/tours/${id}`, refreshKey);
 
   // desctructure properties from tour object
   const {
@@ -40,6 +42,36 @@ const TourDetails = () => {
 
   // format date
   const options = { day: "numeric", month: "long", year: "numeric" };
+  
+  const handleLikeClick = async () => {
+    if (!user) {
+      alert("Please sign in to add to favorites");
+      return;
+    }
+
+    const action = isLiked ? "remove" : "add"; // decide if we are adding or removing
+
+    try {
+      const res = await fetch(`${BASE_URL}/users/${user._id}/favorites`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ tourId: id, action: action }), // send the tourId and action
+      });
+
+      const result = await res.json();
+      if (!res.ok) {
+        return alert(result.message);
+      }
+
+      setIsLiked(!isLiked); // Toggle the like state
+      alert(result.message);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   // submit request to server
   const submitHandler = async (e) => {
@@ -78,17 +110,39 @@ const TourDetails = () => {
       // alert("Review submitted");
       alert(result.message);
     } catch (err) {
-      alert(err.message);
+      // alert(err.message);
     }
   };
 
-  
+  useEffect(() => {
+    const checkIfLiked = async () => {
+      if (!user) return;
+
+      try {
+        const res = await fetch(`${BASE_URL}/users/${user._id}/favorites`);
+        const result = await res.json();
+
+        if (!res.ok) {
+          return alert(result.message);
+        }
+
+        // Kiểm tra xem tourId có trong favorites hay không
+        // setIsLiked(result.favorites.includes(id));
+        setIsLiked(result.data.some((fav) => fav._id === id));
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    checkIfLiked();
+  }, [user, id]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [tour]);
 
   const formattedPrice = price ? price.toLocaleString("vi-VN") : "0";
-  
+
   return (
     <>
       <section>
@@ -102,7 +156,18 @@ const TourDetails = () => {
                   <img src={photo} alt="" />
 
                   <div className="tour__info">
-                    <h2>{title}</h2>
+                    {/* <h2 className="d-flex align-items-center gap-4">{title} <i class="ri-heart-line"></i></h2> */}
+                    <h2 className="d-flex align-items-center gap-4">
+                      {title}
+                      <i
+                        className={`ri-heart-${isLiked ? "fill" : "line"}`}
+                        style={{
+                          color: isLiked ? "red" : "black",
+                          cursor: "pointer",
+                        }}
+                        onClick={handleLikeClick}
+                      ></i>
+                    </h2>
 
                     <div className="d-flex align-items-center gap-5">
                       <span className="tour__rating d-flex align-items-center gap-1">
@@ -128,7 +193,8 @@ const TourDetails = () => {
                         <i class="ri-map-pin-2-line"></i> {city}
                       </span>
                       <span>
-                        <i class="ri-wallet-3-line"></i> {formattedPrice} VND /person
+                        <i class="ri-wallet-3-line"></i> {formattedPrice} VND
+                        /person
                       </span>
                       <span>
                         <i class="ri-time-line"></i> {day} days
@@ -148,22 +214,6 @@ const TourDetails = () => {
 
                     <Form onSubmit={submitHandler}>
                       <div className="d-flex align-items-center gap-3 mb-4 rating__group">
-                        {/* <span onClick={() => setTourRating(1)}>
-                          1 <i class="ri-star-s-fill"></i>
-                        </span>
-                        <span onClick={() => setTourRating(2)}>
-                          2 <i class="ri-star-s-fill"></i>
-                        </span>
-                        <span onClick={() => setTourRating(3)}>
-                          3 <i class="ri-star-s-fill"></i>
-                        </span>
-                        <span onClick={() => setTourRating(4)}>
-                          4 <i class="ri-star-s-fill"></i>
-                        </span>
-                        <span onClick={() => setTourRating(5)}>
-                          5 <i class="ri-star-s-fill"></i>
-                        </span> */}
-
                         {[1, 2, 3, 4, 5].map((star) => (
                           <span key={star} onClick={() => setTourRating(star)}>
                             {star}{" "}

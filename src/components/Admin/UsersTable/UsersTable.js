@@ -62,51 +62,6 @@ const UsersTable = () => {
     }
   };
 
-  // const handleEditUser = async () => {
-  //   try {
-  //     // So sánh dữ liệu gốc với dữ liệu đã chỉnh sửa
-  //     const updatedFields = {};
-  //     // Kiểm tra và cập nhật các trường khác ngoài mật khẩu
-  //     Object.keys(editingUser).forEach((key) => {
-  //       if (editingUser[key] !== originalUser[key]) {
-  //         updatedFields[key] = editingUser[key];
-  //       }
-  //     });
-
-  //     // Nếu mật khẩu thay đổi, thì cập nhật password
-  //     if (
-  //       editingUser.password &&
-  //       editingUser.password !== originalUser.password
-  //     ) {
-  //       updatedFields.password = editingUser.password;
-  //     } else {
-  //       // Nếu mật khẩu không thay đổi, loại bỏ trường password khỏi cập nhật
-  //       delete updatedFields.password;
-  //     }
-
-  //     // Kiểm tra xem có trường nào cần cập nhật không
-  //     if (Object.keys(updatedFields).length === 0) {
-  //       alert("No changes made.");
-  //       return;
-  //     }
-
-  //     const response = await fetch(`${BASE_URL}/users/${editingUser._id}`, {
-  //       method: "PUT",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(updatedFields),
-  //       credentials: "include",
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to update user");
-  //     }
-  //     setRefreshKey((prevKey) => prevKey + 1);
-  //     setEditModal(false); // Đóng modal sau khi cập nhật
-  //   } catch (error) {
-  //     console.error("Error updating user:", error);
-  //   }
-  // };
-
   const handleDeleteUser = async (userId) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this user?"

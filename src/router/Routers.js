@@ -13,6 +13,8 @@ import Profile from "../pages/Profile";
 import Admin from "../components/Admin/Admin";
 import BookingHistory from "../components/User/BookingHistory";
 import SearchResultListPost from "../pages/SearchResultListPost";
+import FavouriteTour from "../components/Favourite-tours/FavouriteTour"
+import ForgotPassword from "../components/Forgot-Password/ForgotPassword"
 
 
 const Routers = () => {
@@ -32,6 +34,8 @@ const Routers = () => {
       <Route path="/profile" element={<Profile />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/history" element={<BookingHistory />} />
+      <Route path="/favourite" element={<FavouriteTour />} />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
     </Routes>
   );
 };
