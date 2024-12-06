@@ -45,8 +45,8 @@ const Footer = () => {
             <div className="logo">
               <img src={logo} alt="" />
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                With all our experience in the industry, we are committed to
+                providing you with the highest quality service.
               </p>
 
               <div className="social__links d-flex align-items-center gap-4">
@@ -137,7 +137,8 @@ const Footer = () => {
 
           <Col lg="12" className="text-center pt-5">
             <p className="copyright">
-              <i class="ri-copyright-line"></i> Copyright {year}. Design in internet. All rights reserved.
+              <i class="ri-copyright-line"></i> Copyright {year}. Design in
+              internet. All rights reserved.
             </p>
           </Col>
         </Row>

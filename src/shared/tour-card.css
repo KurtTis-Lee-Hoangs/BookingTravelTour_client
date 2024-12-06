@@ -49,6 +49,11 @@
   margin-top: 1rem;
   font-size: 1.1rem;
   cursor: pointer;
+
+  display: block; /* Bắt buộc hiển thị như một khối */
+  white-space: nowrap; /* Không xuống dòng */
+  overflow: hidden; /* Ẩn phần nội dung vượt quá khung */
+  text-overflow: ellipsis; /* Hiển thị dấu "..." khi nội dung bị cắt */
 }
 
 .tour__title a {

@@ -62,7 +62,7 @@ const ForgotPassword = () => {
                     />
                   </FormGroup>
                   <Button className="btn primary__btn auth__btn w-100" type="submit">
-                    Send Reset Link
+                    Send Reset Password
                   </Button>
                 </Form>
               </div>

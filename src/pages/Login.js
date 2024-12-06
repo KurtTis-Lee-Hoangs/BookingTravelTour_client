@@ -77,6 +77,7 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ credential }),
       });
 
@@ -84,9 +85,14 @@ const Login = () => {
       if (res.ok) {
         alert("Login successful!");
         localStorage.setItem("accessToken", result.token);
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: { ...result.data, role: result.role },
+        });
         navigate("/"); // Điều hướng về trang chính
       } else {
         alert(result.message || "Something went wrong.");
+        dispatch({ type: "LOGIN_FAILURE", payload: result.message });
       }
     } catch (err) {
       console.error(err);

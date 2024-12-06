@@ -4,6 +4,7 @@ import { NavLink, Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import "./header.css";
 import { AuthContext } from "../../context/AuthContext";
+import { BASE_URL } from "../../utils/config";
 
 const nav__links = [
   {
@@ -27,9 +28,35 @@ const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  const logout = () => {
-    dispatch({ type: "LOGOUT" });
-    navigate("/");
+  // const logout = () => {
+  //   dispatch({ type: "LOGOUT" });
+  //   navigate("/");
+  // };
+
+  const logout = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/users/sign-out`, {
+        method: "POST", // Xác nhận rằng phương thức POST hoặc GET được dùng đúng như server yêu cầu
+        credentials: "include", // Gửi kèm cookies nếu cần
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      const result = await res.json();
+  
+      if (!res.ok) {
+        console.error("Error during logout:", result.message);
+        alert(result.message || "Logout failed. Please try again.");
+      } else {
+        // Clear user data and redirect to homepage
+        dispatch({ type: "LOGOUT" });
+        navigate("/"); 
+      }
+    } catch (err) {
+      console.error("Error during logout:", err);
+      alert("Logout failed. Please try again.");
+    }
   };
 
   // Sticky header functionality

@@ -35,10 +35,15 @@ const HomePage = () => {
                   <span className="highlight"> memories</span>
                 </h1>
                 <p>
-                  lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                  Travel is not just about exploring new destinations. It’s
+                  about opening up opportunities to create unforgettable
+                  memories. Each journey offers unique experiences, from moments
+                  of awe in breathtaking landscapes to meaningful encounters
+                  with new people and cultures. These memories are not merely
+                  photographs or stories to tell but are profound emotions, life
+                  lessons, and lasting values that stay with us forever.
+                  Therefore, travel is not only a journey across physical spaces
+                  but also a path of self-discovery and growth.
                 </p>
               </div>
             </Col>
@@ -102,11 +107,15 @@ const HomePage = () => {
                   With our all experience <br /> we will serve you
                 </h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  With all our experience in the industry, we are committed to
+                  providing you with the highest quality service.
                   <br />
-                  Sed do eiusmod tempor incididunt ut labore et dolore magna
-                  aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                  ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  Over the years, we have honed our skills, learned from every
+                  challenge, and continuously improved to meet your needs.
+                  Whether it's through personalized attention, expert solutions,
+                  or reliable support, we are here to serve you with the full
+                  extent of our knowledge and expertise. Trust that, with our
+                  experience, your satisfaction is our top priority.
                 </p>
               </div>
 

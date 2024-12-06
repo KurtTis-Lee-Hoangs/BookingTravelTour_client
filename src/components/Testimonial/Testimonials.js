@@ -37,107 +37,26 @@ const Testimonials = () => {
       },
     ],
   };
-  
-  //   return (
-  //     <Slider {...settings}>
-  //       <div className="testimonial py-4 px-3">
-  //         <p>
-  //           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  //         </p>
-
-  //         <div className="d-flex align-items-center gap-4 mt-3">
-  //           <img src={ava01} className="w-25 h-25 rounded-2" alt="" />
-  //           <div>
-  //             <h5 className="mb-0 mt-3">John Doe</h5>
-  //             <p>Customer</p>
-  //           </div>
-  //         </div>
-  //       </div>
-  //       <div className="testimonial py-4 px-3">
-  //         <p>
-  //           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  //         </p>
-
-  //         <div className="d-flex align-items-center gap-4 mt-3">
-  //           <img src={ava02} className="w-25 h-25 rounded-2" alt="" />
-  //           <div>
-  //             <h5 className="mb-0 mt-3">John Doe</h5>
-  //             <p>Customer</p>
-  //           </div>
-  //         </div>
-  //       </div>
-  //       <div className="testimonial py-4 px-3">
-  //         <p>
-  //           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  //         </p>
-
-  //         <div className="d-flex align-items-center gap-4 mt-3">
-  //           <img src={ava03} className="w-25 h-25 rounded-2" alt="" />
-  //           <div>
-  //             <h5 className="mb-0 mt-3">John Doe</h5>
-  //             <p>Customer</p>
-  //           </div>
-  //         </div>
-  //       </div><div className="testimonial py-4 px-3">
-  //         <p>
-  //           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  //         </p>
-
-  //         <div className="d-flex align-items-center gap-4 mt-3">
-  //           <img src={ava01} className="w-25 h-25 rounded-2" alt="" />
-  //           <div>
-  //             <h5 className="mb-0 mt-3">John Doe</h5>
-  //             <p>Customer</p>
-  //           </div>
-  //         </div>
-  //       </div>
-  //       <div className="testimonial py-4 px-3">
-  //         <p>
-  //           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  //         </p>
-
-  //         <div className="d-flex align-items-center gap-4 mt-3">
-  //           <img src={ava02} className="w-25 h-25 rounded-2" alt="" />
-  //           <div>
-  //             <h5 className="mb-0 mt-3">John Doe</h5>
-  //             <p>Customer</p>
-  //           </div>
-  //         </div>
-  //       </div>
-  //       <div className="testimonial py-4 px-3">
-  //         <p>
-  //           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-  //           eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  //         </p>
-
-  //         <div className="d-flex align-items-center gap-4 mt-3">
-  //           <img src={ava03} className="w-25 h-25 rounded-2" alt="" />
-  //           <div>
-  //             <h5 className="mb-0 mt-3">John Doe</h5>
-  //             <p>Customer</p>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </Slider>
-  //   );
-  
-
 
   const slides = [
-    { img: ava01, name: "John Doe", role: "Customer" },
-    { img: ava02, name: "Jane Doe", role: "Customer" },
-    { img: ava03, name: "Mike Smith", role: "Customer" },
+    {
+      img: ava01,
+      name: "John Doe",
+      role: "Customer",
+      text: "The trip we had was absolutely amazing! From start to finish, everything was perfectly organized. The destinations were beautiful, and the activities were well-planned. I can’t wait for the next adventure with you!",
+    },
+    {
+      img: ava02,
+      name: "Jane Doe",
+      role: "Customer",
+      text: "We were blown away by the quality of service and the fantastic experiences you offered. The whole family had a great time, and we are so grateful for the beautiful memories we created together.",
+    },
+    {
+      img: ava03,
+      name: "Mike Smith",
+      role: "Customer",
+      text: "Your service exceeded our expectations. Every detail, from the accommodations to the itinerary, was perfectly tailored to our preferences. It was truly a stress-free and memorable vacation for our family.",
+    },
   ];
   const doubleSlides = [...slides, ...slides]; // Nhân đôi danh sách slide
 
@@ -145,10 +64,7 @@ const Testimonials = () => {
     <Slider {...settings}>
       {doubleSlides.map((slide, index) => (
         <div key={index} className="testimonial py-4 px-3">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
+          <p>{slide.text}</p>
           <div className="d-flex align-items-center gap-4 mt-3">
             <img src={slide.img} className="w-25 h-25 rounded-2" alt="" />
             <div>

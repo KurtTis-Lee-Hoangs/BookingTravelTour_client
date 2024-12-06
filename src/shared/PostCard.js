@@ -12,27 +12,29 @@ const PostCard = ({ post }) => {
 
   return (
     <div to={`/posts/${_id}`} className="tour__card">
-      <Card>
-        <div className="post__img">
-          <img src={image} alt="post-img" />
-        </div>
-
-        <CardBody>
-          <h5 className="tour__title">
-            {/* <Link to={`/tours/${_id}`}>{title}</Link> */}
-            {/* <p>{title}</p> */}
-            <p>{titlePreview} ...</p>
-          </h5>
-
-          <div className="card__bottom d-flex align-items-center justify-content-between mt-3">
-            <p>{descriptionPreview} ......</p>
-
-            <button className="btn booking__btn">
-              <Link to={`/posts/${_id}`}>Read</Link>
-            </button>
+      <Link to={`/posts/${_id}`} className="tour__card">
+        <Card>
+          <div className="post__img">
+            <img src={image} alt="post-img" />
           </div>
-        </CardBody>
-      </Card>
+
+          <CardBody>
+            <h5 className="tour__title">
+              {/* <Link to={`/tours/${_id}`}>{title}</Link> */}
+              {/* <p>{title}</p> */}
+              <p>{titlePreview} ...</p>
+            </h5>
+
+            <div className="card__bottom d-flex align-items-center justify-content-between mt-3">
+              <p>{descriptionPreview} ......</p>
+
+              <button className="btn booking__btn">
+                <Link to={`/posts/${_id}`}>Read</Link>
+              </button>
+            </div>
+          </CardBody>
+        </Card>
+      </Link>
     </div>
   );
 };
