@@ -15,7 +15,7 @@ import BookingHistory from "../components/User/BookingHistory";
 import SearchResultListPost from "../pages/SearchResultListPost";
 import FavouriteTour from "../components/Favourite-tours/FavouriteTour"
 import ForgotPassword from "../components/Forgot-Password/ForgotPassword"
-
+import RegistrationSuccess from "../pages/RegisterSuccess"
 
 const Routers = () => {
   return (
@@ -36,6 +36,7 @@ const Routers = () => {
       <Route path="/history" element={<BookingHistory />} />
       <Route path="/favourite" element={<FavouriteTour />} />
       <Route path="/forgotpassword" element={<ForgotPassword />} />
+      <Route path="/registration-success" element={<RegistrationSuccess />} />
     </Routes>
   );
 };

@@ -14,7 +14,7 @@ const ProfilePage = () => {
     data: userData,
     loading,
     error,
-  } = useFetch(`${BASE_URL}/users/${user._id}`);
+  } = useFetch(`${BASE_URL}/users/${user.id}`);
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
