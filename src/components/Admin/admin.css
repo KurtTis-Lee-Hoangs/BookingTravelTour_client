@@ -3,9 +3,9 @@
   background-color: #f8f9fa;
   padding: 20px;
   border: 1px solid #ddd;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); */
   margin: 0 10px;
-  height: 550px;
+  height: 600px;
 }
 
 .sidebar-title {
@@ -52,11 +52,11 @@
 
 .content {
   padding: 20px;
-  border: 2px solid var(--text-color);
+  /* border: 2px solid var(--text-color); */
   border-radius: 8px;
   padding: 20px;
   background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
 }
 
 h2 {
@@ -67,3 +67,5 @@ h2 {
 .acction__btn {
   margin-right: 10px;
 }
+
+/* user */

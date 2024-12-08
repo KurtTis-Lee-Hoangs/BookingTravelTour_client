@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from "reactstrap";
+import { Table, Button, Input } from "reactstrap";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
 import AddPostModal from "./AddPostModal";
@@ -150,14 +150,49 @@ const PostsTable = () => {
     }
   };
 
-  const truncateDescription = (description) => {
-    const words = description.split(" ");
-    return words.length > 9 ? words.slice(0, 9).join(" ") + "..." : description;
+  const truncateText = (text) => {
+    return text.length > 25 ? text.slice(0, 25) + "..." : text;
   };
-  const truncateTitle = (title) => {
-    const words = title.split(" ");
-    return words.length > 9 ? words.slice(0, 9).join(" ") + "..." : title;
+
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
+
+  const sortPosts = (key) => {
+    const direction =
+      sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+    setSortConfig({ key, direction });
+
+    if (post) {
+      post.sort((a, b) => {
+        const valueA = a[key]?.toString().toLowerCase() || ""; // Chuyển về chuỗi thường
+        const valueB = b[key]?.toString().toLowerCase() || ""; // Chuyển về chuỗi thường
+
+        if (valueA < valueB) return direction === "asc" ? -1 : 1;
+        if (valueA > valueB) return direction === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
   };
+
+  const renderSortIcon = (key) => {
+    const isActive = sortConfig.key === key;
+    return (
+      <i
+        className={`ri-arrow-up-down-line ${isActive ? "text-primary" : ""}`}
+        style={{ marginLeft: "5px", fontSize: "1rem" }}
+      ></i>
+    );
+  };
+
+  const [searchQuery, setSearchQuery] = useState("");
+  // Filter users based on search query
+  const filteredPosts = post?.filter((post) => {
+    const searchTerm = searchQuery.toLowerCase();
+    return (
+      post.title.toLowerCase().includes(searchTerm) ||
+      post.description.toLowerCase().includes(searchTerm)
+    );
+  });
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -165,7 +200,14 @@ const PostsTable = () => {
     // <div style={{ overflowX: "auto", width: "100%" }}>
     <div style={{ overflowY: "auto", maxHeight: "500px" }}>
       <div className="d-flex gap-3 mb-3">
-        <h2>Posts List</h2>
+        {/* Search Bar */}
+        <Input
+          type="text"
+          placeholder="Search by Title, City or Address"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ width: "600px", boxShadow: "none" }}
+        />
         <Button color="primary" size="m" onClick={toggleModal}>
           Add post
         </Button>
@@ -176,13 +218,13 @@ const PostsTable = () => {
         <thead>
           <tr>
             <th>Image</th>
-            <th>Title</th>
-            <th>Description</th>
+            <th onClick={() => sortPosts("title")}>Title {renderSortIcon("title")}</th>
+            <th onClick={() => sortPosts("description")}>Description {renderSortIcon("description")}</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {post?.map((post) => (
+          {filteredPosts?.map((post) => (
             <tr key={post._id}>
               <td>
                 <img
@@ -195,8 +237,8 @@ const PostsTable = () => {
                   }}
                 />
               </td>
-              <td>{truncateTitle(post.title)}</td>
-              <td>{truncateDescription(post.description)}...</td>
+              <td>{truncateText(post.title)}</td>
+              <td>{truncateText(post.description)}...</td>
               <td>
                 <Button
                   className="acction__btn"

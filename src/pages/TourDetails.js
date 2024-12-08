@@ -91,6 +91,7 @@ const TourDetails = () => {
         reviewText,
         avatarUser: user.avatar,
         rating: tourRating,
+        userId: user?._id,
       };
 
       const res = await fetch(`${BASE_URL}/review/${id}`, {

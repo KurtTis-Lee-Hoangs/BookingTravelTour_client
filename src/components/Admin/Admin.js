@@ -6,6 +6,7 @@ import UsersTable from "./UsersTable/UsersTable";
 import ToursTable from "./ToursTable/ToursTable";
 import PostsTable from "./PostsTable/PostTable";
 import BookingTable from "./BookingsTable/BookingTable";
+import Statistical from "./Statistical/Statistical";
 import NewSletter from "../../shared/NewSletter";
 
 const Admin = () => {
@@ -21,85 +22,93 @@ const Admin = () => {
 
   return (
     <>
-      <section>
-        <Container>
-          <Row className="mt-5">
-            {/* Sidebar */}
-            <h2 className="text-center mb-4">Admin Panel</h2>
-            <Col lg="2" md="2" sm="2" className="sidebar">
-              <h3 className="sidebar-title text-center">Manage</h3>
-              <ul className="sidebar-menu">
-                <li>
-                  <Button
-                    className="btn primary__btn"
-                    onClick={() => handleTabClick("users")}
-                  >
-                    All users
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    className="btn primary__btn"
-                    onClick={() => handleTabClick("tours")}
-                  >
-                    All tours
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    className="btn primary__btn"
-                    onClick={() => handleTabClick("posts")}
-                  >
-                    All posts
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    className="btn primary__btn"
-                    onClick={() => handleTabClick("bookings")}
-                  >
-                    All bookings
-                  </Button>
-                </li>
-              </ul>
-            </Col>
+      <div className="d-flex mt-4">
+        {/* Sidebar */}
+        <Col lg="2" md="2" sm="2" className="sidebar">
+          <h3 className="sidebar-title text-center">Manage</h3>
+          <ul className="sidebar-menu">
+            <li>
+              <Button
+                className="btn primary__btn"
+                onClick={() => handleTabClick("users")}
+              >
+                Manage users
+              </Button>
+            </li>
+            <li>
+              <Button
+                className="btn primary__btn"
+                onClick={() => handleTabClick("tours")}
+              >
+                Manage tours
+              </Button>
+            </li>
+            <li>
+              <Button
+                className="btn primary__btn"
+                onClick={() => handleTabClick("posts")}
+              >
+                Manage posts
+              </Button>
+            </li>
+            <li>
+              <Button
+                className="btn primary__btn"
+                onClick={() => handleTabClick("bookings")}
+              >
+                Manage bookings
+              </Button>
+            </li>
+            <li>
+              <Button
+                className="btn primary__btn"
+                onClick={() => handleTabClick("statistical")}
+              >
+                Revenue statistics
+              </Button>
+            </li>
+          </ul>
+        </Col>
 
-            {/* Content */}
-            <Col lg="9" md="9" sm="5" className="content">
-              {activeTab === "users" && (
-                <div>
-                  {/* <h2>Users List</h2>
-                  <p>Here you can manage users (Add, Delete, Create, Update)</p> */}
-                  <UsersTable />
-                </div>
-              )}
-              {activeTab === "tours" && (
-                <div>
-                  {/* <h2>Tours List</h2>
-                  <p>Here you can manage tours.</p> */}
-                  <ToursTable />
-                </div>
-              )}
-              {activeTab === "posts" && (
-                <div>
-                  {/* <h2>Posts</h2>
-                  <p>Here you can manage posts (Add, Delete, Create, Update)</p> */}
-                  <PostsTable />
-                </div>
-              )}
-              {activeTab === "bookings" && (
-                <div>
-                  {/* <h2>Bookings</h2>
-                  <p>
-                    Here you can manage bookings (Add, Delete, Create, Update)
-                  </p> */}
-                  <BookingTable />
-                </div>
-              )}
-            </Col>
-          </Row>
-        </Container>
-      </section>
+        {/* Content */}
+        <Col lg="9" md="9" sm="5" className="content">
+          {activeTab === "users" && (
+            <div>
+              <h2 className="text-center mb-4">
+                Manage user accounts in the system
+              </h2>
+              <UsersTable />
+            </div>
+          )}
+          {activeTab === "tours" && (
+            <div>
+              <h2 className="text-center mb-4">Manage tour in the system</h2>
+              <ToursTable />
+            </div>
+          )}
+          {activeTab === "posts" && (
+            <div>
+              <h2 className="text-center mb-4">Manage blogs in the system</h2>
+              <PostsTable />
+            </div>
+          )}
+          {activeTab === "bookings" && (
+            <div>
+              <h2 className="text-center mb-4">
+                Manage bookings in the system
+              </h2>
+              <BookingTable />
+            </div>
+          )}
+          {activeTab === "statistical" && (
+            <div>
+              <h2 className="text-center mb-4">Revenue management</h2>
+              <Statistical />
+            </div>
+          )}
+        </Col>
+      </div>
+
       <NewSletter />
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Button } from "reactstrap";
+import { Table, Button, Input } from "reactstrap";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
 import AddTourModal from "./AddTourModal";
@@ -177,19 +177,68 @@ const ToursTable = () => {
     }
   };
 
-  const truncateDesc = (desc) => {
-    const words = desc.split(" ");
-    return words.length > 4 ? words.slice(0, 4).join(" ") + "..." : desc;
+  const truncateText = (text) => {
+    return text.length > 15 ? text.slice(0, 15) + "..." : text;
   };
 
   const formatCurrency = (price) => {
-    return Number(price).toLocaleString("vi-VN", 
-      // {
-      // style: "currency",
-      // currency: "VND",
-      // }
-    ) + " VND";
+    return (
+      Number(price).toLocaleString(
+        "vi-VN"
+        // {
+        // style: "currency",
+        // currency: "VND",
+        // }
+      ) + " VND"
+    );
   };
+
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
+
+  const sortTours = (key) => {
+    const direction =
+      sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+    setSortConfig({ key, direction });
+
+    if (tour) {
+      tour.sort((a, b) => {
+        // Kiểm tra nếu key là các trường số
+        if (["day", "price", "maxGroupSize"].includes(key)) {
+          const valueA = Number(a[key]) || 0; // Chuyển về số, mặc định là 0 nếu không phải số
+          const valueB = Number(b[key]) || 0;
+          return direction === "asc" ? valueA - valueB : valueB - valueA;
+        }
+
+        // Sắp xếp chuỗi cho các trường khác
+        const valueA = a[key]?.toString().toLowerCase() || "";
+        const valueB = b[key]?.toString().toLowerCase() || "";
+        if (valueA < valueB) return direction === "asc" ? -1 : 1;
+        if (valueA > valueB) return direction === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+  };
+
+  const renderSortIcon = (key) => {
+    const isActive = sortConfig.key === key;
+    return (
+      <i
+        className={`ri-arrow-up-down-line ${isActive ? "text-primary" : ""}`}
+        style={{ marginLeft: "5px", fontSize: "1rem" }}
+      ></i>
+    );
+  };
+
+  const [searchQuery, setSearchQuery] = useState("");
+  // Filter users based on search query
+  const filteredTours = tour?.filter((tour) => {
+    const searchTerm = searchQuery.toLowerCase();
+    return (
+      tour.title.toLowerCase().includes(searchTerm) ||
+      tour.city.toLowerCase().includes(searchTerm) ||
+      tour.address.toLowerCase().includes(searchTerm)
+    );
+  });
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -197,28 +246,51 @@ const ToursTable = () => {
   return (
     <div style={{ overflowY: "auto", maxHeight: "500px" }}>
       <div className="d-flex gap-3  mb-3">
-        <h2>Tours List</h2>
+        {/* Search Bar */}
+        <Input
+          type="text"
+          placeholder="Search by Title, City or Address"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ width: "600px", boxShadow: "none" }}
+        />
         <Button color="primary" size="m" onClick={toggleModal}>
           Add tour
         </Button>
       </div>
-      <Table striped style={{ minWidth: "1400px" }}>
+      <Table striped style={{ minWidth: "1600px" }}>
         <thead>
           <tr>
             <th>Avatar</th>
-            <th>Title</th>
-            <th>City</th>
-            <th>Address</th>
-            <th>Day</th>
-            <th>Desc</th>
-            <th>Price</th>
-            <th>Max Group Size</th>
-            <th>Featured</th>
+            <th onClick={() => sortTours("title")}>
+              Title {renderSortIcon("title")}
+            </th>
+            <th onClick={() => sortTours("city")}>
+              City {renderSortIcon("city")}
+            </th>
+            <th onClick={() => sortTours("address")}>
+              Address {renderSortIcon("address")}
+            </th>
+            <th onClick={() => sortTours("day")}>
+              Day {renderSortIcon("day")}
+            </th>
+            <th onClick={() => sortTours("desc")}>
+              Description {renderSortIcon("desc")}
+            </th>
+            <th onClick={() => sortTours("price")}>
+              Price {renderSortIcon("price")}
+            </th>
+            <th onClick={() => sortTours("maxGroupSize")}>
+              MaxGroupSize {renderSortIcon("maxGroupSize")}
+            </th>
+            <th onClick={() => sortTours("featured")}>
+              Featured {renderSortIcon("featured")}
+            </th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {tour?.map((tour) => (
+          {filteredTours?.map((tour) => (
             <tr key={tour._id}>
               <td>
                 <img
@@ -231,13 +303,13 @@ const ToursTable = () => {
                   }}
                 />
               </td>
-              <td>{tour.title}</td>
-              <td>{tour.city}</td>
-              <td>{tour.address}</td>
-              <td>{tour.day}</td>
-              <td>{truncateDesc(tour.desc)}</td>
+              <td>{truncateText(tour.title)}</td>
+              <td>{truncateText(tour.city)}</td>
+              <td>{truncateText(tour.address)}</td>
+              <td>{truncateText(tour.day)}</td>
+              <td>{truncateText(tour.desc)}</td>
               <td>{formatCurrency(tour.price)}</td>
-              <td>{tour.maxGroupSize}</td>
+              <td>{truncateText(tour.maxGroupSize)}</td>
               <td>
                 {tour.featured ? (
                   <span style={{ color: "green" }}>Yes</span>

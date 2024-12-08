@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Table, Button } from "reactstrap";
+import React, { useState } from "react";
+import { Table, Button, Input } from "reactstrap";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
 import EditBookingModal from "./EditBookingModal";
@@ -36,12 +36,15 @@ const BookingsTable = () => {
         return;
       }
 
-      const response = await fetch(`${BASE_URL}/bookings/${editingBooking._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedFields),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${BASE_URL}/bookings/${editingBooking._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedFields),
+          credentials: "include",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update tour");
@@ -78,42 +81,150 @@ const BookingsTable = () => {
     return "+84 " + phoneStr.replace(/(\d{4})(\d{3})(\d{3})/, "$1 $2 $3");
   };
 
+  const truncateText = (text) => {
+    return text.length > 15 ? text.slice(0, 15) + "..." : text;
+  };
+
+  const formatCurrency = (price) => {
+    return (
+      Number(price).toLocaleString(
+        "vi-VN"
+      ) + " VND"
+    );
+  };
+
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
+
+  const sortBookings = (key) => {
+    const direction =
+      sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+    setSortConfig({ key, direction });
+
+    if (booking) {
+      booking.sort((a, b) => {
+        let valueA = a[key];
+        let valueB = b[key];
+
+        // Handle date sorting
+        if (key === "bookAt") {
+          valueA = new Date(valueA);
+          valueB = new Date(valueB);
+        }
+
+        // Handle numeric sorting
+        if (key === "guestSize" || key === "totalPrice" || key === "phone") {
+          valueA = parseFloat(valueA) || 0; // Default to 0 if not a number
+          valueB = parseFloat(valueB) || 0;
+        } else {
+          // Convert to string and lowercase for other fields
+          valueA = valueA?.toString().toLowerCase() || "";
+          valueB = valueB?.toString().toLowerCase() || "";
+        }
+
+        if (valueA < valueB) return direction === "asc" ? -1 : 1;
+        if (valueA > valueB) return direction === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+  };
+
+  const renderSortIcon = (key) => {
+    const isActive = sortConfig.key === key;
+    return (
+      <i
+        className={`ri-arrow-up-down-line ${isActive ? "text-primary" : ""}`}
+        style={{ marginLeft: "5px", fontSize: "1rem" }}
+      ></i>
+    );
+  };
+
+  const [searchQuery, setSearchQuery] = useState("");
+  // Filter users based on search query
+  const filteredBookings = booking?.filter((booking) => {
+    const searchTerm = searchQuery.toLowerCase();
+    return (
+      booking.userEmail.toLowerCase().includes(searchTerm) ||
+      booking.tourName.toLowerCase().includes(searchTerm) ||
+      booking.fullName.toLowerCase().includes(searchTerm) ||
+      // booking.guestSize.toString().toLowerCase().includes(searchTerm) ||
+      booking.phone.toString().toLowerCase().includes(searchTerm) ||
+      new Date(booking.bookAt).toLocaleDateString("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+        .toLowerCase()
+        .includes(searchTerm)
+    );
+  });
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "500px" }}>
       <div className="d-flex gap-3 mb-3">
-        <h2>Bookings List</h2>
+        <Input
+          type="text"
+          placeholder="Search by Email, Name, TourName, Phone (+84 xxxxxxxxx) or BookAt"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ width: "600px", boxShadow: "none" }}
+        />
       </div>
       <Table striped style={{ minWidth: "1400px" }}>
         {/* Bảng người dùng */}
         <thead>
           <tr>
             <th>UserID</th>
-            <th>User email</th>
-            <th>Tour name</th>
-            <th>FullName</th>
-            <th>Guest size</th>
-            <th>Phone</th>
-            <th>bookAt</th>
-            <th>Total Price</th>
+            <th onClick={() => sortBookings("userEmail")}>
+              User email {renderSortIcon("userEmail")}
+            </th>
+            <th onClick={() => sortBookings("tourName")}>
+              Tour name {renderSortIcon("tourName")}
+            </th>
+            <th onClick={() => sortBookings("fullName")}>
+              FullName {renderSortIcon("fullName")}
+            </th>
+            <th onClick={() => sortBookings("guestSize")}>
+              Guest size {renderSortIcon("guestSize")}
+            </th>
+            <th onClick={() => sortBookings("phone")}>
+              Phone {renderSortIcon("phone")}
+            </th>
+            <th onClick={() => sortBookings("bookAt")}>
+              bookAt {renderSortIcon("bookAt")}
+            </th>
+            <th onClick={() => sortBookings("totalPrice")}>
+              Total Price {renderSortIcon("totalPrice")}
+            </th>
+            <th onClick={() => sortBookings("isPayment")}>
+              Payment {renderSortIcon("isPayment")}
+            </th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {booking?.map((booking) => {
-            const formattedDate = new Date(booking.bookAt).toLocaleDateString();
+          {filteredBookings?.map((booking) => {
+            const formattedBookAt = new Date(booking.bookAt).toLocaleDateString(
+              "vi-VN",
+              {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              }
+            );
             const formattedPhone = formatPhoneNumber(booking.phone);
             return (
               <tr key={booking._id}>
-                <td>{booking.userId}</td>
-                <td>{booking.userEmail}</td>
-                <td>{booking.tourName}</td>
-                <td>{booking.fullName}</td>
-                <td>{booking.guestSize}</td>
+                <td>{truncateText(booking.userId)}</td>
+                <td>{truncateText(booking.userEmail)}</td>
+                <td>{truncateText(booking.tourName)}</td>
+                <td>{truncateText(booking.fullName)}</td>
+                <td>{truncateText(booking.guestSize)}</td>
                 <td>{formattedPhone}</td>
-                <td>{formattedDate}</td>
+                <td>{formattedBookAt}</td>
+                <td>{formatCurrency(booking.totalPrice)}</td>
                 <td>
                   {booking.isPayment ? (
                     <span style={{ color: "green" }}>Yes</span>

@@ -19,6 +19,18 @@ const nav__links = [
     path: "/tours",
     display: "Tours",
   },
+  {
+    path: "/vehicle",
+    display: "Vehicle",
+  },
+  {
+    path: "/Airline",
+    display: "Airline",
+  },
+  {
+    path: "/about",
+    display: "About",
+  },
 ];
 
 const Header = () => {
@@ -172,10 +184,19 @@ const Header = () => {
                       <NavLink to="/homepage">Home</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
-                      <NavLink to="/posts">Article</NavLink>
+                      <NavLink to="/posts">Blogs</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
                       <NavLink to="/tours">Tours</NavLink>
+                    </li>
+                    <li className="nav__item" onClick={handleMenuItemClick}>
+                      <NavLink to="/vehicle">Vehicle</NavLink>
+                    </li>
+                    <li className="nav__item" onClick={handleMenuItemClick}>
+                      <NavLink to="/airline">Airline</NavLink>
+                    </li>
+                    <li className="nav__item" onClick={handleMenuItemClick}>
+                      <NavLink to="/about">About</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
                       <NavLink to="/profile">Profile</NavLink>
