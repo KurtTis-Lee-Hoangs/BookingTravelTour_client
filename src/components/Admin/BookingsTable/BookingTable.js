@@ -86,11 +86,7 @@ const BookingsTable = () => {
   };
 
   const formatCurrency = (price) => {
-    return (
-      Number(price).toLocaleString(
-        "vi-VN"
-      ) + " VND"
-    );
+    return Number(price).toLocaleString("vi-VN") + " VND";
   };
 
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
@@ -109,6 +105,11 @@ const BookingsTable = () => {
         if (key === "bookAt") {
           valueA = new Date(valueA);
           valueB = new Date(valueB);
+
+          // If you want to ensure proper sorting by date (year, month, day)
+          return direction === "asc"
+            ? valueA - valueB // Ascending order
+            : valueB - valueA; // Descending order
         }
 
         // Handle numeric sorting
@@ -148,11 +149,12 @@ const BookingsTable = () => {
       booking.fullName.toLowerCase().includes(searchTerm) ||
       // booking.guestSize.toString().toLowerCase().includes(searchTerm) ||
       booking.phone.toString().toLowerCase().includes(searchTerm) ||
-      new Date(booking.bookAt).toLocaleDateString("vi-VN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
+      new Date(booking.bookAt)
+        .toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
         .toLowerCase()
         .includes(searchTerm)
     );

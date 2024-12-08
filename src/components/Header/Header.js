@@ -20,8 +20,8 @@ const nav__links = [
     display: "Tours",
   },
   {
-    path: "/vehicle",
-    display: "Vehicle",
+    path: "/weather",
+    display: "Weather",
   },
   {
     path: "/Airline",
@@ -190,7 +190,7 @@ const Header = () => {
                       <NavLink to="/tours">Tours</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
-                      <NavLink to="/vehicle">Vehicle</NavLink>
+                      <NavLink to="/weather">Weather</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
                       <NavLink to="/airline">Airline</NavLink>

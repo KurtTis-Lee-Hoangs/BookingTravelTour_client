@@ -1,0 +1,131 @@
+/* Tổng thể trang */
+.weather-page {
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Tiêu đề */
+.weather-page h2 {
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Form nhập liệu */
+.weather-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.weather-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.weather-input:focus {
+  border-color: #007bff;
+}
+
+/* Nút hành động */
+.weather-form button {
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.weather-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Kết quả thời tiết */
+.weather-result {
+  margin-top: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.weather-result h5 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.weather-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: space-around;
+}
+
+.weather-card {
+  flex: 1 1 calc(33.333% - 10px);
+  background-color: #f0f8ff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.weather-card:hover {
+  transform: translateY(-5px);
+}
+
+.weather-card p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.weather-card h6 {
+  margin: 5px 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+}
+
+.weather-icon {
+  font-size: 32px;
+}
+
+/* Thanh Progress */
+.progress {
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background-color: #17a2b8;
+}
+
+/* Lỗi */
+.text-danger {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.btn__weather:hover {
+  background-color: #ff7e01 !important;
+}

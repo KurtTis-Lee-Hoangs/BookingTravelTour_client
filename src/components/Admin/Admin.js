@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
-import { NavLink } from "react-router-dom";
 import "./admin.css";
 import UsersTable from "./UsersTable/UsersTable";
 import ToursTable from "./ToursTable/ToursTable";
@@ -8,8 +7,15 @@ import PostsTable from "./PostsTable/PostTable";
 import BookingTable from "./BookingsTable/BookingTable";
 import Statistical from "./Statistical/Statistical";
 import NewSletter from "../../shared/NewSletter";
+import { BASE_URL } from "../../utils/config";
+import useFetch from "../../hooks/useFetch";
 
 const Admin = () => {
+  // Fetch the users data from the API
+  const [refreshKey, setRefreshKey] = useState(0);
+  const {
+    data: user
+  } = useFetch(`${BASE_URL}/users`, refreshKey);
   const [activeTab, setActiveTab] = useState("users");
 
   const handleTabClick = (tab) => {
@@ -22,10 +28,22 @@ const Admin = () => {
 
   return (
     <>
-      <div className="d-flex mt-4">
+      <div className="d-flex mt-4 scrollbar__none">
         {/* Sidebar */}
         <Col lg="2" md="2" sm="2" className="sidebar">
-          <h3 className="sidebar-title text-center">Manage</h3>
+          <div className="d-flex">
+            <img
+              src={user.avatar}
+              alt="User Avatar"
+              style={{
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+                marginRight: "20px"
+              }}
+            />
+            <h3 className="sidebar-title text-center">Manage</h3>
+          </div>
           <ul className="sidebar-menu">
             <li>
               <Button
@@ -71,7 +89,7 @@ const Admin = () => {
         </Col>
 
         {/* Content */}
-        <Col lg="9" md="9" sm="5" className="content">
+        <Col lg="10" md="9" sm="5" className="content">
           {activeTab === "users" && (
             <div>
               <h2 className="text-center mb-4">

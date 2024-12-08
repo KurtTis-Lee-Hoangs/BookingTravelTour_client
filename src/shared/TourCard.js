@@ -50,6 +50,11 @@ const TourCard = ({ tour }) => {
                 <Link to={`/tours/${_id}`}>Book Now</Link>
               </button>
             </div>
+            {/* <div>
+              <button className="btn booking__btn">
+                <Link to={`/tours/${_id}`}>Book Now</Link>
+              </button>
+            </div> */}
           </CardBody>
         </Card>
       </Link>
