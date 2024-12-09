@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
-import { NavLink } from "react-router-dom";
 import "./admin.css";
 import UsersTable from "./UsersTable/UsersTable";
 import ToursTable from "./ToursTable/ToursTable";
-import PostsTable from "./PostsTable/PostTable";
+import BlogsTable from "./BlogsTable/BlogTable";
 import BookingTable from "./BookingsTable/BookingTable";
+import Statistical from "./Statistical/Statistical";
 import NewSletter from "../../shared/NewSletter";
+import { AuthContext } from "../../context/AuthContext";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("users");
+  const { user } = useContext(AuthContext);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -21,86 +23,112 @@ const Admin = () => {
 
   return (
     <>
-      <section>
-        <Container>
-          <Row className="mt-5">
-            {/* Sidebar */}
-            <h2 className="text-center mb-4">Admin Panel</h2>
-            <Col lg="2" md="2" sm="2" className="sidebar">
-              <h3 className="sidebar-title text-center">Manage</h3>
-              <ul className="sidebar-menu">
-                <li>
-                  <Button
-                    className="btn primary__btn"
-                    onClick={() => handleTabClick("users")}
-                  >
-                    All users
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    className="btn primary__btn"
-                    onClick={() => handleTabClick("tours")}
-                  >
-                    All tours
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    className="btn primary__btn"
-                    onClick={() => handleTabClick("posts")}
-                  >
-                    All posts
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    className="btn primary__btn"
-                    onClick={() => handleTabClick("bookings")}
-                  >
-                    All bookings
-                  </Button>
-                </li>
-              </ul>
-            </Col>
+      <div className="d-flex mt-4 scrollbar__none">
+        {/* Sidebar */}
+        <Col lg="2" md="2" sm="2" className="sidebar">
+          <div className="d-flex align-items-center mt-3 mb-3">
+            <img
+              src={user.avatar}
+              alt="User Avatar"
+              style={{
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+                marginRight: "15px",
+                marginLeft: "25px",
+              }}
+            />
+            <h3 className="sidebar-title text-center">Admin</h3>
+          </div>
+          <ul className="sidebar-menu">
+            <li>
+              <Button
+                className="btn primary__btn manage__btn d-flex align-items-center"
+                onClick={() => handleTabClick("users")}
+              >
+                <i class="ri-user-settings-fill icon"></i>
+                Manage users
+              </Button>
+            </li>
+            <li>
+              <Button
+                className="btn primary__btn d-flex align-items-center"
+                onClick={() => handleTabClick("tours")}
+              >
+                <i class="ri-ancient-gate-fill icon"></i>
+                Manage tours
+              </Button>
+            </li>
+            <li>
+              <Button
+                className="btn primary__btn d-flex align-items-center"
+                onClick={() => handleTabClick("blogs")}
+              >
+                <i class="ri-edit-box-fill icon"></i>
+                Manage blogs
+              </Button>
+            </li>
+            <li>
+              <Button
+                className="btn primary__btn d-flex align-items-center"
+                onClick={() => handleTabClick("bookings")}
+              >
+                <i class="ri-wallet-fill icon"></i>
+                Manage bookings
+              </Button>
+            </li>
+            <li>
+              <Button
+                className="btn primary__btn d-flex align-items-center"
+                onClick={() => handleTabClick("statistical")}
+              >
+                <i class="ri-line-chart-fill icon"></i>
+                Revenue statistics
+              </Button>
+            </li>
+          </ul>
+        </Col>
 
-            {/* Content */}
-            <Col lg="9" md="9" sm="5" className="content">
-              {activeTab === "users" && (
-                <div>
-                  {/* <h2>Users List</h2>
-                  <p>Here you can manage users (Add, Delete, Create, Update)</p> */}
-                  <UsersTable />
-                </div>
-              )}
-              {activeTab === "tours" && (
-                <div>
-                  {/* <h2>Tours List</h2>
-                  <p>Here you can manage tours.</p> */}
-                  <ToursTable />
-                </div>
-              )}
-              {activeTab === "posts" && (
-                <div>
-                  {/* <h2>Posts</h2>
-                  <p>Here you can manage posts (Add, Delete, Create, Update)</p> */}
-                  <PostsTable />
-                </div>
-              )}
-              {activeTab === "bookings" && (
-                <div>
-                  {/* <h2>Bookings</h2>
-                  <p>
-                    Here you can manage bookings (Add, Delete, Create, Update)
-                  </p> */}
-                  <BookingTable />
-                </div>
-              )}
-            </Col>
-          </Row>
-        </Container>
-      </section>
-      <NewSletter />
+        {/* Content */}
+        <Col lg="10" md="9" sm="5" className="content">
+          {activeTab === "users" && (
+            <div>
+              <h2 className="text-center mb-4">
+                Manage user accounts in the system
+              </h2>
+              <UsersTable />
+            </div>
+          )}
+          {activeTab === "tours" && (
+            <div>
+              <h2 className="text-center mb-4">Manage tour in the system</h2>
+              <ToursTable />
+            </div>
+          )}
+          {activeTab === "blogs" && (
+            <div>
+              <h2 className="text-center mb-4">Manage blogs in the system</h2>
+              <BlogsTable />
+            </div>
+          )}
+          {activeTab === "bookings" && (
+            <div>
+              <h2 className="text-center mb-4">
+                Manage bookings in the system
+              </h2>
+              <BookingTable />
+            </div>
+          )}
+          {activeTab === "statistical" && (
+            <div>
+              <h2 className="text-center mb-4">Revenue management</h2>
+              <Statistical />
+            </div>
+          )}
+        </Col>
+      </div>
+
+      {/* <NewSletter /> */}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import CommonSection from "../../shared/CommonSection";
-import "../../styles/tour.css";
-import TourCard from "../../shared/TourCard";
+import "./favourite-tour.css";
+import TourCard from "../Tour/TourCard";
 import NewSletter from "../../shared/NewSletter";
 import { Container, Row, Col } from "reactstrap";
 import ScrollButton from "../../shared/ScrollButton";

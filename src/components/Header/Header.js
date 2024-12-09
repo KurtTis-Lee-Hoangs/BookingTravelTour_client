@@ -12,12 +12,24 @@ const nav__links = [
     display: "Home",
   },
   {
-    path: "/posts",
+    path: "/blogs",
     display: "Blogs",
   },
   {
     path: "/tours",
     display: "Tours",
+  },
+  {
+    path: "/weather",
+    display: "Weather",
+  },
+  {
+    path: "/Airline",
+    display: "Airline",
+  },
+  {
+    path: "/about",
+    display: "About",
   },
 ];
 
@@ -27,11 +39,6 @@ const Header = () => {
   const { user, dispatch } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
-  // const logout = () => {
-  //   dispatch({ type: "LOGOUT" });
-  //   navigate("/");
-  // };
 
   const logout = async () => {
     try {
@@ -172,10 +179,19 @@ const Header = () => {
                       <NavLink to="/homepage">Home</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
-                      <NavLink to="/posts">Article</NavLink>
+                      <NavLink to="/blogs">Blogs</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
                       <NavLink to="/tours">Tours</NavLink>
+                    </li>
+                    <li className="nav__item" onClick={handleMenuItemClick}>
+                      <NavLink to="/weather">Weather</NavLink>
+                    </li>
+                    <li className="nav__item" onClick={handleMenuItemClick}>
+                      <NavLink to="/airline">Airline</NavLink>
+                    </li>
+                    <li className="nav__item" onClick={handleMenuItemClick}>
+                      <NavLink to="/about">About</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
                       <NavLink to="/profile">Profile</NavLink>

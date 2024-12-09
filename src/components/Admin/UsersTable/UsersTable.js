@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Button } from "reactstrap";
+import { Table, Button, Input } from "reactstrap";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
 import AddUserModal from "./AddUserModal";
@@ -32,6 +32,7 @@ const UsersTable = () => {
   };
 
   const toggleModal = () => setModal(!modal);
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,7 +57,8 @@ const UsersTable = () => {
         password: "",
         role: "user",
       });
-      toggleModal();
+      // toggleModal();
+      setIsFormVisible(false);
     } catch (error) {
       console.error("Error adding user:", error);
     }
@@ -152,31 +154,115 @@ const UsersTable = () => {
     }
   };
 
+  const truncateText = (text) => {
+    return text.length > 15 ? text.slice(0, 15) + "..." : text;
+  };
+
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
+
+  const sortUsers = (key) => {
+    const direction =
+      sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+    setSortConfig({ key, direction });
+
+    if (user) {
+      user.sort((a, b) => {
+        const valueA = a[key]?.toString().toLowerCase() || ""; // Chuyển về chuỗi thường
+        const valueB = b[key]?.toString().toLowerCase() || ""; // Chuyển về chuỗi thường
+
+        if (valueA < valueB) return direction === "asc" ? -1 : 1;
+        if (valueA > valueB) return direction === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+  };
+
+  const renderSortIcon = (key) => {
+    const isActive = sortConfig.key === key;
+    return (
+      <i
+        className={`ri-arrow-up-down-line ${isActive ? "text-primary" : ""}`}
+        style={{ marginLeft: "5px", fontSize: "1rem" }}
+      ></i>
+    );
+  };
+
+  const [searchQuery, setSearchQuery] = useState("");
+  // Filter users based on search query
+  const filteredUsers = user?.filter((user) => {
+    const searchTerm = searchQuery.toLowerCase();
+    return (
+      user.username.toLowerCase().includes(searchTerm) ||
+      user.email.toLowerCase().includes(searchTerm)
+    );
+  });
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div style={{ overflowY: "auto", maxHeight: "500px" }}>
       <div className="d-flex gap-3 mb-3">
-        <h2>Users List</h2>
-        <Button color="primary" size="m" onClick={toggleModal}>
+        {/* Search Bar */}
+        <Input
+          type="text"
+          placeholder="Search by Username or Email"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ width: "600px", boxShadow: "none" }}
+        />
+
+        {/* <Button color="primary" size="m" onClick={toggleModal}>
           Add user
+        </Button> */}
+        <Button
+          color="primary"
+          size="m"
+          onClick={() => setIsFormVisible((prev) => !prev)}
+        >
+          {isFormVisible ? "Hide Form" : "Add User"}
         </Button>
       </div>
+
+      {isFormVisible && (
+        <AddUserModal
+          newUser={newUser}
+          handleInputChange={handleInputChange}
+          handleAddUser={handleAddUser}
+          handleCancel={() => setIsFormVisible(false)} // Hides the form on cancel
+        />
+      )}
+
+      {editModal && (
+        <EditUserModal
+          editingUser={editingUser}
+          setEditingUser={setEditingUser}
+          handleEditUser={handleEditUser}
+          handleAvatarChange={handleAvatarChange}
+          toggleEditMode={() => setEditModal(false)} // Close the edit form
+        />
+      )}
+
       <Table striped>
         {/* Bảng người dùng */}
         <thead>
           <tr>
             <th>Avatar</th>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
+            <th onClick={() => sortUsers("_id")}>ID {renderSortIcon("_id")}</th>
+            <th onClick={() => sortUsers("username")}>
+              Username {renderSortIcon("username")}
+            </th>
+            <th onClick={() => sortUsers("email")}>
+              Email {renderSortIcon("email")}
+            </th>
+            <th onClick={() => sortUsers("role")}>
+              Role {renderSortIcon("role")}
+            </th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {user?.map((user) => (
+          {filteredUsers?.map((user) => (
             <tr key={user._id}>
               <td>
                 <img
@@ -189,9 +275,9 @@ const UsersTable = () => {
                   }}
                 />
               </td>
-              <td>{user._id}</td>
-              <td>{user.username}</td>
-              <td>{user.email}</td>
+              <td>{truncateText(user._id)}</td>
+              <td>{truncateText(user.username)}</td>
+              <td>{truncateText(user.email)}</td>
               <td>{user.role}</td>
               <td>
                 <Button
@@ -200,14 +286,14 @@ const UsersTable = () => {
                   size="sm"
                   onClick={() => openEditModal(user)}
                 >
-                  Edit
+                  Edit User
                 </Button>
                 <Button
                   color="danger"
                   size="sm"
                   onClick={() => handleDeleteUser(user._id)}
                 >
-                  Delete
+                  Delete User
                 </Button>
               </td>
             </tr>
@@ -216,23 +302,23 @@ const UsersTable = () => {
       </Table>
 
       {/* Modal add */}
-      <AddUserModal
+      {/* <AddUserModal
         isOpen={modal}
         toggle={toggleModal}
         newUser={newUser}
         handleInputChange={handleInputChange}
         handleAddUser={handleAddUser}
-      />
+      /> */}
 
       {/* Modal edit */}
-      <EditUserModal
+      {/* <EditUserModal
         isOpen={editModal}
         toggle={() => setEditModal(false)}
         editingUser={editingUser}
         setEditingUser={setEditingUser}
         handleEditUser={handleEditUser}
         handleAvatarChange={handleAvatarChange}
-      />
+      /> */}
     </div>
   );
 };

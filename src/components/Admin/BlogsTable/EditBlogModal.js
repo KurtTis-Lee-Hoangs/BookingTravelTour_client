@@ -11,19 +11,19 @@ import {
   Input,
 } from "reactstrap";
 
-const EditPostModal = ({
+const EditBlogModal = ({
   isOpen,
   toggle,
-  editingPost,
-  setEditingPost,
-  handleEditPost,
+  editingBlog,
+  setEditingBlog,
+  handleEditBlog,
   handleImageChange,
 }) => {
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader toggle={toggle}>Edit Post</ModalHeader>
+      <ModalHeader toggle={toggle}>Edit Blog</ModalHeader>
       <ModalBody>
-        {editingPost && (
+        {editingBlog && (
           <Form>
             <FormGroup>
               <Label for="title">Title</Label>
@@ -31,9 +31,9 @@ const EditPostModal = ({
                 type="text"
                 name="title"
                 id="title"
-                value={editingPost?.title}
+                value={editingBlog?.title}
                 onChange={(e) =>
-                    setEditingPost({ ...editingPost, title: e.target.value })
+                    setEditingBlog({ ...editingBlog, title: e.target.value })
                 }
               />
             </FormGroup>
@@ -44,7 +44,7 @@ const EditPostModal = ({
                 name="image"
                 id="image"
                 // onChange={handlePhotoChange}
-                onChange={(e) => handleImageChange(e, setEditingPost)}
+                onChange={(e) => handleImageChange(e, setEditingBlog)}
               />
             </FormGroup>
             <FormGroup>
@@ -53,9 +53,9 @@ const EditPostModal = ({
                 type="textarea"
                 name="description"
                 id="description"
-                value={editingPost?.description}
+                value={editingBlog?.description}
                 onChange={(e) =>
-                    setEditingPost({ ...editingPost, description: e.target.value })
+                    setEditingBlog({ ...editingBlog, description: e.target.value })
                 }
               />
             </FormGroup>
@@ -63,7 +63,7 @@ const EditPostModal = ({
         )}
       </ModalBody>
       <ModalFooter>
-        <Button color="primary" onClick={handleEditPost}>
+        <Button color="primary" onClick={handleEditBlog}>
           Save
         </Button>
         <Button color="secondary" onClick={toggle}>
@@ -74,4 +74,4 @@ const EditPostModal = ({
   );
 };
 
-export default EditPostModal;
+export default EditBlogModal;

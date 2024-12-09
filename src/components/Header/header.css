@@ -5,11 +5,12 @@
 }
 
 .logo img {
-  width: 30%;
+  width: 35%;
 }
 
 .menu {
   margin-bottom: 0;
+  margin-right: 40px;
 }
 
 .nav__item a {

@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from "reactstrap";
+import { Table, Button, Input } from "reactstrap";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
-import AddPostModal from "./AddPostModal";
-import EditPostModal from "./EditPostModal";
+import AddBlogModal from "./AddBlogModal";
+import EditBlogModal from "./EditBlogModal";
 
-const PostsTable = () => {
+const BlogsTable = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const {
-    data: post,
+    data: blog,
     loading,
     error,
-  } = useFetch(`${BASE_URL}/posts`, refreshKey);
+  } = useFetch(`${BASE_URL}/blogs`, refreshKey);
   const [isUploading, setIsUploading] = useState(false);
   const [modal, setModal] = useState(false);
-  const [newPost, setNewPost] = useState({
+  const [newBlog, setNewBlog] = useState({
     title: "",
     image: null,
     description: "",
   });
 
   const [editModal, setEditModal] = useState(false);
-  const [editingPost, setEditingPost] = useState(null);
-  const [originalPost, setOriginalPost] = useState(null);
-  const openEditModal = (post) => {
-    setOriginalPost(post); // Lưu bản sao dữ liệu gốc
-    setEditingPost(post); // Lưu thông tin người dùng vào state
+  const [editingBlog, setEditingBlog] = useState(null);
+  const [originalBlog, setOriginalBlog] = useState(null);
+  const openEditModal = (blog) => {
+    setOriginalBlog(blog); // Lưu bản sao dữ liệu gốc
+    setEditingBlog(blog); // Lưu thông tin người dùng vào state
     setEditModal(true); // Mở modal
   };
 
@@ -33,39 +33,39 @@ const PostsTable = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewPost((prevState) => ({ ...prevState, [name]: value }));
+    setNewBlog((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleAddPost = async () => {
+  const handleAddBlog = async () => {
     const formData = new FormData();
-    for (const key in newPost) {
-      formData.append(key, newPost[key]);
+    for (const key in newBlog) {
+      formData.append(key, newBlog[key]);
     }
 
     try {
-      const responseAdd = await fetch(`${BASE_URL}/posts`, {
+      const responseAdd = await fetch(`${BASE_URL}/blogs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
+        body: JSON.stringify(newBlog),
         credentials: "include",
       });
 
       if (!responseAdd.ok) {
-        throw new Error("Failed to add post");
+        throw new Error("Failed to add blog");
       }
       setRefreshKey((prevKey) => prevKey + 1);
-      setNewPost({
+      setNewBlog({
         title: "",
         image: null,
         description: "",
       });
       toggleModal();
     } catch (error) {
-      console.error("Error adding post:", error);
+      console.error("Error adding blog:", error);
     }
   };
 
-  const handleImageChange = async (e, setPostState) => {
+  const handleImageChange = async (e, setBlogState) => {
     const file = e.target.files[0];
     if (file) {
       setIsUploading(true); // Bắt đầu tải ảnh lên
@@ -86,7 +86,7 @@ const PostsTable = () => {
 
         const data = await response.json();
         if (data.secure_url) {
-          setPostState((prev) => ({
+          setBlogState((prev) => ({
             ...prev,
             image: data.secure_url, // Add the new photo URL to the state
           }));
@@ -99,32 +99,32 @@ const PostsTable = () => {
     }
   };
 
-  const handleDeletePost = async (postId) => {
+  const handleDeleteBlog = async (blogId) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this post?"
+      "Are you sure you want to delete this blog?"
     );
     if (!confirmDelete) return;
     try {
-      const response = await fetch(`${BASE_URL}/posts/${postId}`, {
+      const response = await fetch(`${BASE_URL}/blogs/${blogId}`, {
         method: "DELETE",
         credentials: "include",
       });
       if (!response.ok) {
-        throw new Error("Failed to delete post");
+        throw new Error("Failed to delete blog");
       }
       setRefreshKey((prevKey) => prevKey + 1);
     } catch (error) {
-      console.error("Error deleting post:", error);
+      console.error("Error deleting blog:", error);
     }
   };
 
-  const handleEditPost = async () => {
+  const handleEditBlog = async () => {
     try {
       const updatedFields = {};
       // Check for changes in the user fields
-      Object.keys(editingPost).forEach((key) => {
-        if (editingPost[key] !== originalPost[key]) {
-          updatedFields[key] = editingPost[key];
+      Object.keys(editingBlog).forEach((key) => {
+        if (editingBlog[key] !== originalBlog[key]) {
+          updatedFields[key] = editingBlog[key];
         }
       });
 
@@ -133,7 +133,7 @@ const PostsTable = () => {
         return;
       }
 
-      const response = await fetch(`${BASE_URL}/posts/${editingPost._id}`, {
+      const response = await fetch(`${BASE_URL}/blogs/${editingBlog._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedFields),
@@ -141,23 +141,58 @@ const PostsTable = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update post");
+        throw new Error("Failed to update blog");
       }
       setRefreshKey((prevKey) => prevKey + 1);
       setEditModal(false); // Close modal after update
     } catch (error) {
-      console.error("Error updating post:", error);
+      console.error("Error updating blog:", error);
     }
   };
 
-  const truncateDescription = (description) => {
-    const words = description.split(" ");
-    return words.length > 9 ? words.slice(0, 9).join(" ") + "..." : description;
+  const truncateText = (text) => {
+    return text.length > 25 ? text.slice(0, 25) + "..." : text;
   };
-  const truncateTitle = (title) => {
-    const words = title.split(" ");
-    return words.length > 9 ? words.slice(0, 9).join(" ") + "..." : title;
+
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
+
+  const sortBlogs = (key) => {
+    const direction =
+      sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+    setSortConfig({ key, direction });
+
+    if (blog) {
+      blog.sort((a, b) => {
+        const valueA = a[key]?.toString().toLowerCase() || ""; // Chuyển về chuỗi thường
+        const valueB = b[key]?.toString().toLowerCase() || ""; // Chuyển về chuỗi thường
+
+        if (valueA < valueB) return direction === "asc" ? -1 : 1;
+        if (valueA > valueB) return direction === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
   };
+
+  const renderSortIcon = (key) => {
+    const isActive = sortConfig.key === key;
+    return (
+      <i
+        className={`ri-arrow-up-down-line ${isActive ? "text-primary" : ""}`}
+        style={{ marginLeft: "5px", fontSize: "1rem" }}
+      ></i>
+    );
+  };
+
+  const [searchQuery, setSearchQuery] = useState("");
+  // Filter users based on search query
+  const filteredBlogs = blog?.filter((blog) => {
+    const searchTerm = searchQuery.toLowerCase();
+    return (
+      blog.title.toLowerCase().includes(searchTerm) ||
+      blog.description.toLowerCase().includes(searchTerm)
+    );
+  });
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -165,9 +200,16 @@ const PostsTable = () => {
     // <div style={{ overflowX: "auto", width: "100%" }}>
     <div style={{ overflowY: "auto", maxHeight: "500px" }}>
       <div className="d-flex gap-3 mb-3">
-        <h2>Posts List</h2>
+        {/* Search Bar */}
+        <Input
+          type="text"
+          placeholder="Search by Title, City or Address"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ width: "600px", boxShadow: "none" }}
+        />
         <Button color="primary" size="m" onClick={toggleModal}>
-          Add post
+          Add blog
         </Button>
       </div>
       {/* <Table striped style={{ minWidth: "2000px", display: "block" }}> */}
@@ -176,17 +218,17 @@ const PostsTable = () => {
         <thead>
           <tr>
             <th>Image</th>
-            <th>Title</th>
-            <th>Description</th>
+            <th onClick={() => sortBlogs("title")}>Title {renderSortIcon("title")}</th>
+            <th onClick={() => sortBlogs("description")}>Description {renderSortIcon("description")}</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {post?.map((post) => (
-            <tr key={post._id}>
+          {filteredBlogs?.map((blog) => (
+            <tr key={blog._id}>
               <td>
                 <img
-                  src={post.image}
+                  src={blog.image}
                   alt="Tour imgae"
                   style={{
                     width: "50px",
@@ -195,21 +237,21 @@ const PostsTable = () => {
                   }}
                 />
               </td>
-              <td>{truncateTitle(post.title)}</td>
-              <td>{truncateDescription(post.description)}...</td>
+              <td>{truncateText(blog.title)}</td>
+              <td>{truncateText(blog.description)}...</td>
               <td>
                 <Button
                   className="acction__btn"
                   color="primary"
                   size="sm"
-                  onClick={() => openEditModal(post)}
+                  onClick={() => openEditModal(blog)}
                 >
                   Edit
                 </Button>
                 <Button
                   color="danger"
                   size="sm"
-                  onClick={() => handleDeletePost(post._id)}
+                  onClick={() => handleDeleteBlog(blog._id)}
                 >
                   Delete
                 </Button>
@@ -219,25 +261,25 @@ const PostsTable = () => {
         </tbody>
       </Table>
 
-      <AddPostModal
+      <AddBlogModal
         isOpen={modal}
         toggle={toggleModal}
-        newPost={newPost}
+        newBlog={newBlog}
         handleInputChange={handleInputChange}
-        handleAddPost={handleAddPost}
+        handleAddBlog={handleAddBlog}
         handleImageChange={handleImageChange}
-        setNewPost={setNewPost}
+        setNewBlog={setNewBlog}
       />
-      <EditPostModal
+      <EditBlogModal
         isOpen={editModal}
         toggle={() => setEditModal(false)}
-        editingPost={editingPost}
-        setEditingPost={setEditingPost}
-        handleEditPost={handleEditPost}
+        editingBlog={editingBlog}
+        setEditingBlog={setEditingBlog}
+        handleEditBlog={handleEditBlog}
         handleImageChange={handleImageChange}
       />
     </div>
   );
 };
 
-export default PostsTable;
+export default BlogsTable;

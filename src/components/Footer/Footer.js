@@ -10,7 +10,7 @@ const quick__links = [
     display: "Home",
   },
   {
-    path: "/posts",
+    path: "/blogs",
     display: "Blogs",
   },
   {

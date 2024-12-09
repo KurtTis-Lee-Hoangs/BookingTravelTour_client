@@ -11,18 +11,18 @@ import {
   Input,
 } from "reactstrap";
 
-const AddPostModal = ({
+const AddBlogModal = ({
   isOpen,
   toggle,
-  newPost,
+  newBlog,
   handleInputChange,
-  handleAddPost,
+  handleAddBlog,
   handleImageChange,
-  setNewPost,
+  setNewBlog,
 }) => {
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader toggle={toggle}>Add New Post</ModalHeader>
+      <ModalHeader toggle={toggle}>Add New Blog</ModalHeader>
       <ModalBody>
         <Form>
           <FormGroup>
@@ -44,7 +44,7 @@ const AddPostModal = ({
               accept="image/*"
             //   value={newPost.image}
               // onChange={handlePhotoChange}
-              onChange={(e) => handleImageChange(e, setNewPost)}
+              onChange={(e) => handleImageChange(e, setNewBlog)}
             />
           </FormGroup>
           <FormGroup>
@@ -60,7 +60,7 @@ const AddPostModal = ({
         </Form>
       </ModalBody>
       <ModalFooter>
-        <Button color="primary" onClick={handleAddPost}>
+        <Button color="primary" onClick={handleAddBlog}>
           Save
         </Button>
         <Button color="secondary" onClick={toggle}>
@@ -71,4 +71,4 @@ const AddPostModal = ({
   );
 };
 
-export default AddPostModal;
+export default AddBlogModal;
