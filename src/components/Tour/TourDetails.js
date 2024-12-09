@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import "../styles/tour-details.css";
+import "./tour-details.css";
 import { Container, Row, Col, Form, ListGroup } from "reactstrap";
 import { useParams } from "react-router-dom";
-import calculateAvgRating from "../utils/avgRating";
-import Booking from "../components/Booking/Booking";
-import NewSletter from "../shared/NewSletter";
-import useFetch from "../hooks/useFetch";
-import { BASE_URL } from "../utils/config";
-import { AuthContext } from "../context/AuthContext";
-import ScrollButton from "../shared/ScrollButton";
+import calculateAvgRating from "../../utils/avgRating";
+import Booking from "../Booking/Booking";
+import NewSletter from "../../shared/NewSletter";
+import useFetch from "../../hooks/useFetch";
+import { BASE_URL } from "../../utils/config";
+import { AuthContext } from "../../context/AuthContext";
+import ScrollButton from "../../shared/ScrollButton";
 
 const TourDetails = () => {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -42,7 +42,7 @@ const TourDetails = () => {
 
   // format date
   const options = { day: "numeric", month: "long", year: "numeric" };
-  
+
   const handleLikeClick = async () => {
     if (!user) {
       alert("Please sign in to add to favorites");
@@ -143,6 +143,24 @@ const TourDetails = () => {
   }, [tour]);
 
   const formattedPrice = price ? price.toLocaleString("vi-VN") : "0";
+  const breakText = (text, maxLength) => {
+    if (!text) return null; // Return null if text is undefined or null
+  
+    const chunks = [];
+    
+    // Loop through the text and slice it into chunks of maxLength
+    for (let i = 0; i < text.length; i += maxLength) {
+      chunks.push(text.slice(i, i + maxLength));
+    }
+  
+    // Join the chunks with a <br /> tag to break lines
+    return chunks.map((chunk, index) => (
+      <React.Fragment key={index}>
+        {chunk}
+        {index < chunks.length - 1 && <br />}
+      </React.Fragment>
+    ));
+  };
 
   return (
     <>
@@ -184,8 +202,8 @@ const TourDetails = () => {
                         )}
                       </span>
 
-                      <span>
-                        <i class="ri-map-pin-fill"></i> {address}
+                      <span className="test">
+                        <i class="ri-map-pin-fill"></i> {breakText(address, 60)}
                       </span>
                     </div>
 
@@ -197,6 +215,9 @@ const TourDetails = () => {
                         <i class="ri-wallet-3-line"></i> {formattedPrice} VND
                         /person
                       </span>
+                    </div>
+
+                    <div className="tour__extra-details">
                       <span>
                         <i class="ri-time-line"></i> {day} days
                       </span>
@@ -206,7 +227,7 @@ const TourDetails = () => {
                     </div>
 
                     <h5>Dercription</h5>
-                    <p>{desc}</p>
+                    <p>{breakText(desc, 100)}</p>
                   </div>
 
                   {/* Review by user */}

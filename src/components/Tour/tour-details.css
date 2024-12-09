@@ -29,7 +29,8 @@
   align-items: center;
   column-gap: 2.7rem;
   margin-top: 1rem;
-  margin-bottom: 2.5rem;
+  /* margin-bottom: 2.5rem; */
+  margin-bottom: 1rem;
 }
 
 .tour__info h5 {

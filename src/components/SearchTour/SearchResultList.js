@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import CommonSection from "../shared/CommonSection";
+import CommonSection from "../../shared/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import { useLocation } from "react-router-dom";
-import TourCard from "../shared/TourCard";
-import NewSletter from "../shared/NewSletter";
-import ScrollButton from "../shared/ScrollButton";
+import TourCard from "../Tour/TourCard";
+import NewSletter from "../../shared/NewSletter";
+import ScrollButton from "../../shared/ScrollButton";
 
 
 const SearchResultList = () => {

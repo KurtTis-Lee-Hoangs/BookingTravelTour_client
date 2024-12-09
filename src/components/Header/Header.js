@@ -12,7 +12,7 @@ const nav__links = [
     display: "Home",
   },
   {
-    path: "/posts",
+    path: "/blogs",
     display: "Blogs",
   },
   {
@@ -39,11 +39,6 @@ const Header = () => {
   const { user, dispatch } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
-  // const logout = () => {
-  //   dispatch({ type: "LOGOUT" });
-  //   navigate("/");
-  // };
 
   const logout = async () => {
     try {
@@ -184,7 +179,7 @@ const Header = () => {
                       <NavLink to="/homepage">Home</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
-                      <NavLink to="/posts">Blogs</NavLink>
+                      <NavLink to="/blogs">Blogs</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
                       <NavLink to="/tours">Tours</NavLink>

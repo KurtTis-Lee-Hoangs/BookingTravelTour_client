@@ -7,9 +7,10 @@ import heroVideo from "../assets/images/hero-video.mp4";
 import worldImg from "../assets/images/world.png";
 import experienceImg from "../assets/images/experience.png";
 import Subtitle from "../shared/Subtitle";
-import SearchBar from "../shared/SearchBar";
+import SearchBar from "../components/SearchTour/SearchBar";
 import ServiceList from "../services/ServiceList";
-import FeaturedTourList from "../components/Featured-tours/FeaturedTourList";
+import ForeignTours from "../components/Foreign-tours/Foreign.Tours";
+import DomesticTours from "../components/Domestic-tours/Domestic.Tours";
 import MasonryImagesGallery from "../components/Image-gallery/MasonryImagesGallery";
 import Testimonials from "../components/Testimonial/Testimonials";
 import NewSletter from "../shared/NewSletter";
@@ -20,7 +21,7 @@ const HomePage = () => {
 
   return (
     <>
-      <section>
+      <div>
         <Container>
           <Row>
             <Col lg="6">
@@ -69,7 +70,7 @@ const HomePage = () => {
             <SearchBar />
           </Row>
         </Container>
-      </section>
+      </div>
 
       <section>
         <Container>
@@ -83,20 +84,34 @@ const HomePage = () => {
         </Container>
       </section>
 
-      {/* Tour */}
-      <section>
+      {/* Our foreign tours */}
+      <div>
         <Container>
           <Row>
-            <Col lg="12" className="mb-5">
+            <Col lg="12" className="mb-4">
               <Subtitle subtitle={"Explore"} />
-              <h2 className="featured__tour-title">Our featured tours</h2>
+              <h2 className="featured__tour-title">Our foreign tours</h2>
             </Col>
-            <FeaturedTourList />
+            <ForeignTours />
           </Row>
         </Container>
-      </section>
+      </div>
 
-      <section>
+      {/* Our domestic tours */}
+      <div>
+        <Container>
+          <Row>
+            <Col lg="12" className="mb-3">
+              <Subtitle subtitle={"Explore"} />
+              {/* <h2 className="featured__tour-title">Our featured tours</h2> */}
+              <h2 className="featured__tour-title">Our domestic tours</h2>
+            </Col>
+            <DomesticTours />
+          </Row>
+        </Container>
+      </div>
+
+      <div className="mt-4">
         <Container>
           <Row>
             <Col lg="6">
@@ -144,7 +159,7 @@ const HomePage = () => {
             </Col>
           </Row>
         </Container>
-      </section>
+      </div>
 
       {/* Images */}
       <section>
@@ -165,7 +180,7 @@ const HomePage = () => {
       </section>
 
       {/* Testimonials */}
-      <section>
+      <div>
         <Container>
           <Row>
             <Col lg="12">
@@ -178,17 +193,8 @@ const HomePage = () => {
             </Col>
           </Row>
         </Container>
-      </section>
-
-      {/* Scroll to top button */}
-      {/* <button
-        id="scrollToTopButton"
-        className="scroll-to-top"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >
-        <i class="ri-arrow-up-line"></i>
-      </button> */}
-      {/* <ScrollButton /> */}
+      </div>
+      <ScrollButton />
 
       <NewSletter />
     </>

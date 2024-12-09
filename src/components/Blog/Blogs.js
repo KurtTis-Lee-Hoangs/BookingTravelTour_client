@@ -1,53 +1,52 @@
 import React, { useState, useEffect } from "react";
-import CommonSection from "../shared/CommonSection";
-import "../styles/tour.css";
-import PostCard from "../shared/PostCard";
-import SearchPost from "../shared/SearchPost";
-import NewSletter from "../shared/NewSletter";
-// import tourData from "../assets/data/tours";
+import CommonSection from "../../shared/CommonSection";
+import "../Tour/tour.css";
+import BlogCard from "./BlogCard";
+import SearchBlog from "../SearchBlog/SearchBlog";
+import NewSletter from "../../shared/NewSletter";
 import { Container, Row, Col } from "reactstrap";
-import ScrollButton from "../shared/ScrollButton";
-import useFetch from "../hooks/useFetch";
-import { BASE_URL } from "../utils/config";
+import ScrollButton from "../../shared/ScrollButton";
+import useFetch from "../../hooks/useFetch";
+import { BASE_URL } from "../../utils/config";
 
-const Tours = () => {
+const Blogs = () => {
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
 
   const {
-    data: posts,
+    data: blogs,
     loading,
     error,
-  } = useFetch(`${BASE_URL}/posts/user/getAllPostByUser?page=${page}`);
+  } = useFetch(`${BASE_URL}/blogs/user/getAllBlogByUser?page=${page}`);
 
-  const { data: postCount } = useFetch(`${BASE_URL}/posts/search/getPostCount`);
+  const { data: blosCount } = useFetch(`${BASE_URL}/blogs/search/getBlogCount`);
 
   useEffect(() => {
-    const pages = Math.ceil(postCount / 8); // later we will use backend data count
+    const pages = Math.ceil(blosCount / 8); // later we will use backend data count
     setPageCount(pages);
     window.scrollTo(0, 0);
-  }, [page, postCount, posts]);
+  }, [page, blosCount, blogs]);
 
   return (
     <>
-      <CommonSection title={"All Posts"} />
-      <section>
+      <CommonSection title={"All Blogs"} />
+      <div>
         <Container>
           <Row>
-            <SearchPost />
+            <SearchBlog />
           </Row>
         </Container>
-      </section>
+      </div>
 
-      <section className="pt-0">
+      <div className="mt-3">
         <Container>
           {loading && <h4 className="text-cente pt-5">Loading......</h4>}
           {error && <h4 className="text-cente pt-5">{error}</h4>}
           {!loading && !error && (
             <Row>
-              {posts?.map((post) => (
-                <Col lg="3" key={post._id} className="mb-4">
-                  <PostCard post={post} />
+              {blogs?.map((blog) => (
+                <Col lg="3" key={blog._id} className="mb-4">
+                  <BlogCard blog={blog} />
                 </Col>
               ))}
 
@@ -67,11 +66,11 @@ const Tours = () => {
             </Row>
           )}
         </Container>
-      </section>
+      </div>
       <NewSletter />
       <ScrollButton />
     </>
   );
 };
 
-export default Tours;
+export default Blogs;

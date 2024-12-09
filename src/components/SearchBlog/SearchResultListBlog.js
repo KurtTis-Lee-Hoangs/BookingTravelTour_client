@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import CommonSection from "../shared/CommonSection";
+import CommonSection from "../../shared/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import { useLocation } from "react-router-dom";
-import PostCard from "../shared/PostCard";
-import NewSletter from "../shared/NewSletter";
-import ScrollButton from "../shared/ScrollButton";
+import BlogCard from "../Blog/BlogCard";
+import NewSletter from "../../shared/NewSletter";
+import ScrollButton from "../../shared/ScrollButton";
 
 
-const SearchResultListPost = () => {
+const SearchResultListBlog = () => {
   const location = useLocation();
 
   const [data] = useState(location.state);
@@ -18,17 +18,17 @@ const SearchResultListPost = () => {
 
   return (
     <>
-      <CommonSection title={"Post Search Result"} />
+      <CommonSection title={"Blos Search Result"} />
       <section>
         <Container>
           <Row>
-            <h2 className="mb-5">Posts By Search</h2>
+            <h2 className="mb-5">Blogs By Search</h2>
             {data.length === 0 ? (
-              <h2 className="text-center">No posts found</h2>
+              <h2 className="text-center">No blog found</h2>
             ) : (
-              data?.map((post) => (
-                <Col lg="3" className="mb-4" key={post._id}>
-                  <PostCard post={post} />
+              data?.map((blog) => (
+                <Col lg="3" className="mb-4" key={blog._id}>
+                  <BlogCard blog={blog} />
                 </Col>
               ))
             )}
@@ -41,4 +41,4 @@ const SearchResultListPost = () => {
   );
 };
 
-export default SearchResultListPost;
+export default SearchResultListBlog;

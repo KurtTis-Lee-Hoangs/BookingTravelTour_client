@@ -206,6 +206,7 @@ const Statistical = () => {
             type="select"
             id="yearSelect"
             value={selectedYear}
+            style={{ boxShadow: "none" }}
             onChange={(e) => setSelectedYear(Number(e.target.value))}
           >
             {Array.from(
@@ -224,6 +225,7 @@ const Statistical = () => {
             type="select"
             id="monthSelect"
             value={selectedMonth || ""}
+            style={{ boxShadow: "none" }}
             onChange={(e) =>
               setSelectedMonth(e.target.value ? Number(e.target.value) : null)
             }

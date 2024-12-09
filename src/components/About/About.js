@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./about.css";
+import ScrollButton from "../../shared/ScrollButton";
 
 const About = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
-    <section className="about mb-3">
+    <section className="about mb-4">
       <div className="section-header mb-4">
         <h2>About TisTrips</h2>
       </div>
@@ -112,7 +116,10 @@ const About = () => {
             who have supported and accompanied us:
           </p>
           <div className="partners">
-            <div className="partner">
+            <a
+              className="partner"
+              href="https://www.facebook.com/profile.php?id=100028798721439"
+            >
               <div className="partner-logo">
                 <img
                   src="https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?t=st=1730600707~exp=1730604307~hmac=63d2ed023c4a722f90f9c59a0417ca2eba185a3b9323bf93f4a6ff988c6bd6d7&w=740"
@@ -125,7 +132,7 @@ const About = () => {
                   Software Technology - Frontend
                 </p>
                 <p>
-                  Lê Minh Hoàng is a Frontend developer specializing in creating
+                  Le Minh Hoang is a Frontend developer specializing in creating
                   optimized, user-friendly web interfaces. With experience in
                   HTML, CSS, JavaScript, and modern frameworks like React, he
                   always prioritizes user experience. He also plays an active
@@ -133,9 +140,12 @@ const About = () => {
                   deliver high-quality products that meet customer requirements.
                 </p>
               </div>
-            </div>
+            </a>
 
-            <div className="partner">
+            <a
+              className="partner"
+              href="https://www.facebook.com/nhanhhuynh244"
+            >
               <div className="partner-logo">
                 <img
                   src="https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?t=st=1730600707~exp=1730604307~hmac=63d2ed023c4a722f90f9c59a0417ca2eba185a3b9323bf93f4a6ff988c6bd6d7&w=740"
@@ -148,7 +158,7 @@ const About = () => {
                   Software Technology - Backend
                 </p>
                 <p>
-                  Huỳnh Hữu Nhân is an outstanding Backend developer,
+                  Huynh Huu Nhan is an outstanding Backend developer,
                   specializing in system architecture solutions and data
                   processing. With experience working on platforms such as
                   Node.js, Python, and NoSQL databases, he has contributed to
@@ -156,7 +166,7 @@ const About = () => {
                   value to enterprise clients.
                 </p>
               </div>
-            </div>
+            </a>
           </div>
         </div>
 
@@ -166,7 +176,7 @@ const About = () => {
             <h5>
               TIS TRIPS TRAVEL AND SERVICE COMPANY LIMITED
               <br />
-              <span>TISTRIPS TRAVEL AND SERVICE COMPANY LIMITED</span>
+              {/* <span>TISTRIPS TRAVEL AND SERVICE COMPANY LIMITED</span> */}
             </h5>
             <p>Tax ID: 1111111111</p>
             <p>Business license number: 1111111111</p>
@@ -189,6 +199,7 @@ const About = () => {
           </div>
         </div>
       </div>
+      <ScrollButton />
     </section>
   );
 };

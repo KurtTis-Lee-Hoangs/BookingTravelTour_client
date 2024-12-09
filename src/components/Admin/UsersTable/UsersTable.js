@@ -32,6 +32,7 @@ const UsersTable = () => {
   };
 
   const toggleModal = () => setModal(!modal);
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,7 +57,8 @@ const UsersTable = () => {
         password: "",
         role: "user",
       });
-      toggleModal();
+      // toggleModal();
+      setIsFormVisible(false);
     } catch (error) {
       console.error("Error adding user:", error);
     }
@@ -210,10 +212,37 @@ const UsersTable = () => {
           style={{ width: "600px", boxShadow: "none" }}
         />
 
-        <Button color="primary" size="m" onClick={toggleModal}>
+        {/* <Button color="primary" size="m" onClick={toggleModal}>
           Add user
+        </Button> */}
+        <Button
+          color="primary"
+          size="m"
+          onClick={() => setIsFormVisible((prev) => !prev)}
+        >
+          {isFormVisible ? "Hide Form" : "Add User"}
         </Button>
       </div>
+
+      {isFormVisible && (
+        <AddUserModal
+          newUser={newUser}
+          handleInputChange={handleInputChange}
+          handleAddUser={handleAddUser}
+          handleCancel={() => setIsFormVisible(false)} // Hides the form on cancel
+        />
+      )}
+
+      {editModal && (
+        <EditUserModal
+          editingUser={editingUser}
+          setEditingUser={setEditingUser}
+          handleEditUser={handleEditUser}
+          handleAvatarChange={handleAvatarChange}
+          toggleEditMode={() => setEditModal(false)} // Close the edit form
+        />
+      )}
+
       <Table striped>
         {/* Bảng người dùng */}
         <thead>
@@ -257,14 +286,14 @@ const UsersTable = () => {
                   size="sm"
                   onClick={() => openEditModal(user)}
                 >
-                  Edit
+                  Edit User
                 </Button>
                 <Button
                   color="danger"
                   size="sm"
                   onClick={() => handleDeleteUser(user._id)}
                 >
-                  Delete
+                  Delete User
                 </Button>
               </td>
             </tr>
@@ -273,23 +302,23 @@ const UsersTable = () => {
       </Table>
 
       {/* Modal add */}
-      <AddUserModal
+      {/* <AddUserModal
         isOpen={modal}
         toggle={toggleModal}
         newUser={newUser}
         handleInputChange={handleInputChange}
         handleAddUser={handleAddUser}
-      />
+      /> */}
 
       {/* Modal edit */}
-      <EditUserModal
+      {/* <EditUserModal
         isOpen={editModal}
         toggle={() => setEditModal(false)}
         editingUser={editingUser}
         setEditingUser={setEditingUser}
         handleEditUser={handleEditUser}
         handleAvatarChange={handleAvatarChange}
-      />
+      /> */}
     </div>
   );
 };

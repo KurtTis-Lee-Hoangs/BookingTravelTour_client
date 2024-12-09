@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
 import "./admin.css";
 import UsersTable from "./UsersTable/UsersTable";
 import ToursTable from "./ToursTable/ToursTable";
-import PostsTable from "./PostsTable/PostTable";
+import BlogsTable from "./BlogsTable/BlogTable";
 import BookingTable from "./BookingsTable/BookingTable";
 import Statistical from "./Statistical/Statistical";
 import NewSletter from "../../shared/NewSletter";
-import { BASE_URL } from "../../utils/config";
-import useFetch from "../../hooks/useFetch";
+import { AuthContext } from "../../context/AuthContext";
 
 const Admin = () => {
-  // Fetch the users data from the API
-  const [refreshKey, setRefreshKey] = useState(0);
-  const {
-    data: user
-  } = useFetch(`${BASE_URL}/users`, refreshKey);
   const [activeTab, setActiveTab] = useState("users");
+  const { user } = useContext(AuthContext);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -31,7 +26,7 @@ const Admin = () => {
       <div className="d-flex mt-4 scrollbar__none">
         {/* Sidebar */}
         <Col lg="2" md="2" sm="2" className="sidebar">
-          <div className="d-flex">
+          <div className="d-flex align-items-center mt-3 mb-3">
             <img
               src={user.avatar}
               alt="User Avatar"
@@ -39,49 +34,55 @@ const Admin = () => {
                 width: "50px",
                 height: "50px",
                 borderRadius: "50%",
-                marginRight: "20px"
+                marginRight: "15px",
+                marginLeft: "25px",
               }}
             />
-            <h3 className="sidebar-title text-center">Manage</h3>
+            <h3 className="sidebar-title text-center">Admin</h3>
           </div>
           <ul className="sidebar-menu">
             <li>
               <Button
-                className="btn primary__btn"
+                className="btn primary__btn manage__btn d-flex align-items-center"
                 onClick={() => handleTabClick("users")}
               >
+                <i class="ri-user-settings-fill icon"></i>
                 Manage users
               </Button>
             </li>
             <li>
               <Button
-                className="btn primary__btn"
+                className="btn primary__btn d-flex align-items-center"
                 onClick={() => handleTabClick("tours")}
               >
+                <i class="ri-ancient-gate-fill icon"></i>
                 Manage tours
               </Button>
             </li>
             <li>
               <Button
-                className="btn primary__btn"
-                onClick={() => handleTabClick("posts")}
+                className="btn primary__btn d-flex align-items-center"
+                onClick={() => handleTabClick("blogs")}
               >
-                Manage posts
+                <i class="ri-edit-box-fill icon"></i>
+                Manage blogs
               </Button>
             </li>
             <li>
               <Button
-                className="btn primary__btn"
+                className="btn primary__btn d-flex align-items-center"
                 onClick={() => handleTabClick("bookings")}
               >
+                <i class="ri-wallet-fill icon"></i>
                 Manage bookings
               </Button>
             </li>
             <li>
               <Button
-                className="btn primary__btn"
+                className="btn primary__btn d-flex align-items-center"
                 onClick={() => handleTabClick("statistical")}
               >
+                <i class="ri-line-chart-fill icon"></i>
                 Revenue statistics
               </Button>
             </li>
@@ -104,10 +105,10 @@ const Admin = () => {
               <ToursTable />
             </div>
           )}
-          {activeTab === "posts" && (
+          {activeTab === "blogs" && (
             <div>
               <h2 className="text-center mb-4">Manage blogs in the system</h2>
-              <PostsTable />
+              <BlogsTable />
             </div>
           )}
           {activeTab === "bookings" && (
@@ -127,7 +128,7 @@ const Admin = () => {
         </Col>
       </div>
 
-      <NewSletter />
+      {/* <NewSletter /> */}
     </>
   );
 };

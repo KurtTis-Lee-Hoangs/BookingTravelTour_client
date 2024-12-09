@@ -1,23 +1,23 @@
 import React, { useEffect } from "react";
-import "../styles/tour-details.css";
+import "../Tour/tour-details.css";
 import { Container, Row, Col } from "reactstrap";
 import { useParams } from "react-router-dom";
-import NewSletter from "../shared/NewSletter";
-import useFetch from "../hooks/useFetch";
-import { BASE_URL } from "../utils/config";
+import NewSletter from "../../shared/NewSletter";
+import useFetch from "../../hooks/useFetch";
+import { BASE_URL } from "../../utils/config";
 
-const PostDetails = () => {
+const BlogDetails = () => {
   const { id } = useParams();
 
   // fetch data from database
-  const { data: post, loading, error } = useFetch(`${BASE_URL}/posts/${id}`);
+  const { data: blog, loading, error } = useFetch(`${BASE_URL}/blogs/${id}`);
 
-  // destructure properties from post object
+  // destructure properties from blog object
   const {
     title,
     image,
     description
-  } = post || {};  // Ensure post is not undefined
+  } = blog || {};  // Ensure blog is not undefined
 
   // Function to convert \n to <br /> for line breaks
   const formatDescription = (description) => {
@@ -32,7 +32,7 @@ const PostDetails = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [post]);
+  }, [blog]);
 
   return (
     <>
@@ -62,4 +62,4 @@ const PostDetails = () => {
   );
 };
 
-export default PostDetails;
+export default BlogDetails;

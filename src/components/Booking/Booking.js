@@ -59,6 +59,13 @@ const Booking = ({ tour, avgRating }) => {
   // send data to the server
   const handleClick = async (e) => {
     e.preventDefault();
+    // Kiểm tra nếu guestSize không phải là số nguyên dương
+    if (
+      !Number.isInteger(Number(booking.guestSize)) ||
+      booking.guestSize <= 0
+    ) {
+      return alert("Guest size must be a positive integer.");
+    }
 
     // Kiểm tra nếu guestSize lớn hơn maxGroupSize
     if (booking.guestSize > maxGroupSize) {

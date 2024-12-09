@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
-import TourCard from "../../shared/TourCard";
-import tourData from "../../assets/data/tours";
+import TourFeatured from "./TourFeatured";
 import { Col, Row } from "reactstrap";
 import useFetch from "../../hooks/useFetch";
 import { BASE_URL } from "../../utils/config";
 
-const FeaturedTourList = () => {
+const DomesticTours = () => {
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
   const {
     data: featuredTours,
     loading,
     error,
-  } = useFetch(`${BASE_URL}/tours/search/getFeaturedTours?page=${page}`);
+  } = useFetch(`${BASE_URL}/tours/search/getDomesticTours?page=${page}`);
 
-  const { data: tourCount } = useFetch(`${BASE_URL}/tours/search/getTourCount`);
+  const { data: tourCount } = useFetch(`${BASE_URL}/tours/search/getDomesticToursCount`);
 
   // console.log(featuredTours);
   useEffect(() => {
@@ -32,7 +31,7 @@ const FeaturedTourList = () => {
           !error &&
           featuredTours?.map((tour) => (
             <Col lg="3" md="6" sm="6" className="mb-4" key={tour._id}>
-              <TourCard tour={tour} />
+              <TourFeatured tour={tour} />
             </Col>
           ))}
         <Col lg="12">
@@ -53,4 +52,4 @@ const FeaturedTourList = () => {
   );
 };
 
-export default FeaturedTourList;
+export default DomesticTours;

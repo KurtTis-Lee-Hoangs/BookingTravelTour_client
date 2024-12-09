@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input, Progress } from "reactstrap";
 import "./weather.css"; // CSS cho giao diện đẹp hơn
 import { BASE_URL } from "../../utils/config";
@@ -55,13 +55,17 @@ const Vehicle = () => {
     return "🌈"; // Khác
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="weather-page container py-5 mb-5">
       <h2 className="text-center mb-4">Weather Forecast</h2>
       <div className="weather-form mb-4">
         <Input
           type="text"
-          placeholder="Enter city"
+          placeholder="Enter city (ex: hanoi, ho chi minh)"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="weather-input"

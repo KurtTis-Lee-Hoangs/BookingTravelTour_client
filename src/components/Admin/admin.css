@@ -16,7 +16,7 @@
 .sidebar-title {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .sidebar-menu {
@@ -37,6 +37,7 @@
   border: none;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
+  color: #000;
 }
 
 .sidebar-menu li button:hover {
@@ -75,4 +76,9 @@ h2 {
 .scrollbar__none {
   overflow-x: auto;
   scrollbar-width: none;
+}
+
+.icon {
+  font-size: 1.5rem;
+  display: inline-block;
 }

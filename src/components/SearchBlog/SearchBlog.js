@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
-import "./search-bar.css";
+import "../SearchTour/search-bar.css";
 import { Col, Form, FormGroup } from "reactstrap";
-import { BASE_URL } from "../utils/config";
+import { BASE_URL } from "../../utils/config";
 import { useNavigate } from "react-router-dom";
 
-const SearchBar = () => {
+const SearchBlog = () => {
   const titleRef = useRef("");
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ const SearchBar = () => {
     const queryParams = new URLSearchParams();
     if (title) queryParams.append("title", title);
 
-    const res = await fetch(`${BASE_URL}/posts/search/getPostBySearch?${queryParams.toString()}`);
+    const res = await fetch(`${BASE_URL}/blogs/search/getBlogBySearch?${queryParams.toString()}`);
 
     if (!res.ok) {
       alert("Something went wrong");
@@ -30,7 +30,7 @@ const SearchBar = () => {
 
     const result = await res.json();
 
-    navigate(`/posts/search?${queryParams.toString()}`, { state: result.data });
+    navigate(`/blogs/search?${queryParams.toString()}`, { state: result.data });
   };
 
   return (
@@ -45,7 +45,7 @@ const SearchBar = () => {
               <h6>Title</h6>
               <input
                 type="text"
-                placeholder="What post are you looking"
+                placeholder="What blog are you looking"
                 ref={titleRef}
               />
             </div>
@@ -60,4 +60,4 @@ const SearchBar = () => {
   );
 };
 
-export default SearchBar;
+export default SearchBlog;
