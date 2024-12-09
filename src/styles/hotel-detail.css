@@ -1,0 +1,140 @@
+/* hotel-detail.css */
+
+/* Overall container */
+.hotel-details {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hotel header styling */
+.hotel-details__header {
+  display: flex;
+  margin-bottom: 40px;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.hotel-details__image img {
+  width: 400px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.hotel-details__info {
+  max-width: 600px;
+  flex: 1;
+}
+
+.hotel-details__title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.hotel-details__address {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.hotel-details__description {
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.hotel-details__contact p {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.hotel-details__actions {
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-disabled {
+  background-color: #ddd;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.hotel-details__actions button:disabled {
+  background-color: #ccc;
+}
+
+/* Hotel Rooms Section */
+.hotel-rooms {
+  margin-top: 40px;
+}
+
+.hotel-rooms__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.hotel-rooms__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.hotel-room {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.hotel-room__image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.hotel-room__info h5 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.hotel-room__info p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.hotel-room__info button {
+  margin-top: 15px;
+}
+
+.hotel-rooms__no-rooms {
+  font-size: 1.2rem;
+  color: #888;
+  text-align: center;
+  margin-top: 40px;
+}

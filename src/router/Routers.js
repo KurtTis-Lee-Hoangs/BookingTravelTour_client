@@ -16,6 +16,8 @@ import SearchResultListPost from "../pages/SearchResultListPost";
 import FavouriteTour from "../components/Favourite-tours/FavouriteTour"
 import ForgotPassword from "../components/Forgot-Password/ForgotPassword"
 import RegistrationSuccess from "../pages/RegisterSuccess"
+import Hotels from "../pages/Hotel";
+import HotelDetails from "../pages/HotelDetail";
 
 const Routers = () => {
   return (
@@ -37,6 +39,8 @@ const Routers = () => {
       <Route path="/favourite" element={<FavouriteTour />} />
       <Route path="/forgotpassword" element={<ForgotPassword />} />
       <Route path="/registration-success" element={<RegistrationSuccess />} />
+      <Route path="/hotels" element={<Hotels />} />
+      <Route path="/hotels/:id" element={<HotelDetails />} />
     </Routes>
   );
 };
