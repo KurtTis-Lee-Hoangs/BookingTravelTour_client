@@ -5,12 +5,13 @@
 }
 
 .logo img {
-  width: 35%;
+  width: 39%;
+  
 }
 
 .menu {
   margin-bottom: 0;
-  margin-right: 40px;
+  margin-right: 80px;
 }
 
 .nav__item a {
@@ -140,7 +141,7 @@
 
 @media only screen and (max-width: 768px) {
   .logo img {
-    width: 45%; /* Adjusted logo size */
+    width: 30%; /* Adjusted logo size */
   }
 
   .navigation {
@@ -179,3 +180,8 @@
   }
 }
 
+@media only screen and (max-width: 1024px) {
+  .logo img {
+    width: 100%; /* Adjusted logo size */
+  }
+}

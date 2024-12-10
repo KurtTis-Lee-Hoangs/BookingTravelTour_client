@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
 import { Container, Row, Button } from "reactstrap";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/images/logo.png";
+import logo from "../../assets/images/logo4.jpg";
+// import logo from "../../assets/images/logo.png";
 import "./header.css";
 import { AuthContext } from "../../context/AuthContext";
 import { BASE_URL } from "../../utils/config";
@@ -24,7 +25,7 @@ const nav__links = [
     display: "Weather",
   },
   {
-    path: "/Hotels",
+    path: "/hotel",
     display: "Hotel",
   },
   {
@@ -188,7 +189,7 @@ const Header = () => {
                       <NavLink to="/weather">Weather</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
-                      <NavLink to="/airline">Airline</NavLink>
+                      <NavLink to="/hotel">Hotel</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
                       <NavLink to="/about">About</NavLink>

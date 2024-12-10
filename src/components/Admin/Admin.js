@@ -4,6 +4,7 @@ import "./admin.css";
 import UsersTable from "./UsersTable/UsersTable";
 import ToursTable from "./ToursTable/ToursTable";
 import BlogsTable from "./BlogsTable/BlogTable";
+import HotelsTable from "./HotelsTable/HotelTable";
 import BookingTable from "./BookingsTable/BookingTable";
 import Statistical from "./Statistical/Statistical";
 import NewSletter from "../../shared/NewSletter";
@@ -71,6 +72,15 @@ const Admin = () => {
             <li>
               <Button
                 className="btn primary__btn d-flex align-items-center"
+                onClick={() => handleTabClick("hotels")}
+              >
+                <i class="ri-hotel-fill icon"></i>
+                Manage hotels
+              </Button>
+            </li>
+            <li>
+              <Button
+                className="btn primary__btn d-flex align-items-center"
                 onClick={() => handleTabClick("bookings")}
               >
                 <i class="ri-wallet-fill icon"></i>
@@ -109,6 +119,12 @@ const Admin = () => {
             <div>
               <h2 className="text-center mb-4">Manage blogs in the system</h2>
               <BlogsTable />
+            </div>
+          )}
+          {activeTab === "hotels" && (
+            <div>
+              <h2 className="text-center mb-4">Manage hotels in the system</h2>
+              <HotelsTable />
             </div>
           )}
           {activeTab === "bookings" && (
