@@ -3,17 +3,27 @@ import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { BASE_URL } from "../utils/config";
 import "../styles/hotel-detail.css"; // Custom CSS for styling
-
+import { useNavigate } from "react-router-dom";
 const HotelDetails = () => {
   const { id } = useParams(); // Get the hotel ID from the URL
-
+  const navigate = useNavigate();
+  
   // Fetch hotel details using the ID
-  const { data: hotel, loading: hotelLoading, error: hotelError } = useFetch(`${BASE_URL}/hotels/${id}`);
+  const {
+    data: hotel,
+    loading: hotelLoading,
+    error: hotelError,
+  } = useFetch(`${BASE_URL}/hotels/${id}`);
 
   // Fetch rooms for the hotel using the hotel ID
-  const { data: rooms, loading: roomsLoading, error: roomsError } = useFetch(`${BASE_URL}/hotels/rooms/${id}`);
+  const {
+    data: rooms,
+    loading: roomsLoading,
+    error: roomsError,
+  } = useFetch(`${BASE_URL}/hotels/rooms/${id}`);
 
-  if (hotelLoading || roomsLoading) return <h4 className="text-center pt-5">Loading...</h4>;
+  if (hotelLoading || roomsLoading)
+    return <h4 className="text-center pt-5">Loading...</h4>;
   if (hotelError) return <h4 className="text-center pt-5">{hotelError}</h4>;
   if (roomsError) return <h4 className="text-center pt-5">{roomsError}</h4>;
 
@@ -30,7 +40,9 @@ const HotelDetails = () => {
           <p className="hotel-details__description">{hotel.description}</p>
 
           <div className="hotel-details__contact">
-            <p><strong>Phone:</strong> {hotel.phoneNumber || "Not available"}</p>
+            <p>
+              <strong>Phone:</strong> {hotel.phoneNumber || "Not available"}
+            </p>
           </div>
 
           <div className="hotel-details__actions">
@@ -52,18 +64,36 @@ const HotelDetails = () => {
             {rooms.map((room) => (
               <div key={room._id} className="hotel-room">
                 <div className="hotel-room__image">
-                  <img src={room.images[0] || "/default-room.jpg"} alt={room.roomType} />
+                  <img
+                    src={room.images[0] || "/default-room.jpg"}
+                    alt={room.roomType}
+                  />
                 </div>
                 <div className="hotel-room__info">
                   <h5>{room.roomType}</h5>
-                  <p><strong>Square:</strong> {room.square || "Not specified"}</p>
-                  <p><strong>Max Occupancy:</strong> {room.maxOccupancy} people</p>
-                  <p><strong>Price:</strong> {room.price} VND</p>
-                  <p><strong>Status:</strong> {room.status}</p>
-                  <p><strong>Available Rooms:</strong> {room.availableRooms}</p>
+                  <p>
+                    <strong>Square:</strong> {room.square || "Not specified"}
+                  </p>
+                  <p>
+                    <strong>Max Occupancy:</strong> {room.maxOccupancy} people
+                  </p>
+                  <p>
+                    <strong>Price:</strong> {room.price} VND
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {room.status}
+                  </p>
+                  <p>
+                    <strong>Available Rooms:</strong> {room.availableRooms}
+                  </p>
                   <button
-                    className={`btn ${room.status === "Available" ? "btn-primary" : "btn-disabled"}`}
+                    className={`btn ${
+                      room.status === "Available"
+                        ? "btn-primary"
+                        : "btn-disabled"
+                    }`}
                     disabled={room.status !== "Available"}
+                    onClick={() => navigate(`/hotels/${id}/payment`)} // Điều hướng đến trang thanh toán
                   >
                     {room.status === "Available" ? "Book Room" : "Unavailable"}
                   </button>
@@ -72,7 +102,9 @@ const HotelDetails = () => {
             ))}
           </div>
         ) : (
-          <p className="hotel-rooms__no-rooms">No rooms available for this hotel.</p>
+          <p className="hotel-rooms__no-rooms">
+            No rooms available for this hotel.
+          </p>
         )}
       </section>
     </div>

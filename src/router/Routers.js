@@ -15,7 +15,12 @@ import BookingHistory from "../components/User/BookingHistory";
 import SearchResultListBlog from "../components/SearchBlog/SearchResultListBlog";
 import FavouriteTour from "../components/Favourite-tours/Favourite.Tour"
 import ForgotPassword from "../components/Forgot-Password/ForgotPassword"
-
+import RegistrationSuccess from "../pages/RegisterSuccess"
+import Weather from "../components/Weather/Weather"
+import About from "../components/About/About";
+import Hotel from "../pages/Hotel"
+import HotelDetail from "../pages/HotelDetail"
+import RoomPayment from "../pages/RoomPayment";
 
 const Routers = () => (
   <Routes>
@@ -38,8 +43,9 @@ const Routers = () => (
     <Route path="/registration-success" element={<RegistrationSuccess />} />
     <Route path="/weather" element={<Weather />} />
     <Route path="/about" element={<About />} />
-    <Route path="/hotels" element={<Hotels />} />
-    <Route path="/hotels/:id" element={<HotelDetails />} />
+    <Route path="/hotels" element={<Hotel />} />
+    <Route path="/hotels/:id" element={<HotelDetail />} />
+    <Route path="/hotels/:id/payment" element={<RoomPayment />} />
   </Routes>
 );
 

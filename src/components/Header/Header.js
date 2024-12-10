@@ -24,8 +24,8 @@ const nav__links = [
     display: "Weather",
   },
   {
-    path: "/Airline",
-    display: "Airline",
+    path: "/Hotels",
+    display: "Hotel",
   },
   {
     path: "/about",
