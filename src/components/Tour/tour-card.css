@@ -139,9 +139,9 @@
   background: var(--primary-color) !important;
 }
 
-.booking__btn a:hover {
+/* .booking__btn a:hover {
   color: #fff;
-}
+} */
 
 .tour__card {
   text-decoration: none;

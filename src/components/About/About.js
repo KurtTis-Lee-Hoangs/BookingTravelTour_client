@@ -1,15 +1,17 @@
 import React, { useEffect } from "react";
 import "./about.css";
 import ScrollButton from "../../shared/ScrollButton";
+import logo from "../../assets/images/logo4.jpg";
 
 const About = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <section className="about mb-4">
+    <section className="about mb-4 mt-3">
       <div className="section-header mb-4">
         <h2>About TisTrips</h2>
+        <img src={logo} alt="" />
       </div>
 
       <div className="content">
@@ -100,6 +102,8 @@ const About = () => {
             <p>Domestic and international tours.</p>
             <p>Check the weather at your desired destination.</p>
             <p>Add tours to your favorites and leave reviews for them.</p>
+            <p>Book rooms at different hotels.</p>
+            <p>Review tour order information and payment status (paid or canceled).</p>
           </ul>
           <p>
             In addition, we will soon offer more services such as high-quality

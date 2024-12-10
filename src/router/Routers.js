@@ -18,6 +18,8 @@ import ForgotPassword from "../components/Forgot-Password/ForgotPassword"
 import RegistrationSuccess from "../pages/RegisterSuccess"
 import Weather from "../components/Weather/Weather"
 import About from "../components/About/About";
+import Hotels from "../components/Hotel/Hotels"
+import HotelDetails from "../components/Hotel/HotelDetails";
 
 
 const Routers = () => (
@@ -40,6 +42,8 @@ const Routers = () => (
     <Route path="/forgotpassword" element={<ForgotPassword />} />
     <Route path="/registration-success" element={<RegistrationSuccess />} />
     <Route path="/weather" element={<Weather />} />
+    <Route path="/hotel" element={<Hotels />} />
+    <Route path="/hotels/:id" element={<HotelDetails />} />
     <Route path="/about" element={<About />} />
   </Routes>
 );
