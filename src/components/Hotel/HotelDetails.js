@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { BASE_URL } from "../../utils/config";
 import "./hotel-detail.css";
 import { Button } from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const HotelDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const {
     data: hotel,
     loading: hotelLoading,
@@ -24,6 +28,14 @@ const HotelDetails = () => {
   if (hotelError) return <h4 className="text-center pt-5">{hotelError}</h4>;
   if (roomsError) return <h4 className="text-center pt-5">{roomsError}</h4>;
 
+  const handleClick = (id) => {
+    if (!user) {
+      alert("Please sign in to book the hotel room");
+      return;
+    }
+    navigate(`/hotels/${id}/payment`);
+  };
+
   return (
     <div className="hotel__details">
       {/* Hotel Details Section */}
@@ -39,15 +51,6 @@ const HotelDetails = () => {
             <p>
               <strong>Phone:</strong> {hotel.phoneNumber || "Not available"}
             </p>
-          </div>
-          <div className="hotel__details-actions">
-            <Button
-              // className={`btn ${hotel.active ? "btn-primary" : "btn-disabled"}`}
-              className="btn primary__btn hotels__btn"
-              disabled={!hotel.active}
-            >
-              {hotel.active ? "Book Hotel" : "Unavailable"}
-            </Button>
           </div>
         </div>
       </section>
@@ -86,6 +89,7 @@ const HotelDetails = () => {
                   <Button
                     className="btn primary__btn hotels__btn"
                     disabled={room.status !== "Available"}
+                    onClick={() => handleClick(room._id)}
                   >
                     {room.status === "Available" ? "Book Room" : "Unavailable"}
                   </Button>
