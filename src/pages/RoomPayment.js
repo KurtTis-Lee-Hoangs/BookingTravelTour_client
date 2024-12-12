@@ -45,7 +45,14 @@ const RoomPayment = () => {
 
   useEffect(() => {
     if (!checkInDate || !checkOutDate) {
-      setTotalPrice(room.price);
+      setTotalPrice(room.price || 0);
+    } else if (checkInDate && checkOutDate) {
+      const checkIn = new Date(checkInDate);
+      const checkOut = new Date(checkOutDate);
+      const nightDiff = Math.ceil((checkOut - checkIn) / (1000 * 3600 * 24));
+      const calculatedNights = nightDiff > 0 ? nightDiff : 1;
+      setNumNights(calculatedNights);
+      setTotalPrice(calculatedNights * (room.price || 0));
     }
   }, [checkInDate, checkOutDate, room.price]);
 
@@ -55,26 +62,31 @@ const RoomPayment = () => {
   const handleCheckInDateChange = (e) => {
     const selectedDate = e.target.value;
     setCheckInDate(selectedDate);
-
+  
     if (checkOutDate) {
       const checkIn = new Date(selectedDate);
       const checkOut = new Date(checkOutDate);
       const nightDiff = Math.ceil((checkOut - checkIn) / (1000 * 3600 * 24));
-      setNumNights(nightDiff > 0 ? nightDiff : 1);
-      setTotalPrice(room.price * numNights + numNights * 200000);
+      const calculatedNights = nightDiff > 0 ? nightDiff : 1;
+      setNumNights(calculatedNights);
+      setTotalPrice(calculatedNights * room.price); // Cập nhật giá tiền
     }
   };
-
+  
   const handleCheckOutDateChange = (e) => {
     const selectedDate = e.target.value;
     setCheckOutDate(selectedDate);
-
-    const checkIn = new Date(checkInDate);
-    const checkOut = new Date(selectedDate);
-    const nightDiff = Math.ceil((checkOut - checkIn) / (1000 * 3600 * 24));
-    setNumNights(nightDiff > 0 ? nightDiff : 1);
-    setTotalPrice(room.price * numNights + numNights * 200000);
+  
+    if (checkInDate) {
+      const checkIn = new Date(checkInDate);
+      const checkOut = new Date(selectedDate);
+      const nightDiff = Math.ceil((checkOut - checkIn) / (1000 * 3600 * 24));
+      const calculatedNights = nightDiff > 0 ? nightDiff : 1;
+      setNumNights(calculatedNights);
+      setTotalPrice(calculatedNights * room.price); // Cập nhật giá tiền
+    }
   };
+  
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();

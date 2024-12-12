@@ -60,42 +60,43 @@ const HotelDetails = () => {
         <h3 className="hotel__rooms-title">Available Rooms</h3>
         {rooms.length > 0 ? (
           <div className="hotel__rooms-list">
-            {rooms.map((room) => (
-              <div key={room._id} className="hotel__room-id">
-                <div className="hotel__room-image">
-                  <img
-                    src={room.images[0] || "/default-room.jpg"}
-                    alt={room.roomType}
-                  />
+            {rooms
+              .filter((room) => room.availableRooms > 0) // Lọc các phòng khả dụng
+              .map((room) => (
+                <div key={room._id} className="hotel__room-id">
+                  <div className="hotel__room-image">
+                    <img
+                      src={room.images[0] || "/default-room.jpg"}
+                      alt={room.roomType}
+                    />
+                  </div>
+                  <div className="hotel__room-info">
+                    <h5>{room.roomType}</h5>
+                    <p>
+                      <strong>Square:</strong> {room.square || "Not specified"}
+                    </p>
+                    <p>
+                      <strong>Max Occupancy:</strong> {room.maxOccupancy} people
+                    </p>
+                    <p>
+                      <strong>Price:</strong>{" "}
+                      {new Intl.NumberFormat("vi-VN").format(room.price)} VND
+                    </p>
+                    <p>
+                      <strong>Status:</strong> {room.status}
+                    </p>
+                    <p>
+                      <strong>Available Rooms:</strong> {room.availableRooms}
+                    </p>
+                    <Button
+                      className="btn primary__btn hotels__btn"
+                      onClick={() => handleClick(room._id)}
+                    >
+                      Book Room
+                    </Button>
+                  </div>
                 </div>
-                <div className="hotel__room-info">
-                  <h5>{room.roomType}</h5>
-                  <p>
-                    <strong>Square:</strong> {room.square || "Not specified"}
-                  </p>
-                  <p>
-                    <strong>Max Occupancy:</strong> {room.maxOccupancy} people
-                  </p>
-                  <p>
-                    <strong>Price:</strong>{" "}
-                    {new Intl.NumberFormat("vi-VN").format(room.price)} VND
-                  </p>
-                  <p>
-                    <strong>Status:</strong> {room.status}
-                  </p>
-                  <p>
-                    <strong>Available Rooms:</strong> {room.availableRooms}
-                  </p>
-                  <Button
-                    className="btn primary__btn hotels__btn"
-                    disabled={room.status !== "Available"}
-                    onClick={() => handleClick(room._id)}
-                  >
-                    {room.status === "Available" ? "Book Room" : "Unavailable"}
-                  </Button>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         ) : (
           <p className="hotel-rooms__no-rooms">
