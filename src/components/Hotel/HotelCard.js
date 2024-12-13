@@ -13,7 +13,7 @@ const HotelCard = ({ hotel }) => {
     address.length > 35 ? address.slice(0, 30) + "..." : address;
   return (
     <div to={`/hotels/${_id}`} className="tour__card">
-      <Link className="tour__card">
+      <Link to={`/hotels/${_id}`} className="tour__card">
         <Card>
           <div className="post__img">
             <img src={photo} alt="post-img" />

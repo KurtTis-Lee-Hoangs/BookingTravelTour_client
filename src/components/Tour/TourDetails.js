@@ -162,6 +162,16 @@ const TourDetails = () => {
     ));
   };
 
+  const formatDescription = (description) => {
+    if (!description) return null; // Return null if description is undefined or null
+    return description.split("\n").map((item, index) => (
+      <span key={index}>
+        {item}
+        <br />
+      </span>
+    ));
+  };
+
   return (
     <>
       <section>
@@ -227,7 +237,8 @@ const TourDetails = () => {
                     </div>
 
                     <h5>Dercription</h5>
-                    <p>{breakText(desc, 100)}</p>
+                    {/* <p>{breakText(desc, 100)}</p> */}
+                    <p>{formatDescription(desc, 100)}</p>
                   </div>
 
                   {/* Review by user */}

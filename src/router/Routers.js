@@ -20,6 +20,8 @@ import Weather from "../components/Weather/Weather"
 import About from "../components/About/About";
 import Hotels from "../components/Hotel/Hotels"
 import HotelDetails from "../components/Hotel/HotelDetails";
+import RoomPayment from "../pages/RoomPayment";
+import HotelBookingHistory from "../components/User/HotelBookingHistory";
 
 
 const Routers = () => (
@@ -44,7 +46,9 @@ const Routers = () => (
     <Route path="/weather" element={<Weather />} />
     <Route path="/hotel" element={<Hotels />} />
     <Route path="/hotels/:id" element={<HotelDetails />} />
+    <Route path="/hotels/:id/payment" element={<RoomPayment />} />
     <Route path="/about" element={<About />} />
+    <Route path="/hotelBooking" element={<HotelBookingHistory />} />
   </Routes>
 );
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input } from "reactstrap";
+import { TextField, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
 import { Line, Bar } from "react-chartjs-2";
@@ -36,7 +36,8 @@ const Statistical = () => {
   } = useFetch(`${BASE_URL}/bookings`, refreshKey);
 
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(null); // `null` means no month filter
+  // const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [timeRange, setTimeRange] = useState("year"); // Default view by year
 
   if (loading) return <div>Loading...</div>;
@@ -104,7 +105,7 @@ const Statistical = () => {
 
   // Count the number of bookings per tour
   const tourBookingCounts = filteredBookings.reduce((acc, b) => {
-    const tourId = b.tourId; // Assuming `tourId` is available in booking data
+    const tourId = b.tourName; // Assuming `tourName` is available in booking data
     acc[tourId] = (acc[tourId] || 0) + 1;
     return acc;
   }, {});
@@ -150,12 +151,27 @@ const Statistical = () => {
 
   const options = {
     responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Total revenue based on tour booking date",
+      },
+    },
     scales: {
       x: {
         type: "category",
         title: {
           display: true,
           text: timeRange === "day" ? "Date" : "Month",
+        },
+        ticks: {
+          // This ensures the labels are displayed horizontally
+          autoSkip: false,
+          maxRotation: 45, // 0 ensures no rotation of the label
+          minRotation: 45, // 0 ensures no rotation of the label
         },
       },
       y: {
@@ -173,11 +189,26 @@ const Statistical = () => {
 
   const barOptions = {
     responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Number of tours according to tour booking date",
+      },
+    },
     scales: {
       x: {
         title: {
           display: true,
-          text: "Tour ID",
+          text: "Tour Name",
+        },
+        ticks: {
+          // This ensures the labels are displayed horizontally
+          autoSkip: false,
+          maxRotation: 45, // 0 ensures no rotation of the label
+          minRotation: 45, // 0 ensures no rotation of the label
         },
       },
       y: {
@@ -197,46 +228,48 @@ const Statistical = () => {
   );
 
   return (
-    <div style={{ maxWidth: "1200px", margin: "0 50px", overflowY: "auto", maxHeight: "500px" }} className="scrollbar__none">
+    <div className="scrollbar__none">
       {/* Year and Month Selectors */}
       <div className="d-flex gap-3 mb-4">
         <div>
-          <label htmlFor="yearSelect">Year:</label>
-          <Input
-            type="select"
-            id="yearSelect"
-            value={selectedYear}
-            style={{ boxShadow: "none" }}
-            onChange={(e) => setSelectedYear(Number(e.target.value))}
-          >
-            {Array.from(
-              { length: 11 }, // Tổng cộng 21 năm (10 năm trước + 1 năm hiện tại + 10 năm sau)
-              (_, i) => new Date().getFullYear() - 5 + i
-            ).map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </Input>
+          <InputLabel htmlFor="yearSelect">Year:</InputLabel>
+          <FormControl fullWidth>
+            <Select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              id="yearSelect"
+              label="Year"
+            >
+              {Array.from(
+                { length: 11 }, // Tổng cộng 21 năm (10 năm trước + 1 năm hiện tại + 10 năm sau)
+                (_, i) => new Date().getFullYear() - 5 + i
+              ).map((year) => (
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
         <div>
-          <label htmlFor="monthSelect">Month:</label>
-          <Input
-            type="select"
-            id="monthSelect"
-            value={selectedMonth || ""}
-            style={{ boxShadow: "none" }}
-            onChange={(e) =>
-              setSelectedMonth(e.target.value ? Number(e.target.value) : null)
-            }
-          >
-            <option value="">All</option>
-            {[...Array(12)].map((_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {new Date(0, i).toLocaleDateString("vi-VN", { month: "long" })}
-              </option>
-            ))}
-          </Input>
+          <InputLabel htmlFor="monthSelect">Month:</InputLabel>
+          <FormControl fullWidth>
+            <Select
+              value={selectedMonth || ""}
+              onChange={(e) =>
+                setSelectedMonth(e.target.value ? Number(e.target.value) : null)
+              }
+              id="monthSelect"
+              label="Month"
+            >
+              <MenuItem value="">All</MenuItem>
+              {[...Array(12)].map((_, i) => (
+                <MenuItem key={i + 1} value={i + 1}>
+                  {new Date(0, i).toLocaleDateString("vi-VN", { month: "long" })}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
       </div>
 
@@ -246,27 +279,15 @@ const Statistical = () => {
           Total Price in {selectedMonth ? `Month ${selectedMonth},` : "Year"}{" "}
           {selectedYear}
         </h5>
-        {selectedMonth ? (
-          <h5 style={{ marginTop: "10px" }}>
-            Total Price:{" "}
-            {totalDailyPrice
-              .toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })
-              .replace("₫", "VND")}
-          </h5>
-        ) : (
-          <h5 style={{ marginTop: "10px" }}>
-            Total Price:{" "}
-            {totalDailyPrice
-              .toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })
-              .replace("₫", "VND")}
-          </h5>
-        )}
+        <h5 style={{ marginTop: "10px" }}>
+          Total Price:{" "}
+          {totalDailyPrice
+            .toLocaleString("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            })
+            .replace("₫", "VND")}
+        </h5>
         <Line
           data={selectedMonth ? dailyChartData : monthlyChartData}
           options={options}
@@ -276,17 +297,12 @@ const Statistical = () => {
       </div>
 
       {/* Bar chart for bookings per tour */}
-      <div style={{ marginBottom: "20px", width: "80%", height: "300px" }}>
+      <div style={{ marginBottom: "20px", width: "100%", height: "500px" }}>
         <h5>
           Bookings Per Tour in{" "}
           {selectedMonth ? `Month ${selectedMonth},` : "Year"} {selectedYear}
         </h5>
-        <Bar
-          data={tourChartData}
-          options={barOptions}
-          height={150}
-          width={500}
-        />
+        <Bar data={tourChartData} options={barOptions} height={300} width={800} />
       </div>
     </div>
   );

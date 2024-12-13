@@ -4,13 +4,58 @@
   top: 80px;
 } */
 
+.active-tab {
+  background-color: #ff7e01 !important; /* Màu giống hover */
+  transform: scale(1.05); /* Phóng to giống hover */
+  color: white !important; /* Màu chữ */
+  border: none; /* Bỏ viền */
+  transition: all 0.3s ease; /* Hiệu ứng chuyển đổi */
+}
+
 .sidebar {
   background-color: #f8f9fa;
-  padding: 5px;
+  /* padding: 5px; */
   border: 1px solid #ddd;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   margin: 0 10px;
-  height: 560px;
+  height: 610px;
+  position: relative;
+  border-radius: 10px;
+}
+
+.sidebar__scrollbar {
+  overflow-y: auto;
+}
+
+.sidebar__scrollbar::-webkit-scrollbar {
+  width: 5px; /* Độ rộng của thanh cuộn */
+}
+
+.sidebar__scrollbar::-webkit-scrollbar-thumb {
+  background-color: #abb0b4; /* Màu của thanh cuộn */
+  border-radius: 10px; /* Bo góc thanh cuộn */
+}
+
+.sidebar__scrollbar::-webkit-scrollbar-track {
+  background-color: #f8f9fa; /* Màu nền của track thanh cuộn */
+}
+
+/* .sidebar .sidebar__header {
+  position: sticky;
+  top: -10px;
+  z-index: 10;
+  background-color: #f8f9fa;
+  padding-top: 20px;
+  padding-bottom: 10px;
+} */
+
+.sidebar__header {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  z-index: 10;
+  padding: 15px 25px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 }
 
 .sidebar-title {
@@ -22,6 +67,7 @@
 .sidebar-menu {
   list-style-type: none;
   padding: 10px;
+  background-color: #f8f9fa;
 }
 
 .sidebar-menu li {
@@ -81,4 +127,5 @@ h2 {
 .icon {
   font-size: 1.5rem;
   display: inline-block;
+  margin-right: 5px;
 }

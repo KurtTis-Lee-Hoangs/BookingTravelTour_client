@@ -18,7 +18,7 @@ const Booking = ({ tour, avgRating }) => {
     tourName: title,
     fullName: "",
     phone: "",
-    guestSize: 1,
+    guestSize: "",
     bookAt: "",
     totalPrice: price,
   });
@@ -65,6 +65,11 @@ const Booking = ({ tour, avgRating }) => {
       booking.guestSize <= 0
     ) {
       return alert("Guest size must be a positive integer.");
+    }
+
+    // Kiểm tra nếu guestSize trống (empty)
+    if (!booking.guestSize) {
+      return alert("Please enter the number of guests.");
     }
 
     // Kiểm tra nếu guestSize lớn hơn maxGroupSize

@@ -1,151 +1,308 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Container, Row, Col, Button } from "reactstrap";
-import "./admin.css";
+import {
+  Box,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Collapse,
+  Typography,
+} from "@mui/material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import UsersTable from "./UsersTable/UsersTable";
+import RestoreUsers from "./RestoreDeleted/RestoreUsers";
 import ToursTable from "./ToursTable/ToursTable";
+import RestoreTours from "./RestoreDeleted/RestoreTours";
 import BlogsTable from "./BlogsTable/BlogTable";
+import RestoreBlogs from "./RestoreDeleted/RestoreBlogs";
 import HotelsTable from "./HotelsTable/HotelTable";
+import RestoreHotels from "./RestoreDeleted/RestoreHotels";
 import BookingTable from "./BookingsTable/BookingTable";
 import Statistical from "./Statistical/Statistical";
-import NewSletter from "../../shared/NewSletter";
-import { AuthContext } from "../../context/AuthContext";
+import HotelStatistical from "./HotelStatistical/HotelStatistical";
 
 const Admin = () => {
-  const [activeTab, setActiveTab] = useState("users");
+  const [activeTab, setActiveTab] = useState("Manage users");
+  const [openSections, setOpenSections] = useState({});
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const toggleSection = (section) => {
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
+  const handleHomePageClick = () => {
+    navigate("/homepage");
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [activeTab]);
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "Manage users":
+        return <UsersTable />;
+      case "Restore users":
+        return <RestoreUsers />;
+      case "Manage tours":
+        return <ToursTable />;
+      case "Restore tours":
+        return <RestoreTours />;
+      case "Manage blogs":
+        return <BlogsTable />;
+      case "Restore blogs":
+        return <RestoreBlogs />;
+      case "Manage hotels":
+        return <HotelsTable />;
+      case "Restore hotels":
+        return <RestoreHotels />;
+      case "Manage bookings":
+        return <BookingTable />;
+      case "Tour statistics":
+        return <Statistical />;
+      case "Hotel statistics":
+        return <HotelStatistical />;
+      default:
+        return null;
+    }
+  };
+
+  const getListItemStyles = (tab) => ({
+    backgroundColor: activeTab === tab ? "#ff7e01" : "transparent", // Active color
+    color: activeTab === tab ? "#fff" : "#ccc",
+    padding: "10px 20px",
+    "&:hover": {
+      backgroundColor: activeTab === tab ? "#ff7e01" : "#faa935", // Hover color
+    },
+  });
 
   return (
-    <>
-      <div className="d-flex mt-4 scrollbar__none">
-        {/* Sidebar */}
-        <Col lg="2" md="2" sm="2" className="sidebar">
-          <div className="d-flex align-items-center mt-3 mb-3">
-            <img
-              src={user.avatar}
-              alt="User Avatar"
-              style={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                marginRight: "15px",
-                marginLeft: "25px",
-              }}
-            />
-            <h3 className="sidebar-title text-center">Admin</h3>
-          </div>
-          <ul className="sidebar-menu">
-            <li>
-              <Button
-                className="btn primary__btn manage__btn d-flex align-items-center"
-                onClick={() => handleTabClick("users")}
-              >
-                <i class="ri-user-settings-fill icon"></i>
-                Manage users
-              </Button>
-            </li>
-            <li>
-              <Button
-                className="btn primary__btn d-flex align-items-center"
-                onClick={() => handleTabClick("tours")}
-              >
-                <i class="ri-ancient-gate-fill icon"></i>
-                Manage tours
-              </Button>
-            </li>
-            <li>
-              <Button
-                className="btn primary__btn d-flex align-items-center"
-                onClick={() => handleTabClick("blogs")}
-              >
-                <i class="ri-edit-box-fill icon"></i>
-                Manage blogs
-              </Button>
-            </li>
-            <li>
-              <Button
-                className="btn primary__btn d-flex align-items-center"
-                onClick={() => handleTabClick("hotels")}
-              >
-                <i class="ri-hotel-fill icon"></i>
-                Manage hotels
-              </Button>
-            </li>
-            <li>
-              <Button
-                className="btn primary__btn d-flex align-items-center"
-                onClick={() => handleTabClick("bookings")}
-              >
-                <i class="ri-wallet-fill icon"></i>
-                Manage bookings
-              </Button>
-            </li>
-            <li>
-              <Button
-                className="btn primary__btn d-flex align-items-center"
-                onClick={() => handleTabClick("statistical")}
-              >
-                <i class="ri-line-chart-fill icon"></i>
-                Revenue statistics
-              </Button>
-            </li>
-          </ul>
-        </Col>
+    <Box display="flex" height="100vh">
+      {/* Sidebar */}
+      <Drawer
+        sx={{
+          width: 240,
+          flexShrink: 0,
+          backgroundColor: "#333",
+          color: "#fff",
+          boxShadow: 3,
+          "& .MuiDrawer-paper": {
+            width: 240,
+            boxSizing: "border-box",
+            backgroundColor: "#333",
+            color: "#fff",
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <Box p={2} display="flex" alignItems="center">
+          <img
+            src={user.avatar}
+            alt="User Avatar"
+            style={{
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
+              marginRight: "15px",
+            }}
+          />
+          <Typography variant="h6">Admin</Typography>
+        </Box>
+        <List>
+          <ListItem
+            button
+            onClick={handleHomePageClick}
+            sx={{ padding: "10px 20px" }}
+          >
+            <ListItemText primary="Home Page" />
+          </ListItem>
 
-        {/* Content */}
-        <Col lg="10" md="9" sm="5" className="content">
-          {activeTab === "users" && (
-            <div>
-              <h2 className="text-center mb-4">
-                Manage user accounts in the system
-              </h2>
-              <UsersTable />
-            </div>
-          )}
-          {activeTab === "tours" && (
-            <div>
-              <h2 className="text-center mb-4">Manage tour in the system</h2>
-              <ToursTable />
-            </div>
-          )}
-          {activeTab === "blogs" && (
-            <div>
-              <h2 className="text-center mb-4">Manage blogs in the system</h2>
-              <BlogsTable />
-            </div>
-          )}
-          {activeTab === "hotels" && (
-            <div>
-              <h2 className="text-center mb-4">Manage hotels in the system</h2>
-              <HotelsTable />
-            </div>
-          )}
-          {activeTab === "bookings" && (
-            <div>
-              <h2 className="text-center mb-4">
-                Manage bookings in the system
-              </h2>
-              <BookingTable />
-            </div>
-          )}
-          {activeTab === "statistical" && (
-            <div>
-              <h2 className="text-center mb-4">Revenue management</h2>
-              <Statistical />
-            </div>
-          )}
-        </Col>
-      </div>
+          {/* User Section */}
+          <ListItem
+            button
+            onClick={() => toggleSection("User")}
+            sx={{ padding: "10px 20px" }}
+          >
+            <ListItemText primary="User" />
+            {openSections.User ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openSections.User} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Manage users")}
+                sx={{ ...getListItemStyles("Manage users"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Manage users" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Restore users")}
+                // sx={getListItemStyles("Restore users")} 
+                sx={{ ...getListItemStyles("Restore users"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Restore users" />
+              </ListItem>
+            </List>
+          </Collapse>
 
-      {/* <NewSletter /> */}
-    </>
+          {/* Tour Section */}
+          <ListItem
+            button
+            onClick={() => toggleSection("Tour")}
+            sx={{ padding: "10px 20px" }}
+          >
+            <ListItemText primary="Tour" />
+            {openSections.Tour ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openSections.Tour} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Manage tours")}
+                // sx={getListItemStyles("Manage tours")} // Sử dụng getListItemStyles
+                sx={{ ...getListItemStyles("Manage tours"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Manage tours" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Restore tours")}
+                // sx={getListItemStyles("Restore tours")} // Sử dụng getListItemStyles
+                sx={{ ...getListItemStyles("Restore tours"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Restore tours" />
+              </ListItem>
+            </List>
+          </Collapse>
+
+          {/* Blog Section */}
+          <ListItem
+            button
+            onClick={() => toggleSection("Blog")}
+            sx={{ padding: "10px 20px" }}
+          >
+            <ListItemText primary="Blog" />
+            {openSections.Blog ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openSections.Blog} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Manage blogs")}
+                // sx={getListItemStyles("Manage blogs")} // Sử dụng getListItemStyles
+                sx={{ ...getListItemStyles("Manage blogs"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Manage blogs" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Restore blogs")}
+                // sx={getListItemStyles("Restore blogs")} // Sử dụng getListItemStyles
+                sx={{ ...getListItemStyles("Restore blogs"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Restore blogs" />
+              </ListItem>
+            </List>
+          </Collapse>
+
+          {/* Hotel Section */}
+          <ListItem
+            button
+            onClick={() => toggleSection("Hotel")}
+            sx={{ padding: "10px 20px" }}
+          >
+            <ListItemText primary="Hotel" />
+            {openSections.Hotel ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openSections.Hotel} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Manage hotels")}
+                // sx={getListItemStyles("Manage hotels")} // Sử dụng getListItemStyles
+                sx={{ ...getListItemStyles("Manage hotels"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Manage hotels" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Restore hotels")}
+                // sx={getListItemStyles("Restore hotels")} // Sử dụng getListItemStyles
+                sx={{ ...getListItemStyles("Restore hotels"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Restore hotels" />
+              </ListItem>
+            </List>
+          </Collapse>
+
+          {/* Statistics Section */}
+          <ListItem
+            button
+            onClick={() => toggleSection("Statistics")}
+            sx={{ padding: "10px 20px" }}
+          >
+            <ListItemText primary="Statistics" />
+            {openSections.Statistics ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openSections.Statistics} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Manage bookings")}
+                // sx={getListItemStyles("Manage bookings")} // Sử dụng getListItemStyles
+                sx={{ ...getListItemStyles("Manage bookings"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Manage bookings" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Tour statistics")}
+                // sx={getListItemStyles("Tour statistics")} // Sử dụng getListItemStyles
+                sx={{ ...getListItemStyles("Tour statistics"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Tour statistics" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => handleTabClick("Hotel statistics")}
+                // sx={getListItemStyles("Hotel statistics")} // Sử dụng getListItemStyles
+                sx={{ ...getListItemStyles("Hotel statistics"), pl: 4 }} // Sử dụng getListItemStyles
+              >
+                <ListItemText primary="Hotel statistics" />
+              </ListItem>
+            </List>
+          </Collapse>
+        </List>
+      </Drawer>
+
+      {/* Content */}
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: "#f5f5f5", p: 3 }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          {activeTab === "Manage users" && "Manage user accounts in the system"}
+          {activeTab === "Restore users" && "Manage deleted user accounts"}
+          {activeTab === "Manage tours" && "Manage tours in the system"}
+          {activeTab === "Restore tours" && "Manage deleted tours"}
+          {activeTab === "Manage blogs" && "Manage blogs in the system"}
+          {activeTab === "Restore blogs" && "Manage deleted blogs"}
+          {activeTab === "Manage hotels" && "Manage hotels in the system"}
+          {activeTab === "Restore hotels" && "Manage deleted hotels"}
+          {activeTab === "Manage bookings" && "Manage bookings in the system"}
+          {activeTab === "Tour statistics" && "Revenue management"}
+          {activeTab === "Hotel statistics" && "Hotel booking statistics"}
+        </Typography>
+        {renderContent()}
+      </Box>
+    </Box>
   );
 };
 

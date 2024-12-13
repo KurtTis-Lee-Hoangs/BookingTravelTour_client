@@ -1,8 +1,19 @@
 import React, { useState } from "react";
-import { Table, Button, Input } from "reactstrap";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Button,
+  TextField,
+  IconButton,
+} from "@mui/material";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
 import EditBookingModal from "./EditBookingModal";
+import SearchIcon from "@mui/icons-material/Search";
 
 const BookingsTable = () => {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -58,17 +69,25 @@ const BookingsTable = () => {
 
   const handleDeleteBooking = async (bookingId) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this booking?"
+      "Are you sure you want to delete this user?"
     );
+
     if (!confirmDelete) return;
+
     try {
       const response = await fetch(`${BASE_URL}/bookings/${bookingId}`, {
-        method: "DELETE",
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
         credentials: "include",
+        body: JSON.stringify({ isDelete: true }),
       });
+
       if (!response.ok) {
         throw new Error("Failed to delete user");
       }
+
       setRefreshKey((prevKey) => prevKey + 1);
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -164,106 +183,208 @@ const BookingsTable = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "500px" }}>
+    <div>
       <div className="d-flex gap-3 mb-3">
-        <Input
-          type="text"
-          placeholder="Search by Email, Name, TourName, Phone (+84 xxxxxxxxx) or BookAt"
+        <TextField
+          label="Search by Email, Name, TourName, Phone (+84 xxxxxxxxx) or BookAt"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: "600px", boxShadow: "none" }}
+          variant="outlined"
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              <IconButton position="end">
+                <SearchIcon />
+              </IconButton>
+            ),
+          }}
         />
       </div>
-      <Table striped style={{ minWidth: "1400px" }}>
-        {/* Bảng người dùng */}
-        <thead>
-          <tr>
-            <th>UserID</th>
-            <th onClick={() => sortBookings("userEmail")}>
-              User email {renderSortIcon("userEmail")}
-            </th>
-            <th onClick={() => sortBookings("tourName")}>
-              Tour name {renderSortIcon("tourName")}
-            </th>
-            <th onClick={() => sortBookings("fullName")}>
-              FullName {renderSortIcon("fullName")}
-            </th>
-            <th onClick={() => sortBookings("guestSize")}>
-              Guest size {renderSortIcon("guestSize")}
-            </th>
-            <th onClick={() => sortBookings("phone")}>
-              Phone {renderSortIcon("phone")}
-            </th>
-            <th onClick={() => sortBookings("bookAt")}>
-              bookAt {renderSortIcon("bookAt")}
-            </th>
-            <th onClick={() => sortBookings("totalPrice")}>
-              Total Price {renderSortIcon("totalPrice")}
-            </th>
-            <th onClick={() => sortBookings("isPayment")}>
-              Payment {renderSortIcon("isPayment")}
-            </th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredBookings?.map((booking) => {
-            const formattedBookAt = new Date(booking.bookAt).toLocaleDateString(
-              "vi-VN",
-              {
+      <TableContainer>
+        <Table sx={{ minWidth: 1500 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                UserID
+              </TableCell>
+              <TableCell
+                onClick={() => sortBookings("userEmail")}
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                User email {renderSortIcon("userEmail")}
+              </TableCell>
+              <TableCell
+                onClick={() => sortBookings("tourName")}
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                Tour name {renderSortIcon("tourName")}
+              </TableCell>
+              <TableCell
+                onClick={() => sortBookings("fullName")}
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                FullName {renderSortIcon("fullName")}
+              </TableCell>
+              <TableCell
+                onClick={() => sortBookings("guestSize")}
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                Guest size {renderSortIcon("guestSize")}
+              </TableCell>
+              <TableCell
+                onClick={() => sortBookings("phone")}
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                Phone {renderSortIcon("phone")}
+              </TableCell>
+              <TableCell
+                onClick={() => sortBookings("bookAt")}
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                BookAt {renderSortIcon("bookAt")}
+              </TableCell>
+              <TableCell
+                onClick={() => sortBookings("totalPrice")}
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                Total Price {renderSortIcon("totalPrice")}
+              </TableCell>
+              <TableCell
+                onClick={() => sortBookings("isPayment")}
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                Payment {renderSortIcon("isPayment")}
+              </TableCell>
+              <TableCell
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  paddingRight: 1,
+                  "&:hover": { color: "primary.main" },
+                  whiteSpace: "nowrap", // Prevent wrapping
+                }}
+              >
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredBookings?.map((booking) => {
+              const formattedBookAt = new Date(
+                booking.bookAt
+              ).toLocaleDateString("vi-VN", {
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
-              }
-            );
-            const formattedPhone = formatPhoneNumber(booking.phone);
-            return (
-              <tr key={booking._id}>
-                <td>{truncateText(booking.userId)}</td>
-                <td>{truncateText(booking.userEmail)}</td>
-                <td>{truncateText(booking.tourName)}</td>
-                <td>{truncateText(booking.fullName)}</td>
-                <td>{truncateText(booking.guestSize)}</td>
-                <td>{formattedPhone}</td>
-                <td>{formattedBookAt}</td>
-                <td>{formatCurrency(booking.totalPrice)}</td>
-                <td>
-                  {booking.isPayment ? (
-                    <span style={{ color: "green" }}>Yes</span>
-                  ) : (
-                    <span style={{ color: "red" }}>No</span>
-                  )}
-                </td>
-                <td>
-                  <Button
-                    className="acction__btn"
-                    color="primary"
-                    size="sm"
-                    onClick={() => openEditModal(booking)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    color="danger"
-                    size="sm"
-                    onClick={() => handleDeleteBooking(booking._id)}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-      {/* Modal edit tour */}
-      <EditBookingModal
-        isOpen={editModal}
-        toggle={() => setEditModal(false)}
-        editingBooking={editingBooking}
-        setEditingBooking={setEditingBooking}
-        handleEditBooking={handleEditBooking}
-      />
+              });
+              const formattedPhone = formatPhoneNumber(booking.phone);
+              return (
+                <TableRow key={booking._id}>
+                  <TableCell>{truncateText(booking.userId)}</TableCell>
+                  <TableCell>{truncateText(booking.userEmail)}</TableCell>
+                  <TableCell>{truncateText(booking.tourName)}</TableCell>
+                  <TableCell>{truncateText(booking.fullName)}</TableCell>
+                  <TableCell>{truncateText(booking.guestSize)}</TableCell>
+                  <TableCell>{formattedPhone}</TableCell>
+                  <TableCell>{formattedBookAt}</TableCell>
+                  <TableCell>{formatCurrency(booking.totalPrice)}</TableCell>
+                  <TableCell>
+                    {/* {booking.isPayment ? "Paid" : "Unpaid"} */}
+                    {booking.isPayment ? (
+                      <span style={{ color: "green" }}>Yes</span>
+                    ) : (
+                      <span style={{ color: "red" }}>No</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={() => openEditModal(booking)}
+                      variant="outlined"
+                      color="primary"
+                      style={{ marginRight: "10px" }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteBooking(booking._id)}
+                      variant="outlined"
+                      color="error"
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {editModal && (
+        <EditBookingModal
+          isOpen={editModal}
+          toggle={() => setEditModal(false)}
+          editingBooking={editingBooking}
+          setEditingBooking={setEditingBooking}
+          handleEditBooking={handleEditBooking}
+        />
+      )}
     </div>
   );
 };

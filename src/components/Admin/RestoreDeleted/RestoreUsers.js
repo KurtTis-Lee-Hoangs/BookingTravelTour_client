@@ -1,171 +1,53 @@
 import React, { useState } from "react";
 import {
+  Button,
+  TextField,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Button,
-  TextField,
+  Paper,
+  Box,
   IconButton,
-  Tooltip,
 } from "@mui/material";
 import { BASE_URL } from "../../../utils/config";
 import useFetch from "../../../hooks/useFetch";
-import AddUserModal from "./AddUserModal";
-import EditUserModal from "./EditUserModal";
 import SearchIcon from "@mui/icons-material/Search";
 
-const UsersTable = () => {
-  // Fetch the users data from the API
+const RestoreUsers = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const {
     data: user,
     loading,
     error,
-  } = useFetch(`${BASE_URL}/users`, refreshKey);
-  const [isUploading, setIsUploading] = useState(false);
-  const [modal, setModal] = useState(false);
-  const [newUser, setNewUser] = useState({
-    username: "",
-    email: "",
-    password: "",
-    role: "user",
-  });
-
-  const [editModal, setEditModal] = useState(false);
-  const [editingUser, setEditingUser] = useState(null);
-  const [originalUser, setOriginalUser] = useState(null);
-  const openEditModal = (user) => {
-    setOriginalUser(user); // Lưu bản sao dữ liệu gốc
-    setEditingUser(user); // Lưu thông tin người dùng vào state
-    setEditModal(true); // Mở modal
-  };
-
-  const toggleModal = () => setModal(!modal);
-  const [isFormVisible, setIsFormVisible] = useState(false);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewUser((prevState) => ({ ...prevState, [name]: value }));
-  };
-
-  const handleAddUser = async () => {
-    try {
-      const responseAdd = await fetch(`${BASE_URL}/users`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(newUser),
-      });
-
-      if (!responseAdd.ok) {
-        const errorData = await responseAdd.json();
-        throw new Error(errorData.message || "Failed to add user");
-      }
-      setRefreshKey((prevKey) => prevKey + 1);
-      setNewUser({
-        username: "",
-        email: "",
-        password: "",
-        role: "user",
-      });
-      setIsFormVisible(false);
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  } = useFetch(`${BASE_URL}/users/delete/getAllUserDeleted`, refreshKey);
 
   const handleDeleteUser = async (userId) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this user?"
+      "Are you sure you want to restore this user?"
     );
-
     if (!confirmDelete) return;
 
     try {
       const response = await fetch(`${BASE_URL}/users/${userId}`, {
-        method: "PUT",
+        method: "PUT", // Change from DELETE to PATCH
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ isDelete: true }),
+        body: JSON.stringify({ isDelete: false }), // Sending updated isDelete info
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete user");
+        throw new Error("Failed to restore user");
       }
 
+      // Refresh the user list after restoration
       setRefreshKey((prevKey) => prevKey + 1);
     } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
-
-  const handleAvatarChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setIsUploading(true);
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "avatarImg");
-
-      try {
-        const response = await fetch(
-          "https://api.cloudinary.com/v1_1/dmbkgg1ac/image/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        const data = await response.json();
-        if (data.secure_url) {
-          setEditingUser({
-            ...editingUser,
-            avatar: data.secure_url,
-          });
-        }
-      } catch (error) {
-        console.error("Error uploading image to Cloudinary:", error);
-      } finally {
-        setIsUploading(false);
-      }
-    }
-  };
-
-  const handleEditUser = async () => {
-    try {
-      const updatedFields = {};
-
-      Object.keys(editingUser).forEach((key) => {
-        if (editingUser[key] !== originalUser[key]) {
-          updatedFields[key] = editingUser[key];
-        }
-      });
-
-      if (Object.keys(updatedFields).length === 0) {
-        return;
-      }
-
-      const response = await fetch(`${BASE_URL}/users/${editingUser._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedFields),
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update user");
-      }
-
-      setRefreshKey((prevKey) => prevKey + 1);
-      setEditModal(false);
-    } catch (error) {
-      console.error("Error updating user:", error);
+      console.error("Error restoring user:", error);
     }
   };
 
@@ -182,8 +64,8 @@ const UsersTable = () => {
 
     if (user) {
       user.sort((a, b) => {
-        const valueA = a[key]?.toString().toLowerCase() || "";
-        const valueB = b[key]?.toString().toLowerCase() || "";
+        const valueA = a[key]?.toString().toLowerCase() || ""; // Convert to lowercase string
+        const valueB = b[key]?.toString().toLowerCase() || ""; // Convert to lowercase string
 
         if (valueA < valueB) return direction === "asc" ? -1 : 1;
         if (valueA > valueB) return direction === "asc" ? 1 : -1;
@@ -215,14 +97,15 @@ const UsersTable = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div>
-      <div className="d-flex gap-3 mb-3">
+    <Box sx={{ overflowY: "auto", maxHeight: "500px" }}>
+      <Box sx={{ display: "flex", gap: 3, marginBottom: 3, marginTop: 2 }}>
+        {/* Search Bar */}
         <TextField
           label="Search by Username or Email"
           variant="outlined"
-          fullWidth
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          fullWidth
           InputProps={{
             endAdornment: (
               <IconButton>
@@ -231,37 +114,10 @@ const UsersTable = () => {
             ),
           }}
         />
+      </Box>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setIsFormVisible((prev) => !prev)}
-        >
-          {isFormVisible ? "Hide Form" : "Add User"}
-        </Button>
-      </div>
-
-      {isFormVisible && (
-        <AddUserModal
-          newUser={newUser}
-          handleInputChange={handleInputChange}
-          handleAddUser={handleAddUser}
-          handleCancel={() => setIsFormVisible(false)}
-        />
-      )}
-
-      {editModal && (
-        <EditUserModal
-          editingUser={editingUser}
-          setEditingUser={setEditingUser}
-          handleEditUser={handleEditUser}
-          handleAvatarChange={handleAvatarChange}
-          toggleEditMode={() => setEditModal(false)}
-        />
-      )}
-
-      <TableContainer>
-        <Table>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="restored users table">
           <TableHead>
             <TableRow>
               <TableCell
@@ -343,21 +199,12 @@ const UsersTable = () => {
                 <TableCell>{user.role}</TableCell>
                 <TableCell>
                   <Button
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    onClick={() => openEditModal(user)}
-                    style={{ marginRight: "10px" }}
-                  >
-                    Edit User
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="error"
+                    variant="contained"
+                    color="secondary"
                     size="small"
                     onClick={() => handleDeleteUser(user._id)}
                   >
-                    Delete User
+                    Restore User
                   </Button>
                 </TableCell>
               </TableRow>
@@ -365,8 +212,8 @@ const UsersTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Box>
   );
 };
 
-export default UsersTable;
+export default RestoreUsers;

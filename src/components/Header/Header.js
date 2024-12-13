@@ -21,12 +21,12 @@ const nav__links = [
     display: "Tours",
   },
   {
-    path: "/weather",
-    display: "Weather",
-  },
-  {
     path: "/hotel",
     display: "Hotel",
+  },
+  {
+    path: "/weather",
+    display: "Weather",
   },
   {
     path: "/about",
@@ -186,10 +186,10 @@ const Header = () => {
                       <NavLink to="/tours">Tours</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
-                      <NavLink to="/weather">Weather</NavLink>
+                      <NavLink to="/hotel">Hotel</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
-                      <NavLink to="/hotel">Hotel</NavLink>
+                      <NavLink to="/weather">Weather</NavLink>
                     </li>
                     <li className="nav__item" onClick={handleMenuItemClick}>
                       <NavLink to="/about">About</NavLink>
@@ -249,7 +249,13 @@ const Header = () => {
                           to="/history"
                           className="dropdown__item profile-item"
                         >
-                          History Booking
+                          Booking History
+                        </Link>
+                        <Link
+                          to="/hotelBooking"
+                          className="dropdown__item profile-item"
+                        >
+                          Hotel Booking
                         </Link>
                         <Link
                           to="/favourite"

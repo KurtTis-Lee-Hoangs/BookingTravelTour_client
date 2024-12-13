@@ -12,7 +12,7 @@ const Hotel = () => {
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
   // Fetch hotels based on the current page
-  const { data: hotels, loading, error } = useFetch(`${BASE_URL}/hotels?page=${page}`);
+  const { data: hotels, loading, error } = useFetch(`${BASE_URL}/hotels/getAllHotelByUser?page=${page}`);
   // Fetch hotel count to calculate pagination
   const { data: hotelCount } = useFetch(`${BASE_URL}/hotels/search/getHotelCount`);
   // Update the page count when hotelCount or page changes
