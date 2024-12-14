@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Button, Form, FormGroup, Label, Input, Container, Row, Col } from "reactstrap";
+import { Button, TextField, Container, Box, Typography, Avatar, Grid, CircularProgress } from "@mui/material";
 import { AuthContext } from "../context/AuthContext";
 import { BASE_URL } from "../utils/config";
-import "../styles/profile.css";
 import useFetch from "../hooks/useFetch";
+import "../styles/profile.css";
 
 const ProfilePage = () => {
   const { user, dispatch } = useContext(AuthContext);
@@ -54,13 +54,13 @@ const ProfilePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const updatedData = {
       avatar,
       username,
       ...(password && { password })  // Only include password if it is non-empty
     };
-
+  
     try {
       const response = await fetch(`${BASE_URL}/users/${user._id}`, {
         method: "PUT",
@@ -70,17 +70,19 @@ const ProfilePage = () => {
         credentials: "include",
         body: JSON.stringify(updatedData),
       });
-
+  
       const result = await response.json();
       if (result.success) {
         alert("Profile updated successfully!");
-
-        // After profile update, log the user out (clear context and localStorage)
-        dispatch({ type: "LOGOUT" });
-        localStorage.removeItem("user");
-
-        // Optionally, redirect the user to the login page or home page after logout
-        window.location.href = "/login"; // or any route you prefer
+  
+        // Update user data in AuthContext
+        dispatch({ type: "LOGIN_SUCCESS", payload: { ...user, ...updatedData } });
+  
+        // Update user data in localStorage
+        const updatedUser = { ...user, ...updatedData };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        
+        // Optionally, you can update the UI or show a success message.
       } else {
         alert("Failed to update profile. Please try again.");
       }
@@ -90,75 +92,89 @@ const ProfilePage = () => {
     }
   };
 
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      dispatch({ type: "LOGIN_SUCCESS", payload: storedUser });
+    }
+  }, [dispatch]);
+
   return (
-    <Container className="profile-page">
-      <Row>
-        <Col md={{ size: 6, offset: 3 }}>
-          <h2 className="text-center mb-4">Profile Settings</h2>
+    <Container maxWidth="sm">
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 4,
+        }}
+      >
+        <Typography component="h1" variant="h5" gutterBottom>
+          Profile Settings
+        </Typography>
 
-          {/* Form to update user information */}
-          <Form onSubmit={handleSubmit}>
-            <div className="text-center">
-              <img
-                src={
-                  avatar ||
-                  "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?t=st=1730600707~exp=1730604307~hmac=63d2ed023c4a722f90f9c59a0417ca2eba185a3b9323bf93f4a6ff988c6bd6d7&w=740"
-                }
-                alt="User Avatar"
-                className="profile-photo mb-3"
-              />
-            </div>
+        <Avatar
+          src={
+            avatar ||
+            "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg"
+          }
+          sx={{ width: 100, height: 100, mb: 2 }}
+        />
 
-            <FormGroup>
-              <Label for="avatar">Avatar</Label>
-              <Input
-                type="file"
-                name="avatar"
-                id="avatar"
-                onChange={handleAvatarChange}
-                disabled={isUploading}
-              />
-            </FormGroup>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <Button
+            variant="outlined"
+            component="label"
+            fullWidth
+            sx={{ mb: 2 }}
+            disabled={isUploading}
+          >
+            {isUploading ? <CircularProgress size={24} /> : "Upload New Avatar"}
+            <input type="file" hidden onChange={handleAvatarChange} />
+          </Button>
 
-            <FormGroup>
-              <Label for="username">Username</Label>
-              <Input
-                type="text"
-                name="username"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </FormGroup>
+          <TextField
+            margin="normal"
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
-            <FormGroup>
-              <Label for="email">Email</Label>
-              <Input
-                type="email"
-                name="email"
-                id="email"
-                value={user.email}
-                disabled
-              />
-            </FormGroup>
+          <TextField
+            margin="normal"
+            fullWidth
+            id="email"
+            label="Email"
+            name="email"
+            value={user.email}
+            disabled
+          />
 
-            <FormGroup>
-              <Label for="password">Password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </FormGroup>
+          <TextField
+            margin="normal"
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-            <Button type="submit" className="btn primary__btn m-2">
-              Update Profile
-            </Button>
-          </Form>
-        </Col>
-      </Row>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Update Profile
+          </Button>
+        </Box>
+      </Box>
     </Container>
   );
 };
