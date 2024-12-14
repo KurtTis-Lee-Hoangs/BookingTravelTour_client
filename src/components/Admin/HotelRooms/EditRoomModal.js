@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import { Modal, Box, TextField, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Modal, Box, TextField, Button, MenuItem } from "@mui/material";
 import { BASE_URL } from "../../../utils/config";
 
-const AddRoomModal = ({ open, onClose, hotelId, onRoomAdded }) => {
+const EditRoomModal = ({ open, onClose, hotelId, onRoomEdited, roomData }) => {
   const [newRoom, setNewRoom] = useState({
     hotelId: hotelId,
-    roomNumber: "",
     square: "",
     roomType: "",
     maxOccupancy: "",
@@ -14,6 +13,12 @@ const AddRoomModal = ({ open, onClose, hotelId, onRoomAdded }) => {
     status: "Available",
   });
   const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    if (roomData) {
+      setNewRoom(roomData); // Gán thông tin phòng hiện tại vào newRoom
+    }
+  }, [roomData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,12 +60,12 @@ const AddRoomModal = ({ open, onClose, hotelId, onRoomAdded }) => {
     }
   };
 
-  const handleSubmitAddRoom = async (e) => {
+  const handleSubmitEditRoom = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await fetch(`${BASE_URL}/hotels/room`, {
-        method: "POST",
+      const response = await fetch(`${BASE_URL}/hotels/rooms/${newRoom._id}`, { // Dùng _id thay vì hotelId
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -68,15 +73,15 @@ const AddRoomModal = ({ open, onClose, hotelId, onRoomAdded }) => {
         body: JSON.stringify(newRoom),
       });
       const data = await response.json();
-
+  
       if (data.success) {
-        onRoomAdded(data.data); // Call parent callback to add the new room to the list
-        onClose(); // Close the modal
+        onRoomEdited(data.data); // Gọi callback với phòng đã chỉnh sửa
+        onClose();
       } else {
-        console.error("Error adding room");
+        console.error("Error editing room");
       }
     } catch (error) {
-      console.error("Error adding room", error);
+      console.error("Error editing room", error);
     }
   };
 
@@ -95,17 +100,8 @@ const AddRoomModal = ({ open, onClose, hotelId, onRoomAdded }) => {
           width: 400,
         }}
       >
-        <h3>Add New Room</h3>
-        <form onSubmit={handleSubmitAddRoom}>
-          <TextField
-            label="Room Number"
-            name="roomNumber"
-            value={newRoom.roomNumber}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            sx={{ marginBottom: 2 }}
-          />
+        <h3>Edit Room</h3>
+        <form onSubmit={handleSubmitEditRoom}>
           <TextField
             label="Square"
             name="square"
@@ -142,6 +138,19 @@ const AddRoomModal = ({ open, onClose, hotelId, onRoomAdded }) => {
             required
             sx={{ marginBottom: 2 }}
           />
+          <TextField
+            select
+            label="Status"
+            name="status"
+            value={newRoom.status}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ marginBottom: 2 }}
+          >
+            <MenuItem value="Available">Available</MenuItem>
+            <MenuItem value="Unavailable">Unavailable</MenuItem>
+          </TextField>
           <Button
             variant="outlined"
             component="label"
@@ -158,7 +167,7 @@ const AddRoomModal = ({ open, onClose, hotelId, onRoomAdded }) => {
           </Button>
           {isUploading && <p>Uploading image...</p>}
           <Button type="submit" variant="contained" color="primary">
-            Add Room
+            Save Changes
           </Button>
         </form>
       </Box>
@@ -166,4 +175,4 @@ const AddRoomModal = ({ open, onClose, hotelId, onRoomAdded }) => {
   );
 };
 
-export default AddRoomModal;
+export default EditRoomModal;

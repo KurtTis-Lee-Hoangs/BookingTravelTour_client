@@ -10,13 +10,17 @@ import {
   Button,
 } from "@mui/material";
 import { BASE_URL } from "../../../utils/config";
-import AddRoomModal from "./AddRoomModal"; // Import the modal
+import AddRoomModal from "./AddRoomModal";
+import EditRoomModal from "./EditRoomModal";
 
 const HotelRooms = ({ hotelId, onFinishViewing }) => {
+  const [refreshKey, setRefreshKey] = useState(0);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openAddRoomModal, setOpenAddRoomModal] = useState(false);
+  const [openEditRoomModal, setOpenEditRoomModal] = useState(false);
+  const [currentRoom, setCurrentRoom] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
 
   useEffect(() => {
@@ -53,6 +57,59 @@ const HotelRooms = ({ hotelId, onFinishViewing }) => {
 
   const handleRoomAdded = (newRoom) => {
     setRooms((prevRooms) => [...prevRooms, newRoom]); // Add the new room to the list
+  };
+
+  const handleOpenEditRoomModal = (room) => {
+    setCurrentRoom(room); // Gán thông tin phòng hiện tại
+    setOpenEditRoomModal(true); // Mở modal
+  };
+
+  const handleCloseEditRoomModal = () => {
+    setCurrentRoom(null); // Reset thông tin phòng
+    setOpenEditRoomModal(false); // Đóng modal
+  };
+
+  const handleRoomEdited = (updatedRoom) => {
+    setRooms((prevRooms) =>
+      prevRooms.map((room) =>
+        room._id === updatedRoom._id ? updatedRoom : room
+      )
+    );
+  };
+
+  const handleCheckOutRoom = async (roomId) => {
+    const confirmAction = window.confirm(
+      "Are you sure you want to mark this room as 'Available'?"
+    );
+
+    if (!confirmAction) return;
+
+    try {
+      const response = await fetch(`${BASE_URL}/hotels/rooms/${roomId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ status: "Available" }), // Cập nhật trạng thái
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update room status");
+      }
+      // const updatedRoom = await response.json()
+      // Cập nhật trạng thái trong danh sách rooms
+      setRooms((prevRooms) =>
+        prevRooms.map((room) =>
+          room._id === roomId ? { ...room, status: "Available" } : room
+        )
+      );
+
+      alert("Room status updated to 'Available' successfully.");
+    } catch (error) {
+      console.error("Error updating room status:", error);
+      alert("Failed to update room status.");
+    }
   };
 
   const sortRooms = (key) => {
@@ -175,7 +232,11 @@ const HotelRooms = ({ hotelId, onFinishViewing }) => {
                   <TableCell>{room.price}</TableCell>
                   <TableCell>{room.status}</TableCell>
                   <TableCell>
-                    <Button variant="outlined" color="primary">
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => handleOpenEditRoomModal(room)}
+                    >
                       Edit
                     </Button>
                     {room.status === "Unavailable" && (
@@ -183,6 +244,7 @@ const HotelRooms = ({ hotelId, onFinishViewing }) => {
                         variant="outlined"
                         color="secondary"
                         sx={{ marginLeft: 1 }}
+                        onClick={() => handleCheckOutRoom(room._id)}
                       >
                         Checkout
                       </Button>
@@ -200,6 +262,14 @@ const HotelRooms = ({ hotelId, onFinishViewing }) => {
         onClose={handleCloseAddRoomModal}
         hotelId={hotelId}
         onRoomAdded={handleRoomAdded}
+      />
+
+      <EditRoomModal
+        open={openEditRoomModal}
+        onClose={handleCloseEditRoomModal}
+        hotelId={hotelId}
+        onRoomEdited={handleRoomEdited}
+        roomData={currentRoom} // Truyền thông tin phòng hiện tại
       />
     </div>
   );
