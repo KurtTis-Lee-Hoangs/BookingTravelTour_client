@@ -1,5 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Button, TextField, Container, Box, Typography, Avatar, Grid, CircularProgress } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Container,
+  Box,
+  Typography,
+  Avatar,
+  Grid,
+  CircularProgress,
+} from "@mui/material";
 import { AuthContext } from "../context/AuthContext";
 import { BASE_URL } from "../utils/config";
 import useFetch from "../hooks/useFetch";
@@ -14,7 +23,7 @@ const ProfilePage = () => {
     data: userData,
     loading,
     error,
-  // } = useFetch(`${BASE_URL}/users/${user._id}`);
+    // } = useFetch(`${BASE_URL}/users/${user._id}`);
   } = useFetch(`${BASE_URL}/users/${user.id}`);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -25,7 +34,7 @@ const ProfilePage = () => {
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      setIsUploading(true);  // Bắt đầu tải ảnh lên
+      setIsUploading(true); // Bắt đầu tải ảnh lên
 
       // Tạo FormData để gửi file ảnh tới Cloudinary
       const formData = new FormData();
@@ -34,10 +43,13 @@ const ProfilePage = () => {
 
       try {
         // Upload ảnh lên Cloudinary
-        const response = await fetch("https://api.cloudinary.com/v1_1/dmbkgg1ac/image/upload", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dmbkgg1ac/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         const data = await response.json();
         if (data.secure_url) {
@@ -47,20 +59,20 @@ const ProfilePage = () => {
       } catch (error) {
         console.error("Error uploading image to Cloudinary:", error);
       } finally {
-        setIsUploading(false);  // Kết thúc quá trình tải ảnh lên
+        setIsUploading(false); // Kết thúc quá trình tải ảnh lên
       }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const updatedData = {
       avatar,
       username,
-      ...(password && { password })  // Only include password if it is non-empty
+      ...(password && { password }), // Only include password if it is non-empty
     };
-  
+
     try {
       const response = await fetch(`${BASE_URL}/users/${user._id}`, {
         method: "PUT",
@@ -70,18 +82,21 @@ const ProfilePage = () => {
         credentials: "include",
         body: JSON.stringify(updatedData),
       });
-  
+
       const result = await response.json();
       if (result.success) {
         alert("Profile updated successfully!");
-  
+
         // Update user data in AuthContext
-        dispatch({ type: "LOGIN_SUCCESS", payload: { ...user, ...updatedData } });
-  
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: { ...user, ...updatedData },
+        });
+
         // Update user data in localStorage
         const updatedUser = { ...user, ...updatedData };
         localStorage.setItem("user", JSON.stringify(updatedUser));
-        
+
         // Optionally, you can update the UI or show a success message.
       } else {
         alert("Failed to update profile. Please try again.");
@@ -169,7 +184,15 @@ const ProfilePage = () => {
             fullWidth
             variant="contained"
             color="primary"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: "#faa935", // Default color
+              color: "black", // Text color
+              "&:hover": {
+                backgroundColor: "#ff7e01", // Hover color
+              },
+            }}
           >
             Update Profile
           </Button>

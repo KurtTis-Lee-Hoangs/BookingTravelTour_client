@@ -212,15 +212,26 @@ const TourDetails = () => {
                         )}
                       </span>
 
+                      {/* <span className="test">
+                        <i class="ri-map-pin-fill"></i> {breakText(address, 60)}
+                      </span> */}
+
+                      <span>
+                        <i class="ri-map-pin-2-line"></i> {city}
+                      </span>
+                    </div>
+
+                    <div className="tour__extra-details">
+                      {/* <span>
+                        <i class="ri-map-pin-2-line"></i> {city}
+                      </span> */}
+
                       <span className="test">
                         <i class="ri-map-pin-fill"></i> {breakText(address, 60)}
                       </span>
                     </div>
 
                     <div className="tour__extra-details">
-                      <span>
-                        <i class="ri-map-pin-2-line"></i> {city}
-                      </span>
                       <span>
                         <i class="ri-wallet-3-line"></i> {formattedPrice} VND
                         /person

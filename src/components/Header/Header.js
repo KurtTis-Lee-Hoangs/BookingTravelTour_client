@@ -50,16 +50,16 @@ const Header = () => {
           "Content-Type": "application/json",
         },
       });
-  
+
       const result = await res.json();
-  
+
       if (!res.ok) {
         console.error("Error during logout:", result.message);
         alert(result.message || "Logout failed. Please try again.");
       } else {
         // Clear user data and redirect to homepage
         dispatch({ type: "LOGOUT" });
-        navigate("/"); 
+        navigate("/");
       }
     } catch (err) {
       console.error("Error during logout:", err);
@@ -84,7 +84,9 @@ const Header = () => {
       }
     };
 
-    stickyheaderFunc();
+    // stickyheaderFunc();
+    // Attach the event listener
+    window.addEventListener("scroll", stickyheaderFunc);
     return () => window.removeEventListener("scroll", stickyheaderFunc);
   }, []);
 

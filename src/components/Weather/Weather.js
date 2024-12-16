@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, Progress } from "reactstrap";
+// import { Button, Input, Progress } from "reactstrap";
+import { Button, Input, LinearProgress, TextField } from "@mui/material";
 import "./weather.css"; // CSS cho giao diện đẹp hơn
 import { BASE_URL } from "../../utils/config";
 
@@ -63,9 +64,17 @@ const Vehicle = () => {
     <div className="weather-page container py-5 mb-5">
       <h2 className="text-center mb-4">Weather Forecast</h2>
       <div className="weather-form mb-4">
-        <Input
+        {/* <Input
           type="text"
           placeholder="Enter city (ex: hanoi, ho chi minh)"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          className="weather-input"
+        /> */}
+        <TextField
+          label="Enter city (ex: hanoi, ho chi minh)"
+          variant="outlined"
+          fullWidth
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="weather-input"
@@ -77,12 +86,16 @@ const Vehicle = () => {
           onChange={(e) => setDistrict(e.target.value)}
           className="weather-input mt-2"
         /> */}
-        <Button color="btn primary__btn btn__weather" className="mt-3" onClick={fetchWeather}>
+        <Button
+          color="btn primary__btn btn__weather"
+          className="mt-3"
+          onClick={fetchWeather}
+        >
           See the weather
         </Button>
       </div>
       {loading && (
-        <Progress animated color="info" value={100} className="mt-3" />
+        <LinearProgress animated color="info" value={100} className="mt-3" />
       )}
       {error && <p className="text-danger mt-3">{error}</p>}
       {weatherData && (

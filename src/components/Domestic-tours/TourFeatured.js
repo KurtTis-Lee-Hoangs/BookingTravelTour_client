@@ -12,7 +12,7 @@ const TourFeatured = ({ tour }) => {
   const formattedPrice = price.toLocaleString("vi-VN");
   const cityPreview = city.split(" ").slice(0, 5).join(" ");
   const previewWithEllipsis = city.split(" ").length > 5 ? `${cityPreview}...` : cityPreview;
-  const titlePreview = title.length > 35 ? title.slice(0, 35) + "..." : title;
+  const titlePreview = title.length > 30 ? title.slice(0, 30) + "..." : title;
 
   return (
     <div to={`/tours/${_id}`} className="tour__card">
@@ -20,7 +20,7 @@ const TourFeatured = ({ tour }) => {
         <Card>
           <div className="tour__img">
             <img src={photo} alt="tour-img" />
-            {featured && <span className="ribbon__tour">Featured Tour</span>}
+            {featured && <span className="ribbon__tour">Foreign Tour</span>}
           </div>
 
           <CardBody>
