@@ -159,7 +159,7 @@ const HotelTable = ({ hotels }) => {
   };
 
   const truncateText = (text) => {
-    return text.length > 25 ? text.slice(0, 25) + "..." : text;
+    return text.length > 20 ? text.slice(0, 20) + "..." : text;
   };
 
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });

@@ -8,6 +8,10 @@ import {
   ListItemText,
   Collapse,
   Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { AuthContext } from "../../context/AuthContext";
@@ -23,12 +27,18 @@ import RestoreHotels from "./RestoreDeleted/RestoreHotels";
 import BookingTable from "./BookingsTable/BookingTable";
 import Statistical from "./Statistical/Statistical";
 import HotelStatistical from "./HotelStatistical/HotelStatistical";
+import { BASE_URL } from "../../utils/config";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("Manage users");
   const [openSections, setOpenSections] = useState({});
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { dispatch } = useContext(AuthContext);
+  
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
+  const handleOpenLogoutDialog = () => setOpenLogoutDialog(true);
+  const handleCloseLogoutDialog = () => setOpenLogoutDialog(false);
 
   const toggleSection = (section) => {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -40,6 +50,32 @@ const Admin = () => {
 
   const handleHomePageClick = () => {
     navigate("/homepage");
+  };
+
+  const logout = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/users/sign-out`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        console.error("Error during logout:", result.message);
+        alert(result.message || "Logout failed. Please try again.");
+      } else {
+        // Clear user data and redirect to homepage
+        dispatch({ type: "LOGOUT" });
+        navigate("/");
+      }
+    } catch (err) {
+      console.error("Error during logout:", err);
+      alert("Logout failed. Please try again.");
+    }
   };
 
   useEffect(() => {
@@ -147,7 +183,7 @@ const Admin = () => {
               <ListItem
                 button
                 onClick={() => handleTabClick("Restore users")}
-                // sx={getListItemStyles("Restore users")} 
+                // sx={getListItemStyles("Restore users")}
                 sx={{ ...getListItemStyles("Restore users"), pl: 4 }} // Sử dụng getListItemStyles
               >
                 <ListItemText primary="Restore users" />
@@ -282,8 +318,44 @@ const Admin = () => {
               </ListItem>
             </List>
           </Collapse>
+
+          {/* Logout */}
+          <ListItem
+            button
+            onClick={handleOpenLogoutDialog}
+            sx={{ padding: "10px 20px" }}
+          >
+            <ListItemText primary="Logout" />
+          </ListItem>
         </List>
       </Drawer>
+      {/* Dialog confirm */}
+      <Dialog
+        open={openLogoutDialog}
+        onClose={handleCloseLogoutDialog}
+        aria-labelledby="logout-dialog-title"
+        aria-describedby="logout-dialog-description"
+      >
+        <DialogTitle id="logout-dialog-title">Confirm Logout</DialogTitle>
+        <DialogContent>
+          Are you sure you want to log out of your account?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLogoutDialog} color="error">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              handleCloseLogoutDialog();
+              logout();
+            }}
+            color="primary"
+            autoFocus
+          >
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Content */}
       <Box component="main" sx={{ flexGrow: 1, bgcolor: "#f5f5f5", p: 3 }}>

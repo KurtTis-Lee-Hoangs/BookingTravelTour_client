@@ -96,6 +96,9 @@ const BookingHistory = () => {
     );
   };
 
+  const titlePreview = (title) =>
+    title.length > 35 ? title.slice(0, 35) + "..." : title;
+
   return (
     <>
       <section>
@@ -159,7 +162,7 @@ const BookingHistory = () => {
                           <tr key={booking._id}>
                             <td>{booking.userEmail}</td>
                             <td>{booking.fullName}</td>
-                            <td>{booking.tourName}</td>
+                            <td>{titlePreview(booking.tourName)}</td>
                             <td>{booking.guestSize}</td>
                             <td>{formattedPhone}</td>
                             <td>{formattedBookAt}</td>

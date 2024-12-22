@@ -71,6 +71,16 @@ const AddRoomModal = ({ open, onClose, hotelId, onRoomAdded }) => {
 
       if (data.success) {
         onRoomAdded(data.data); // Call parent callback to add the new room to the list
+        setNewRoom({
+          hotelId: hotelId,
+          roomNumber: "",
+          square: "",
+          roomType: "",
+          maxOccupancy: "",
+          price: "",
+          images: "",
+          status: "Available",
+        });
         onClose(); // Close the modal
       } else {
         console.error("Error adding room");

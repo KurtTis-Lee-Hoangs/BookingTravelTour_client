@@ -50,6 +50,18 @@ const EditTourModal = ({
               />
             </FormGroup>
             <FormGroup>
+              <Label for="address">Address</Label>
+              <Input
+                type="text"
+                name="address"
+                id="address"
+                value={editingHotel?.address}
+                onChange={(e) =>
+                  setEditingHotel({ ...editingHotel, address: e.target.value })
+                }
+              />
+            </FormGroup>
+            <FormGroup>
               <Label for="photo">Photo</Label>
               <Input
                 type="file"
